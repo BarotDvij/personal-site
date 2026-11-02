@@ -27,6 +27,14 @@ const COLORS: Record<string, string> = {
 };
 const HEIGHT = SPRITE.length + 3;
 const WARP_TIME = 420;
+const GRAVITY = 0.18;
+const JUMP_SPEED = 3.4; // apex about 32px, enough to clear a 26px warp pipe
+
+const PIPES = STRUCTURES.filter((s) => s.kind === 'warp');
+/** Warp pipe whose body overlaps x (with the character's half-width). */
+const pipeAt = (x: number) => PIPES.find((s) => x > s.x - 3 && x < s.x + s.w + 3);
+/** Height of whatever the character would stand on at x. */
+const supportAt = (x: number) => pipeAt(x)?.h ?? 0;
 
 export interface Walker {
   x: number;
@@ -42,13 +50,28 @@ export interface Walker {
 
 export const createWalker = (): Walker => ({ x: 112, jump: 0, vy: 0, facing: 1, moving: false, step: 0, warp: 0, warpTo: -1, poof: 0 });
 
-/** The clickable structure the character is standing in front of, if any. */
+/** True when standing on top of a warp pipe. */
+export const onPipe = (w: Walker) => {
+  const pipe = pipeAt(w.x);
+  return !!pipe && w.vy === 0 && Math.abs(w.jump - pipe.h) < 0.5;
+};
+
+/** The structure the character can use right now: a door in front of it, or the pipe under or beside it. */
 export function nearby(w: Walker): Structure | undefined {
-  return STRUCTURES.find((s) => s.ref && w.x >= s.x + 2 && w.x <= s.x + s.w - 2);
+  const pipe = PIPES.find((s) => w.x > s.x - 10 && w.x < s.x + s.w + 10);
+  if (pipe) return pipe;
+  return STRUCTURES.find((s) => s.ref && s.kind !== 'warp' && w.x >= s.x + 2 && w.x <= s.x + s.w - 2);
+}
+
+/** Puts the character on top of a pipe (used when jumping straight to one). */
+export function standOn(w: Walker, s: Structure) {
+  w.x = s.x + s.w / 2;
+  w.jump = s.kind === 'warp' ? s.h : 0;
+  w.vy = 0;
 }
 
 export function startWarp(w: Walker, s: Structure) {
-  if (w.warp > 0 || s.ref?.type !== 'warp') return false;
+  if (w.warp > 0 || s.ref?.type !== 'warp' || !onPipe(w)) return false;
   w.warp = WARP_TIME;
   w.warpTo = s.ref.to;
   w.x = s.x + s.w / 2;
@@ -56,7 +79,8 @@ export function startWarp(w: Walker, s: Structure) {
 }
 
 export function jump(w: Walker) {
-  if (w.jump === 0 && w.warp <= 0) w.vy = 2.6;
+  const grounded = w.vy === 0 && Math.abs(w.jump - supportAt(w.x)) < 0.5;
+  if (grounded && w.warp <= 0) w.vy = JUMP_SPEED;
 }
 
 /** Advances the character. Returns true when it moved or animated. */
@@ -71,23 +95,31 @@ export function updateWalker(w: Walker, dir: number, run: boolean, dt: number): 
     if (w.warp <= 0) {
       const d = DISTRICTS[w.warpTo];
       w.x = d.x0 + 36;
+      w.jump = 0;
+      w.vy = 0;
       w.facing = 1;
       w.poof = 300;
     }
     return true;
   }
+  const k = dt / 16.67;
   if (dir) {
     w.facing = dir > 0 ? 1 : -1;
-    w.x = Math.max(4, Math.min(WORLD_W - 4, w.x + dir * (run ? 2.2 : 1.2) * (dt / 16.67)));
+    const nx = Math.max(4, Math.min(WORLD_W - 4, w.x + dir * (run ? 2.2 : 1.2) * k));
+    // Pipes are solid: walk into one from the side and you stop, unless
+    // you're already high enough to land on it.
+    const blocker = pipeAt(nx);
+    if (!blocker || pipeAt(w.x) === blocker || w.jump >= blocker.h - 0.5) w.x = nx;
     w.step += dt;
     changed = true;
   }
   w.moving = dir !== 0;
-  if (w.jump > 0 || w.vy > 0) {
-    w.jump += w.vy * (dt / 16.67);
-    w.vy -= 0.18 * (dt / 16.67);
-    if (w.jump <= 0) {
-      w.jump = 0;
+  const support = supportAt(w.x);
+  if (w.vy !== 0 || w.jump > support + 0.01) {
+    w.jump += w.vy * k;
+    w.vy -= GRAVITY * k;
+    if (w.jump <= support && w.vy <= 0) {
+      w.jump = support;
       w.vy = 0;
     }
     changed = true;
@@ -129,7 +161,8 @@ export function drawWalker(ctx: CanvasRenderingContext2D, w: Walker, ox: number,
 
 export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structure | undefined, ox: number, oy: number) {
   if (!s || w.warp > 0) return;
-  const label = s.ref?.type === 'warp' ? 'DOWN: WARP' : 'UP: OPEN';
+  const label = s.ref?.type !== 'warp' ? 'UP: OPEN' : onPipe(w) ? 'DOWN: WARP' : w.jump === 0 ? 'SPACE: HOP ON' : '';
+  if (!label) return;
   const cx = Math.round(w.x + ox);
   const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump);
   const width = textWidth(label) + 6;

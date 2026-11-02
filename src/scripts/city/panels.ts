@@ -44,44 +44,35 @@ export function panelFor(ref: Ref): PanelContent | null {
         html: `${badge}${status}<p class="lead">${esc(p.tagline)}</p><p class="stack">${p.stack.map(esc).join(' · ')}</p><p class="links">${links}</p>`,
       };
     }
-    case 'about': {
-      const ed = profile.education;
-      return {
-        kicker: 'Visitor Center',
-        title: profile.name,
-        html: `<p class="lead">${esc(profile.headline)}</p>
-          <p>${esc(ed.degree)}, ${esc(ed.school)} (expected ${esc(ed.expected)}).</p>
-          <h3>How the city works</h3>
-          ${list([
-            'Every building is a role or project. Click one to open it.',
-            'Districts are lenses: marketing, PM, AI, data, and building.',
-            'The copper pipes underground are data pipelines, and the packets are real flows of work into the warehouse.',
-            'Teal warp pipes jump to the next district.',
-          ])}
-          <h3>Trophy case</h3>
-          <ul class="trophies">${[
-            ...profile.hackathons.map((h) => ({ title: `${h.place}, ${h.event}`, meta: h.project.length < 40 ? h.project : 'Hackathon' })),
-            ...profile.awards.map((a) => ({ title: a.title, meta: `${a.issuer} · ${a.date}` })),
-          ]
-            .map((t) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(t.title)}<br><small>${esc(t.meta)}</small></span></li>`)
-            .join('')}</ul>
-          <h3>Approach</h3>
-          ${profile.lessons.map((l) => `<p><strong>${esc(l.title)}.</strong> ${esc(l.body)}</p>`).join('')}`,
-      };
-    }
     case 'contact': {
       const l = profile.links;
+      const ed = profile.education;
       return {
         kicker: 'Post Office',
-        title: 'Send a letter',
-        html: `<p class="lead">Open to ${esc(profile.seeking)} in forward deployed engineering, technical PM, and product.</p>
+        title: profile.name,
+        html: `<p class="lead">${esc(ed.degree.replace('Bachelor of Applied Science in ', ''))} at the University of Waterloo (expected ${esc(ed.expected)}). Open to ${esc(profile.seeking)} in forward deployed engineering, technical PM, data engineering, and AI engineering.</p>
           <p class="links">${link(`mailto:${l.email}`, l.email)}</p>
-          <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>`,
+          <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>
+          <h3>Approach</h3>
+          ${profile.lessons.map((x) => `<p><strong>${esc(x.title)}.</strong> ${esc(x.body)}</p>`).join('')}`,
+      };
+    }
+    case 'trophies': {
+      const items = [
+        ...profile.awards.map((a) => ({ title: a.title, meta: `${a.issuer} · ${a.date}` })),
+        ...profile.hackathons.map((h) => ({ title: `${h.place}, ${h.event}`, meta: 'link' in h ? h.project : 'Hackathon' })),
+      ];
+      return {
+        kicker: 'Hall of Fame',
+        title: 'Trophy case',
+        html: `<ul class="trophies">${items
+          .map((t) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(t.title)}<br><small>${esc(t.meta)}</small></span></li>`)
+          .join('')}</ul>`,
       };
     }
     case 'hackathons': {
       return {
-        kicker: 'Hall of Fame',
+        kicker: 'Podium',
         title: '3 podiums in 7 days',
         html: `<ul class="podium">${profile.hackathons
           .map((h) => `<li><span class="place">${esc(h.place)}</span> <strong>${esc(h.event)}</strong><br>${
