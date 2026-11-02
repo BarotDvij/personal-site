@@ -1,0 +1,204 @@
+{
+  "name": "Dvij Barot",
+  "headline": "TODO: one-line spine in Dvij's own words",
+  "location": "Waterloo, ON",
+  "links": {
+    "email": "d2barot@uwaterloo.ca",
+    "linkedin": "https://www.linkedin.com/in/barotdvij",
+    "github": "https://github.com/BarotDvij",
+    "devpost": "https://devpost.com/BarotDvij"
+  },
+  "lenses": ["marketing", "data", "pm", "ai", "dev"],
+  "education": {
+    "school": "University of Waterloo",
+    "degree": "Bachelor of Applied Science in Management Engineering",
+    "expected": "April 2028",
+    "courses": ["Databases & Software Design", "Probability & Statistics II", "Algorithms & Data Structures", "Modelling in Operations Research"],
+    "clubs": ["Wat.AI Engineering Design Team (2024)", "Warriors Dance Team (2023–2024)", "HSC President (2023–2025)"]
+  },
+  "highlights": [
+    { "value": "3 in 7 days", "label": "hackathon podiums (two 1st, one 2nd)", "lenses": ["dev", "ai"] },
+    { "value": "68% → 97%", "label": "routing accuracy after building an eval harness", "lenses": ["ai", "dev"] },
+    { "value": "6 min → 30 s", "label": "booking time on a platform I product-owned", "lenses": ["pm", "dev"] },
+    { "value": "$100K", "label": "rebrand budget owned at Go Lime", "lenses": ["marketing", "pm"] },
+    { "value": "$50K", "label": "rebate fraud investigated in Snowflake", "lenses": ["data"] }
+  ],
+  "experience": [
+    {
+      "role": "Technical Product Manager",
+      "org": "AltaML Inc.",
+      "dates": "Sep 2026 – Dec 2026",
+      "place": "Waterloo, ON",
+      "lenses": ["pm", "ai", "dev"],
+      "summary": "Led an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
+      "bullets": [
+        "Led product development of a fullstack agentic application automating purchase-order drafts, AI image generation, and e-commerce listings for enterprise client Hauser Industries",
+        "Co-built it in React, TypeScript, Python, and PostgreSQL on a team of 2, integrating Faire, Brightpearl ERP, and Shopify over GraphQL and REST",
+        "Ran process discovery to turn manual workflows into a PRD with functional specs, business rules, and acceptance criteria",
+        "Embedded model-driven classification and image generation with human-in-the-loop checkpoints",
+        "Administered UAT on prototypes against acceptance criteria"
+      ]
+    },
+    {
+      "role": "Software Engineer",
+      "org": "GenLedge",
+      "dates": "Jul 2026 – Sep 2026",
+      "place": "Remote",
+      "lenses": ["ai", "dev", "data"],
+      "summary": "Built an LLM-powered data ingestion tool for an agentic ERP.",
+      "bullets": [
+        "Built an LLM-powered ingestion tool in Next.js and TypeScript converting 4 file formats into structured warehouse tables",
+        "Engineered a routing agent on the Anthropic API that decides whether to reuse or generate a table, and at what grain",
+        "Built an evaluation harness over 38 labelled cases, raising routing accuracy from 68% → 97%",
+        "Implemented staging tables, merge writes, and upserts in AWS Glue PySpark, validated by 151 unit tests",
+        "Prevented hallucinated records by resolving references by name and rejecting non-matches",
+        "Deployed on AWS ECS with multi-tenant schema isolation and daily ingestion across Airbyte, DocumentDB, and RDS"
+      ]
+    },
+    {
+      "role": "Product Manager",
+      "org": "SevenAfter Technologies",
+      "dates": "May 2026 – Jul 2026",
+      "place": "Remote",
+      "lenses": ["pm", "ai"],
+      "summary": "Product for an AI-powered educational game about mental health and bullying.",
+      "bullets": [
+        "Ran 2 rounds of playtesting with 8 students on the game prototype",
+        "Led focus groups with educators and parents to set topic scope and safety guardrails for AI characters",
+        "Built user personas from research to steer the game's plot",
+        "Shipped a Figma redesign fixing checkpoint saving and text fatigue",
+        "Ran bi-weekly feedback surveys feeding a continuous requirements backlog",
+        "Partnered with ML vendor Red River to train and validate AI characters"
+      ]
+    },
+    {
+      "role": "AI Engineer",
+      "org": "KnowIdea Inc.",
+      "dates": "Apr 2026 – May 2026",
+      "place": "Remote",
+      "lenses": ["ai", "dev"],
+      "summary": "Made an AI report pipeline faster and observable.",
+      "bullets": [
+        "Designed a dependency graph and concurrent priority batch scheduler in asyncio, cutting report generation time by 58%",
+        "Built telemetry across a multi-stage inference pipeline on Modal, surfacing token usage and timing",
+        "Shipped a report-correction feature that triggers background re-runs on a Hermes Agent backend"
+      ]
+    },
+    {
+      "role": "Data Analytics Engineer",
+      "org": "Super.com",
+      "dates": "Jan 2026 – Apr 2026",
+      "place": "San Francisco, CA · Toronto, ON",
+      "lenses": ["data"],
+      "summary": "Pipelines, dashboards, and a fraud investigation.",
+      "bullets": [
+        "Extended the LTV:CAC pipeline in dbt and Snowflake with a flat-rate channel sub-pipeline powering 36 downstream tables",
+        "Built modular dbt models and unit tests, improving data completeness by 19%",
+        "Investigated $50K in rebate fraud, identified 4 fraudulent accounts, and built Amplitude alerts",
+        "Automated a daily CPA dashboard across 6 marketing channels with Snowsight and Hightouch",
+        "Root-caused Fivetran and Airflow failures and added alerts safeguarding 22 pipelines"
+      ]
+    },
+    {
+      "role": "Project Manager",
+      "org": "Go Lime Inc.",
+      "dates": "May 2024 – Dec 2024",
+      "place": "Toronto, ON",
+      "lenses": ["marketing", "pm", "dev"],
+      "summary": "Rebrand, growth ops, and a new booking platform.",
+      "bullets": [
+        "Owned a $100K budget and led a team of 4 on a rebrand: customer journey, sales funnel, and marketing ops SOP",
+        "Ran weekly sprints with standups, demos, and retros, producing 2 video ads and 10 still ads per week",
+        "Used Microsoft Clarity recordings to find drop-off points and turned them into Figma wireframes",
+        "A/B tested ad creatives and automated lead capture across Meta Ads, Zoho CRM, and Asana, cutting lead reporting from 12 minutes → 10 seconds",
+        "Co-built a Figma and React Native prototype that shaped the production app on Google Play",
+        "Product-owned a Django booking platform, cutting booking time from 6 minutes → 30 seconds"
+      ]
+    },
+    {
+      "role": "Program Manager",
+      "org": "Ontario Chamber of Commerce",
+      "dates": "May 2023 – Aug 2023",
+      "place": "Toronto, ON",
+      "lenses": ["marketing", "pm", "data"],
+      "summary": "Digital adoption advisory for small businesses.",
+      "bullets": [
+        "Built digital roadmaps covering web, e-commerce, SEO, and SEM for business owners in the Canada Digital Adoption Program",
+        "Designed and ran workshops on digital marketing, web design, SEO, UX research, cybersecurity, and databases",
+        "Built and UX-tested self-serve learning modules from the most common advising questions",
+        "Built a FastAPI prototype on a team of 5 feeding a BigQuery warehouse and Looker Studio KPI dashboard"
+      ]
+    },
+    {
+      "role": "Business Development Representative",
+      "org": "Swap Robotics",
+      "dates": "May 2022 – Dec 2022",
+      "place": "Kitchener, ON",
+      "lenses": ["marketing", "data"],
+      "summary": "Sold autonomous grass-cutting robots to the solar industry.",
+      "bullets": [
+        "Prospected C-suite leaders in solar and closed annual contracts with 2 accounts",
+        "Automated KPI reporting with VBA and Power BI, cutting reporting time by 70%",
+        "Migrated CRM data from Close.io to Salesforce, improving pipeline accuracy by 31%"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Urban Marble",
+      "award": "1st Place, DD x Ignition Hackathon",
+      "tagline": "Scroll a 3D landscape of North America's biggest cities and get an AI documentary for any building.",
+      "stack": ["TypeScript", "Next.js", "PostgreSQL", "CesiumJS", "GPT-4o", "DALL-E 3"],
+      "links": { "code": "https://github.com/pranavishal/DD-x-Ignition", "devpost": "https://devpost.com/software/urban-marble" },
+      "lenses": ["ai", "dev"],
+      "featured": true
+    },
+    {
+      "name": "CityScapes",
+      "award": "1st Place, Claude Hacks @ UWaterloo",
+      "tagline": "Finds the empty lots where new green space would matter most, by heat relief, access, and equity.",
+      "stack": ["React", "Mapbox GL JS", "Claude API", "Tailwind"],
+      "links": { "code": "https://github.com/tanvibatchu/CityScapes", "devpost": "https://devpost.com/software/cityscape-b02jei" },
+      "lenses": ["ai", "data", "dev", "pm"],
+      "featured": true
+    },
+    {
+      "name": "Learning Technique Recommendation Engine",
+      "tagline": "Classifies a syllabus and ranks 21 study techniques using evidence from 22 meta-analyses.",
+      "stack": ["Python", "scikit-learn", "Streamlit", "Gemini", "Docker", "GitHub Actions"],
+      "links": { "code": "https://github.com/BarotDvij/Learning-Technique-Recommendations" },
+      "lenses": ["data", "ai", "dev"],
+      "featured": true
+    },
+    {
+      "name": "Boggle Zen",
+      "tagline": "A calm, offline-first Boggle game for iOS and Android with a freemium model.",
+      "stack": ["React Native", "Expo", "Zustand", "SQLite", "RevenueCat", "AdMob"],
+      "links": { "code": "https://github.com/BarotDvij/boggle-zen" },
+      "lenses": ["dev", "pm"]
+    },
+    {
+      "name": "Eco Eats Advisor",
+      "tagline": "Scan a barcode or snap a meal to see its carbon footprint and greener swaps.",
+      "stack": ["React", "TypeScript", "Supabase", "Gemini", "Open Food Facts"],
+      "links": { "code": "https://github.com/BarotDvij/eco-eats-advisor" },
+      "lenses": ["ai", "data", "dev"]
+    },
+    {
+      "name": "SUMMIT Financial Learning",
+      "status": "In development",
+      "tagline": "A gamified financial-literacy platform for Canadian students in grades 6–12.",
+      "stack": ["Next.js", "Expo", "tRPC", "PostgreSQL", "Drizzle", "Turborepo", "Phaser"],
+      "links": { "code": "https://github.com/BarotDvij/SUMMIT-Financial-Learning" },
+      "lenses": ["dev", "pm"]
+    }
+  ],
+  "skills": {
+    "languages": ["Python", "TypeScript", "JavaScript", "SQL", "Java", "R", "HTML/CSS", "VBA"],
+    "frameworks": ["React", "React Native", "Next.js", "Node.js", "tRPC", "Django", "FastAPI", "Tailwind CSS", "pandas", "PySpark", "scikit-learn", "Streamlit", "Mapbox", "CesiumJS"],
+    "methods": ["Agile/Scrum", "PRDs", "UAT", "A/B Testing", "Root Cause Analysis", "LLM Evaluation", "UX Research", "UI/UX Design"],
+    "tools": ["AWS", "GCP", "Snowflake", "dbt", "Airflow", "Airbyte", "Fivetran", "Hightouch", "PostgreSQL", "MongoDB", "Supabase", "Modal", "Docker", "Anthropic / OpenAI / Gemini APIs", "Amplitude", "Figma", "Meta Ads", "GA4"]
+  },
+  "philosophy": "Start with the friction, not the tech.",
+  "spice": "TODO: hobbies, fun facts, taste"
+}
