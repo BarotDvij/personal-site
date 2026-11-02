@@ -425,6 +425,50 @@ html[data-mode='city'] body {
   font-size: 1.04rem;
 }
 
+/* Intro text runs right up to the infobox, like a wiki lead */
+.article > .lead,
+.article > .lead-more {
+  max-width: none;
+}
+
+/* Career starts below the infobox so the table gets the full width */
+#career {
+  clear: both;
+}
+
+.career-table {
+  width: 100%;
+}
+
+.career-table td,
+.career-table th[scope='row'] {
+  vertical-align: top;
+}
+
+.career-table th[scope='row'] {
+  background: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.career-table th[scope='row'] small {
+  display: block;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.career-table .dates {
+  white-space: nowrap;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.career-table .city-link {
+  display: flex;
+  margin-top: 4px;
+  font-size: 0.66rem;
+}
+
 sup {
   line-height: 0;
   font-size: 0.7em;
@@ -432,11 +476,7 @@ sup {
 
 sup a {
   text-decoration: none;
-  display: inline-block;
-  min-width: 24px;
-  min-height: 24px;
-  padding: 0 2px;
-  text-align: center;
+  padding: 0 1px;
 }
 
 q {
@@ -446,7 +486,7 @@ q {
 .infobox {
   float: right;
   width: 300px;
-  margin: 0 0 16px 24px;
+  margin: 0 0 12px 16px;
   border: 1px solid var(--line-strong);
   background: var(--panel);
   padding: 8px;
@@ -550,16 +590,6 @@ q {
   min-height: 24px;
 }
 
-.role .meta {
-  margin: 0 0 4px;
-  color: var(--muted);
-  font-size: 0.92rem;
-}
-
-.role ul {
-  padding-left: 20px;
-}
-
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -648,25 +678,6 @@ blockquote p {
 
 .skills dd {
   margin: 0;
-}
-
-.timeline {
-  list-style: none;
-  padding: 0;
-  font-size: 0.94rem;
-}
-
-.timeline li {
-  display: grid;
-  grid-template-columns: 170px 1fr;
-  gap: 12px;
-  padding: 5px 0;
-  border-bottom: 1px dotted var(--line);
-}
-
-.timeline time {
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
 }
 
 .contact {
@@ -914,9 +925,27 @@ blockquote p {
     flex-wrap: wrap;
   }
 
-  .timeline li {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .career-table thead {
+    display: none;
+  }
+
+  .career-table tr,
+  .career-table td,
+  .career-table th[scope='row'] {
+    display: block;
+    border: 0;
+    padding: 2px 10px;
+    white-space: normal;
+  }
+
+  .career-table tr {
+    border: 1px solid var(--line-strong);
+    border-top: 0;
+    padding: 8px 0;
+  }
+
+  .career-table tr:first-child {
+    border-top: 1px solid var(--line-strong);
   }
 
   .bar-actions .ghost {
@@ -1584,7 +1613,7 @@ html.party .hud-title {
   }
 
   section,
-  .role,
+  .career-table tr,
   .project {
     break-inside: avoid;
   }
