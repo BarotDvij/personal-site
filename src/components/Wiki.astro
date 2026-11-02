@@ -13,8 +13,8 @@ const projectBuilding = (name: string) => buildingFor((r) => r.type === 'project
 const lensNames: Record<string, string> = {
   marketing: 'Marketer',
   data: 'Analyst',
-  pm: 'Product Manager',
-  ai: 'AI Engineer',
+  pm: 'PM',
+  ai: 'Developer',
   dev: 'Builder',
 };
 
@@ -293,24 +293,14 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <section id="references" aria-labelledby="refs-h">
       <h2 id="refs-h">References</h2>
-      <ol class="refs">
-        {refs.map((r) => <li id={r.id}><a href={r.href}>{r.label}</a></li>)}
-      </ol>
-    </section>
-
-    <section id="external" aria-labelledby="ext-h">
-      <h2 id="ext-h">External links</h2>
-      <ul class="ext">
-        <li><a href={profile.links.linkedin}>Dvij Barot on LinkedIn</a></li>
-        <li><a href={profile.links.github}>Dvij Barot on GitHub</a></li>
-        <li><a href={profile.links.devpost}>Dvij Barot on Devpost</a></li>
-      </ul>
-      <h3>Colleagues</h3>
       <ul class="ext">
         {profile.colleagues.map((c) => (
           <li><a href={c.url}>{c.name}</a>{c.note && <span> ({c.note})</span>} on LinkedIn</li>
         ))}
       </ul>
+      <ol class="refs">
+        {refs.map((r) => <li id={r.id}><a href={r.href}>{r.label}</a></li>)}
+      </ol>
     </section>
   </main>
 
