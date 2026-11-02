@@ -201,26 +201,58 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
 
   switch (s.kind) {
     case 'kiosk': {
-      box(ctx, x, top + 10, w, h - 10, shade('#f1e3c6', p), p);
-      for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 6, 4, 6, shade('#e0457b', p));
-      for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 6, 4, 6, shade('#fff4e0', p));
-      rect(ctx, x - 2, top + 4, w + 4, 2, p.outline);
-      // Trophy case in the window
-      rect(ctx, x + 5, top + 16, w - 30, 16, p.night ? '#2a2240' : '#d6eeff');
-      rect(ctx, x + 5, top + 28, w - 30, 1, shade('#8a6a3a', p));
-      for (let i = 0; i < 5; i++) {
-        // The case is lit, so trophies keep full colour at night.
-        const tx = x + 8 + i * 7, gold = i % 3 === 1 ? '#c9ccd6' : '#f2c84b';
-        rect(ctx, tx, top + 20, 4, 3, gold);
-        rect(ctx, tx + 1, top + 23, 2, 3, gold);
-        rect(ctx, tx, top + 26, 4, 2, gold);
+      // Hall of Fame: a glass-walled gallery with trophies on lit pedestals.
+      const steel = shade('#5d6676', p);
+      const glass = p.night ? '#3a4f7c' : '#cdeaf7';
+      const glassHi = p.night ? '#5a73a3' : '#f2fbff';
+      const gy = top + 9, gh = h - 9;
+      // Flat roof slab
+      box(ctx, x - 2, top + 3, w + 4, 6, shade('#3a4558', p), p);
+      rect(ctx, x - 1, top + 4, w + 2, 1, shade('#6d7a90', p));
+      // Glass walls with steel mullions and a transom
+      box(ctx, x, gy, w, gh, glass, p);
+      for (const sx of [x + 6, x + 34]) {
+        for (let k = 0; k < 11; k++) {
+          rect(ctx, sx + k, gy + 24 - k, 2, 1, glassHi);
+          rect(ctx, sx + 6 + k, gy + 24 - k, 1, 1, glassHi);
+        }
       }
-      // Gold star emblem
-      rect(ctx, x + w - 20, top + 16, 14, 14, shade('#2a2233', p));
-      rect(ctx, x + w - 14, top + 18, 2, 10, '#f2c84b');
-      rect(ctx, x + w - 18, top + 21, 10, 2, '#f2c84b');
-      rect(ctx, x + w - 16, top + 19, 6, 6, '#f2c84b');
-      door(ctx, x + 16);
+      for (let i = 0; i <= 4; i++) rect(ctx, x + 1 + Math.round((i * (w - 4)) / 4), gy + 1, 1, gh - 2, steel);
+      rect(ctx, x + 1, gy + 12, w - 2, 1, steel);
+      // Gallery floor and spotlights
+      rect(ctx, x + 1, GROUND - 3, w - 2, 3, shade('#8a8f9c', p));
+      for (const lx of [x + 9, x + 21, x + 33, x + 45]) {
+        rect(ctx, lx - 1, gy + 1, 3, 2, '#fff6c8');
+        rect(ctx, lx, gy + 3, 1, 1, '#fff6c8');
+      }
+      // Star plaque hanging above the cases
+      const px0 = x + 21;
+      rect(ctx, px0, gy + 14, 12, 7, shade('#2a2233', p));
+      rect(ctx, px0 + 5, gy + 15, 2, 5, '#f2c84b');
+      rect(ctx, px0 + 3, gy + 17, 6, 1, '#f2c84b');
+      rect(ctx, px0 + 4, gy + 16, 4, 3, '#f2c84b');
+      // Pedestals with outlined trophies. The case is lit, so colours stay full at night.
+      const cases: [number, number, string][] = [
+        [x + 9, 6, '#f2c84b'], [x + 21, 10, '#c9ccd6'], [x + 33, 6, '#f2c84b'], [x + 45, 10, '#f2c84b'],
+      ];
+      for (const [cxT, ph, gold] of cases) {
+        const baseY = GROUND - 3 - ph;
+        box(ctx, cxT - 4, baseY, 10, ph, shade('#e9e4da', p), p);
+        const parts: [number, number, number, number][] = [
+          [cxT - 2, baseY - 9, 5, 4], [cxT - 4, baseY - 8, 2, 2], [cxT + 3, baseY - 8, 2, 2],
+          [cxT, baseY - 5, 1, 3], [cxT - 1, baseY - 2, 3, 2],
+        ];
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, gold === '#c9ccd6' && !p.night ? '#aab0c4' : gold);
+        rect(ctx, cxT - 1, baseY - 8, 1, 2, '#fff6c8');
+      }
+      // Glass double door
+      const dx = x + w - 19;
+      box(ctx, dx, GROUND - 22, 16, 22, glass, p);
+      rect(ctx, dx + 7, GROUND - 21, 1, 21, steel);
+      rect(ctx, dx + 5, GROUND - 11, 1, 3, '#e8c547');
+      rect(ctx, dx + 9, GROUND - 11, 1, 3, '#e8c547');
+      rect(ctx, dx + 2, GROUND - 19, 3, 1, glassHi);
       sign(ctx, label, cx, top - 6, '#e8c547', '#2a2233', p);
       break;
     }
