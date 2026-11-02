@@ -201,7 +201,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x, GROUND - 18, w, 18, shade('#a49c90', p), p);
       box(ctx, x + 6, GROUND - 24, w - 12, 7, shade('#bdb5a8', p), p);
       centeredText(ctx, label, cx, GROUND - 12, shade('#3a3530', p));
-      const cups: [number, number, string][] = [[cx - 34, 30, '#c9ccd6'], [cx, 42, '#f2c84b'], [cx + 34, 34, '#f2c84b']];
+      const cups: [number, number, string][] = [[cx - 34, 42, '#f2c84b'], [cx, 30, '#c9ccd6'], [cx + 34, 42, '#f2c84b']];
       for (const [px, ph, gold] of cups) {
         box(ctx, px - 7, GROUND - 24 - ph + 14, 14, ph - 14, shade('#d9d2c4', p), p);
         const cupY = GROUND - 24 - ph;
@@ -212,9 +212,9 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, px - 3, cupY + 11, 6, 2, shade(gold, p));
         rect(ctx, px - 4, cupY + 1, 2, 3, '#fff6c8');
       }
-      text(ctx, '2', cx - 35, GROUND - 24 - 30 + 18, shade('#3a3530', p));
-      text(ctx, '1', cx - 1, GROUND - 24 - 42 + 18, shade('#3a3530', p));
-      text(ctx, '1', cx + 33, GROUND - 24 - 34 + 18, shade('#3a3530', p));
+      text(ctx, '1', cx - 35, GROUND - 24 - 42 + 18, shade('#3a3530', p));
+      text(ctx, '2', cx - 1, GROUND - 24 - 30 + 18, shade('#3a3530', p));
+      text(ctx, '1', cx + 33, GROUND - 24 - 42 + 18, shade('#3a3530', p));
       break;
     }
     case 'post': {
