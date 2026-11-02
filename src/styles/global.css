@@ -387,7 +387,7 @@ html[data-mode='city'] body {
 
 .tour-float {
   position: fixed;
-  right: 16px;
+  left: 16px;
   bottom: 16px;
   z-index: 20;
   display: inline-flex;
@@ -579,7 +579,7 @@ q {
 .toc {
   position: sticky;
   top: 12px;
-  max-height: calc(100vh - 24px);
+  max-height: calc(100vh - 88px); /* leaves room for the Explore button at bottom left */
   overflow-y: auto;
   padding: 14px 4px 14px 0;
   font-size: 0.9rem;
@@ -948,7 +948,7 @@ blockquote p {
 
 .tour-float {
   position: fixed;
-  right: 16px;
+  left: 16px;
   bottom: 16px;
   z-index: 20;
   display: inline-flex;
