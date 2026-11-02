@@ -119,6 +119,16 @@ lensSelect?.addEventListener('change', () => {
   }
 });
 
+// ----- floating tour button once the notice scrolls away -----
+
+const notice = document.querySelector('.sitenotice');
+const floatBtn = document.querySelector<HTMLElement>('.tour-float');
+if (notice && floatBtn && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([entry]) => {
+    floatBtn.hidden = entry.isIntersecting || html.dataset.mode === 'city';
+  }).observe(notice);
+}
+
 // ----- easter egg -----
 
 const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];

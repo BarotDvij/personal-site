@@ -1,0 +1,81 @@
+---
+// Tiny pixel-art icons drawn from text grids. '#' uses the current text color,
+// '+' uses the page color so letters can be cut out of a filled shape.
+const GRIDS = {
+  mail: [
+    '...........',
+    '###########',
+    '##.......##',
+    '#.#.....#.#',
+    '#..#...#..#',
+    '#...#.#...#',
+    '#....#....#',
+    '#.........#',
+    '#.........#',
+    '###########',
+    '...........',
+  ],
+  linkedin: [
+    '###########',
+    '##+########',
+    '###########',
+    '##+##+#++##',
+    '##+##++##+#',
+    '##+##+###+#',
+    '##+##+###+#',
+    '##+##+###+#',
+    '##+##+###+#',
+    '###########',
+    '###########',
+  ],
+  github: [
+    '...........',
+    '.#.......#.',
+    '.##.....##.',
+    '.#########.',
+    '###########',
+    '###+###+###',
+    '###########',
+    '.#########.',
+    '..#######..',
+    '...#...#...',
+    '...........',
+  ],
+  devpost: [
+    '...#####...',
+    '..#######..',
+    '.##+++####.',
+    '.##+##+###.',
+    '###+###+###',
+    '###+###+###',
+    '###+###+###',
+    '.##+##+###.',
+    '.##+++####.',
+    '..#######..',
+    '...#####...',
+  ],
+} as const;
+
+interface Props {
+  name: keyof typeof GRIDS;
+  size?: number;
+}
+
+const { name, size = 22 } = Astro.props;
+const runs: { x: number; y: number; w: number; fill: string }[] = [];
+GRIDS[name].forEach((row, y) => {
+  let x = 0;
+  while (x < row.length) {
+    const ch = row[x];
+    if (ch === '.') { x++; continue; }
+    let w = 1;
+    while (row[x + w] === ch) w++;
+    runs.push({ x, y, w, fill: ch === '#' ? 'currentColor' : 'var(--paper)' });
+    x += w;
+  }
+});
+---
+
+<svg viewBox="0 0 11 11" width={size} height={size} aria-hidden="true" shape-rendering="crispEdges">
+  {runs.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}
+</svg>
