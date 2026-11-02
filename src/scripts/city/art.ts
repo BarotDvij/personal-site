@@ -379,7 +379,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         box(ctx, dx, GROUND - 24, 20, 24, shade('#4c5563', p), p);
         for (let yy = GROUND - 22; yy < GROUND; yy += 3) rect(ctx, dx + 1, yy, 18, 1, shade('#5d6676', p));
       }
-      sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
+      sign(ctx, label, cx, top + 20, LENS_COLOR.data, '#2a2233', p);
       break;
     }
     case 'library': {

@@ -15,7 +15,7 @@ export const LENS_COLOR: Record<Lens | 'plaza' | 'play', string> = {
   marketing: '#c8336c',
   pm: '#f2a33a',
   ai: '#7c4ddb',
-  data: '#2f6fd6',
+  data: '#ff6fb5', // Super.com pink
   dev: '#3fb950',
   downtown: '#e0703a',
 };
