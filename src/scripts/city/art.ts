@@ -485,7 +485,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, wx + ww - 9, wy + 10, 3, 10, shade('#7a4a8c', p));
       rect(ctx, wx + 6, wy + 12, ww - 16, 3, shade('#9b6bb0', p));
       rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
-      rect(ctx, wx + ww - 6, wy + 4, 5, 3, p.night ? '#ffd76a' : '#f2c84b');
+      rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
       door(ctx, x + w - 8, 8, 14);
       sign(ctx, label, cx, top + 12, '#f2a33a', '#2a2233', p);
       break;
@@ -599,9 +599,12 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 14, top + 4, w - 28, 16, crown, p);
       rect(ctx, cx, top - 12, 1, 16, p.lamp);
       windows(ctx, p, r, x + 11, top + 34, w - 22, h - 80, 4, 4, 3, 3);
-      for (let yy = top + 30; yy < GROUND - 22; yy += 24) rect(ctx, x + 7, yy, w - 14, 1, shade('#f2a33a', p));
+      // Floor bands run through the gap between window rows, never across a window.
+      const winTop = top + 34, rowStep = 4 + 3;
+      const winRows = Math.floor((h - 80 + 3) / rowStep);
+      for (let j = 4; j < winRows; j += 4) rect(ctx, x + 7, winTop + j * rowStep - 2, w - 14, 1, shade('#f2a33a', p));
       door(ctx, cx, 14, 14, shade('#122230', p));
-      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#7c4ddb', '#ffffff', p);
+      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#2bb5a6', '#2a2233', p);
       if (s.text?.[1]) sign(ctx, s.text[1], cx, GROUND - 32, '#f2a33a', '#2a2233', p);
       break;
     }
@@ -774,8 +777,12 @@ function drawStreet(ctx: Ctx, p: Palette) {
   for (const d of DISTRICTS) {
     const label = d.name.toUpperCase().replace("'", '');
     const plate = shade(LENS_COLOR[d.lens], p);
-    box(ctx, d.x0 + 4, GROUND + 6, textWidth(label) + 6, 9, plate, p);
-    text(ctx, label, d.x0 + 7, GROUND + 8, ink(plate));
+    // Long names would run under the pipes beside them, so these two stack on two lines.
+    const stacked = d.id === 'commercial' || d.id === 'marketing';
+    const lines = stacked ? [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)] : [label];
+    const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
+    box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
+    lines.forEach((l, i) => text(ctx, l, d.x0 + 7, GROUND + 8 + i * 8, ink(plate)));
   }
 
   // Street furniture fills the gaps between buildings: lamps and trees alternate.
