@@ -46,13 +46,14 @@ export type Ref =
   | { type: 'pipelines' }
   | { type: 'civic' }
   | { type: 'arcade' }
+  | { type: 'museum' }
   | { type: 'game'; id: string }
   | { type: 'warp'; to: number };
 
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'arcadehall' | 'pond';
+  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'arcadehall' | 'pond' | 'museum';
 
 export interface Structure {
   id: string;
@@ -108,6 +109,7 @@ export const STRUCTURES: Structure[] = [
   // Play District
   { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 2428, w: 132, h: 98, district: 'play', ref: { type: 'arcade' }, text: ['ARCADE'] },
   { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2580, w: 76, h: 30, district: 'play', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
+  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 2668, w: 92, h: 86, district: 'play', ref: { type: 'museum' }, text: ['MUSEUM'] },
   { id: 'warp-0', label: 'Warp back to Welcome Plaza', kind: 'warp', x: 2766, w: 22, h: 26, district: 'play', ref: { type: 'warp', to: 0 } },
 ];
 

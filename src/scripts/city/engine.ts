@@ -193,6 +193,12 @@ export function mountCity(root: HTMLElement): City {
   });
   panel.addEventListener('click', (e) => {
     if (e.target === panel) panel.close();
+    const goto = (e.target as HTMLElement).closest<HTMLElement>('[data-goto]');
+    if (goto) {
+      const s = STRUCTURES.find((x) => x.id === goto.dataset.goto);
+      if (s) fill(s);
+      return;
+    }
     const game = (e.target as HTMLElement).closest<HTMLElement>('[data-game]');
     if (game) {
       backToArcade = true;

@@ -120,19 +120,19 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 
 ## Museum of Favourites
 
-- [ ] Museum building in the city
-- [ ] Exhibit hall layout: framed plaques along a gallery wall
-- [ ] One plaque per game: our own pixel art, why it mattered, link to the original
-  - [ ] Super Mario (warp pipes)
-  - [ ] Undertale (the underground)
-  - [ ] Red Ball
-  - [ ] Fireboy and Watergirl
-  - [ ] Run 2
-  - [ ] Cricket batting games
-  - [ ] Henry Stickmin series
-  - [ ] Stickman fighting games
-- [ ] Plaque for Wikipedia (why the site is a wiki)
-- [ ] Links open in a new tab with a clear "external" marker
+- [x] Museum building in the city
+- [x] Exhibit hall layout: framed plaques along a gallery wall
+- [x] One plaque per game: our own pixel art, why it mattered, link to the original
+  - [x] Super Mario (warp pipes)
+  - [x] Undertale (the underground)
+  - [x] Red Ball
+  - [x] Fireboy and Watergirl
+  - [x] Run 2
+  - [x] Cricket batting games
+  - [x] Henry Stickmin series
+  - [x] Stickman fighting games
+- [x] Plaque for Wikipedia (why the site is a wiki)
+- [x] Links open in a new tab with a clear "external" marker
 
 ---
 

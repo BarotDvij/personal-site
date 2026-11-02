@@ -478,6 +478,25 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, cx, GROUND - 30, '#22b8cf', '#ffffff', p);
       break;
     }
+    case 'museum': {
+      const stone = shade('#e6dfcf', p), dark = shade('#b9ae96', p);
+      for (let i = 0; i < 3; i++) rect(ctx, x + i * 3, GROUND - 3 - i * 3, w - i * 6, 3, dark);
+      box(ctx, x + 6, top + 26, w - 12, h - 35, stone, p);
+      for (let i = 0; i < 12; i++) rect(ctx, x + 4 + i * 3, top + 24 - i * 2, w - 8 - i * 6, 2, i === 0 ? dark : stone);
+      rect(ctx, x + 4, top + 24, w - 8, 2, p.outline);
+      // Framed paintings between columns
+      const frames = ['#008c00', '#e0302f', '#3b82f6'];
+      for (let i = 0; i < 3; i++) {
+        const fx = x + 13 + i * ((w - 32) / 2);
+        box(ctx, fx - 2, top + 34, 18, 16, shade('#c8a24a', p), p);
+        rect(ctx, fx, top + 36, 14, 12, shade(frames[i], p));
+        rect(ctx, fx + 2, top + 38, 4, 3, '#ffffff');
+      }
+      for (let i = 0; i < 4; i++) rect(ctx, x + 9 + i * ((w - 24) / 3), top + 54, 5, h - 63, shade('#fffaf0', p));
+      door(ctx, cx, 12, 16, shade('#5a4030', p));
+      sign(ctx, label, cx, top + 12, '#22b8cf', '#ffffff', p);
+      break;
+    }
     case 'warp': {
       warpBody(ctx, x + 2, top + 9, w - 4, h - 9, p);
       rect(ctx, x, top, w, 10, p.warp[0]);

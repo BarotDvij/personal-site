@@ -3,6 +3,7 @@
 import profile from '../../../content/profile.json';
 import type { Ref } from './world';
 import { GAMES } from '../arcade/catalog';
+import { museumHtml } from './museum';
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -106,6 +107,8 @@ export function panelFor(ref: Ref): PanelContent | null {
             <span class="game-name">${esc(g.title)}</span><span class="game-blurb">${esc(g.blurb)}</span></button></li>`).join('')}</ul>`,
       };
     }
+    case 'museum':
+      return { kicker: 'Play District', title: 'Museum of Favourites', html: museumHtml() };
     case 'pipelines': {
       const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
       const rows = profile.experience.flatMap((e) =>
