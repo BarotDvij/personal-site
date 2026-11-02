@@ -40,7 +40,7 @@ const current = profile.experience[0];
 const sections = [
   ['career', 'Career'],
   ['projects', 'Projects'],
-  ['hackathons', 'Hackathons'],
+  ['awards', 'Awards'],
   ['approach', 'Approach'],
   ['civic', 'Civic life'],
   ['skills', 'Skills'],
@@ -50,6 +50,10 @@ const sections = [
   ['references', 'References'],
   ['external', 'External links'],
 ];
+
+const awardGroups = ['Business competitions', 'Junior Achievement', 'School'].map(
+  (g) => [g, profile.awards.filter((a) => a.group === g)] as const,
+);
 
 const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
@@ -219,8 +223,9 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       </div>
     </section>
 
-    <section id="hackathons" aria-labelledby="hack-h">
-      <h2 id="hack-h">Hackathons</h2>
+    <section id="awards" aria-labelledby="awards-h">
+      <h2 id="awards-h">Awards</h2>
+      <h3>Hackathons</h3>
       <table class="wikitable">
         <caption>Results from one week in 2026</caption>
         <thead><tr><th scope="col">Place</th><th scope="col">Event</th><th scope="col">Project</th></tr></thead>
@@ -234,6 +239,20 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           ))}
         </tbody>
       </table>
+      {awardGroups.map(([group, items]) => (
+        <>
+          <h3>{group}</h3>
+          <ul class="awards">
+            {items.map((a) => (
+              <li>
+                <b>{a.title}</b> <span class="award-meta">{a.issuer} · {a.date}</span>
+                <br />{a.body}
+              </li>
+            ))}
+          </ul>
+        </>
+      ))}
+      <a class="city-link" href="#tour/visitor" data-city-target="visitor">See the trophy case in Dvij City</a>
     </section>
 
     <section id="approach" aria-labelledby="approach-h">

@@ -374,6 +374,19 @@ html[data-mode='city'] body {
   box-shadow: 0 0 0 1px #2a2233;
 }
 
+.awards {
+  padding-left: 20px;
+}
+
+.awards li {
+  margin: 6px 0;
+}
+
+.award-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .ext {
   padding-left: 20px;
 }
@@ -890,6 +903,19 @@ blockquote p {
   background: #e33b3b;
   border: 2px solid #fff;
   box-shadow: 0 0 0 1px #2a2233;
+}
+
+.awards {
+  padding-left: 20px;
+}
+
+.awards li {
+  margin: 6px 0;
+}
+
+.award-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
 }
 
 .ext {
@@ -1646,4 +1672,33 @@ html.party .hud-title {
   .project {
     break-inside: avoid;
   }
+}
+
+.panel-body .trophies {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.panel-body .trophies li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.panel-body .trophies .cup {
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  background:
+    linear-gradient(#f2c84b, #f2c84b) 2px 0 / 10px 7px no-repeat,
+    linear-gradient(#f2c84b, #f2c84b) 6px 7px / 2px 4px no-repeat,
+    linear-gradient(#f2c84b, #f2c84b) 3px 11px / 8px 3px no-repeat;
+  image-rendering: pixelated;
+}
+
+.panel-body .trophies small {
+  color: #b8b2cf;
 }

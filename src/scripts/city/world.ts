@@ -65,7 +65,7 @@ export interface Structure {
 
 export const STRUCTURES: Structure[] = [
   // Welcome Plaza
-  { id: 'visitor', label: 'Visitor Center', kind: 'kiosk', x: 34, w: 64, h: 52, district: 'plaza', ref: { type: 'about' }, text: ['INFO'] },
+  { id: 'visitor', label: 'Visitor Center: trophy case', kind: 'kiosk', x: 34, w: 64, h: 52, district: 'plaza', ref: { type: 'about' }, text: ['INFO'] },
   { id: 'fame', label: 'Hall of Fame', kind: 'monument', x: 136, w: 112, h: 66, district: 'plaza', ref: { type: 'hackathons' }, text: ['HALL OF FAME'] },
   { id: 'post', label: 'Post Office', kind: 'post', x: 284, w: 72, h: 56, district: 'plaza', ref: { type: 'contact' }, text: ['POST'] },
   { id: 'warp-1', label: 'Warp to Marketing Strip', kind: 'warp', x: 372, w: 22, h: 26, district: 'plaza', ref: { type: 'warp', to: 1 } },

@@ -56,6 +56,13 @@ export function panelFor(ref: Ref): PanelContent | null {
             'The copper pipes underground are data pipelines, and the packets are real flows of work into the warehouse.',
             'Teal warp pipes jump to the next district.',
           ])}
+          <h3>Trophy case</h3>
+          <ul class="trophies">${[
+            ...profile.hackathons.map((h) => ({ title: `${h.place}, ${h.event}`, meta: h.project.length < 40 ? h.project : 'Hackathon' })),
+            ...profile.awards.map((a) => ({ title: a.title, meta: `${a.issuer} · ${a.date}` })),
+          ]
+            .map((t) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(t.title)}<br><small>${esc(t.meta)}</small></span></li>`)
+            .join('')}</ul>
           <h3>Approach</h3>
           ${profile.lessons.map((l) => `<p><strong>${esc(l.title)}.</strong> ${esc(l.body)}</p>`).join('')}`,
       };

@@ -208,7 +208,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 6, 4, 6, shade('#e0457b', p));
       for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 6, 4, 6, shade('#fff4e0', p));
       rect(ctx, x - 2, top + 4, w + 4, 2, p.outline);
-      windows(ctx, p, r, x + 6, top + 18, w - 30, 14, 6, 6, 4, 4);
+      // Trophy case in the window
+      rect(ctx, x + 5, top + 16, w - 30, 16, p.night ? '#3a3a52' : '#d6eeff');
+      rect(ctx, x + 5, top + 28, w - 30, 1, shade('#8a6a3a', p));
+      for (let i = 0; i < 5; i++) {
+        const tx = x + 8 + i * 7, gold = i % 3 === 1 ? '#c9ccd6' : '#f2c84b';
+        rect(ctx, tx, top + 20, 4, 3, shade(gold, p));
+        rect(ctx, tx + 1, top + 23, 2, 3, shade(gold, p));
+        rect(ctx, tx, top + 26, 4, 2, shade(gold, p));
+      }
       rect(ctx, x + w - 20, top + 16, 14, 14, shade('#3b82f6', p));
       text(ctx, 'I', x + w - 14, top + 21, '#ffffff');
       door(ctx, x + 16);
