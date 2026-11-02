@@ -228,7 +228,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x, GROUND - 18, w, 18, shade('#a49c90', p), p);
       box(ctx, x + 6, GROUND - 24, w - 12, 7, shade('#bdb5a8', p), p);
       centeredText(ctx, label, cx, GROUND - 12, shade('#3a3530', p));
-      const cups: [number, number, string][] = [[cx - 34, 30, '#c9ccd6'], [cx, 42, '#f2c84b'], [cx + 34, 34, '#f2c84b']];
+      const cups: [number, number, string][] = [[cx - 34, 42, '#f2c84b'], [cx, 30, '#c9ccd6'], [cx + 34, 42, '#f2c84b']];
       for (const [px, ph, gold] of cups) {
         box(ctx, px - 7, GROUND - 24 - ph + 14, 14, ph - 14, shade('#d9d2c4', p), p);
         const cupY = GROUND - 24 - ph;
@@ -239,9 +239,9 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, px - 3, cupY + 11, 6, 2, shade(gold, p));
         rect(ctx, px - 4, cupY + 1, 2, 3, '#fff6c8');
       }
-      text(ctx, '2', cx - 35, GROUND - 24 - 30 + 18, shade('#3a3530', p));
-      text(ctx, '1', cx - 1, GROUND - 24 - 42 + 18, shade('#3a3530', p));
-      text(ctx, '1', cx + 33, GROUND - 24 - 34 + 18, shade('#3a3530', p));
+      text(ctx, '1', cx - 35, GROUND - 24 - 42 + 18, shade('#3a3530', p));
+      text(ctx, '2', cx - 1, GROUND - 24 - 30 + 18, shade('#3a3530', p));
+      text(ctx, '1', cx + 33, GROUND - 24 - 42 + 18, shade('#3a3530', p));
       break;
     }
     case 'post': {
@@ -547,7 +547,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       // Framed paintings between columns
       const frames = ['#008c00', '#e0302f', '#3b82f6'];
       for (let i = 0; i < 3; i++) {
-        const fx = x + 13 + i * ((w - 32) / 2);
+        // Evenly spaced and centred inside the building body (x + 6 .. x + w - 6).
+        const fx = x + 6 + 4 + 2 + i * ((w - 12 - 8 - 18) / 2);
         box(ctx, fx - 2, top + 34, 18, 16, shade('#c8a24a', p), p);
         rect(ctx, fx, top + 36, 14, 12, shade(frames[i], p));
         rect(ctx, fx + 2, top + 38, 4, 3, '#ffffff');
@@ -672,8 +673,17 @@ export function buildCityLayer(p: Palette) {
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
   for (const d of DISTRICTS) {
-    rect(ctx, d.x0 + 3, GROUND - 26, 1, 26, p.lamp);
-    rect(ctx, d.x0 + 4, GROUND - 26, 8, 5, shade(LENS_COLOR[d.lens], p));
+    // Tall flag so it clears the street lamps (which top out at GROUND - 24).
+    // At night the pole and cloth stay bright so they read against the sky.
+    const pole = p.night ? '#c9cde8' : p.lamp;
+    const cloth = p.night ? LENS_COLOR[d.lens] : shade(LENS_COLOR[d.lens], p);
+    rect(ctx, d.x0 + 3, GROUND - 46, 1, 46, pole);
+    rect(ctx, d.x0 + 3, GROUND - 48, 1, 2, p.night ? '#ffffff' : p.lamp);
+    rect(ctx, d.x0 + 4, GROUND - 46, 10, 7, cloth);
+    if (p.night) {
+      rect(ctx, d.x0 + 4, GROUND - 46, 10, 1, '#ffffff');
+      rect(ctx, d.x0 + 4, GROUND - 40, 10, 1, p.outline);
+    }
   }
   // Welcome banner
   sign(ctx, 'WELCOME TO DVIJ CITY', 200, 48, '#e8c547', '#2a2233', p);
