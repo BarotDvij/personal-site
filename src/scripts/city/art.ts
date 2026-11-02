@@ -660,7 +660,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[1528, 1], [1552, 2], [1588, 1], [1604, 2], [1624, 1], [1736, 2]] as const) tree(ctx, tx, p, size);
+  for (const [tx, size] of [[1650, 1], [1664, 2], [1696, 1], [1712, 2], [1740, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -672,8 +672,8 @@ export function buildCityLayer(p: Palette) {
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
   for (const d of DISTRICTS) {
-    rect(ctx, d.x0 + 3, GROUND - 26, 1, 26, p.lamp);
-    rect(ctx, d.x0 + 4, GROUND - 26, 8, 5, shade(LENS_COLOR[d.lens], p));
+    rect(ctx, d.x0 + 31, GROUND - 26, 1, 26, p.lamp);
+    rect(ctx, d.x0 + 32, GROUND - 26, 7, 5, shade(LENS_COLOR[d.lens], p));
   }
   // Welcome banner
   sign(ctx, 'WELCOME TO DVIJ CITY', 200, 48, '#e8c547', '#2a2233', p);

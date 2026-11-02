@@ -45,10 +45,11 @@ export interface Walker {
   step: number;
   warp: number;
   warpTo: number;
+  rise: number;
   poof: number;
 }
 
-export const createWalker = (): Walker => ({ x: 112, jump: 0, vy: 0, facing: 1, moving: false, step: 0, warp: 0, warpTo: -1, poof: 0 });
+export const createWalker = (): Walker => ({ x: 112, jump: 0, vy: 0, facing: 1, moving: false, step: 0, warp: 0, warpTo: -1, rise: 0, poof: 0 });
 
 /** True when standing on top of a warp pipe. */
 export const onPipe = (w: Walker) => {
@@ -58,8 +59,9 @@ export const onPipe = (w: Walker) => {
 
 /** The structure the character can use right now: a door in front of it, or the pipe under or beside it. */
 export function nearby(w: Walker): Structure | undefined {
-  const pipe = PIPES.find((s) => w.x > s.x - 10 && w.x < s.x + s.w + 10);
+  const pipe = PIPES.find((s) => s.ref && w.x > s.x - 10 && w.x < s.x + s.w + 10);
   if (pipe) return pipe;
+  if (pipeAt(w.x)) return undefined;
   return STRUCTURES.find((s) => s.ref && s.kind !== 'warp' && w.x >= s.x + 2 && w.x <= s.x + s.w - 2);
 }
 
@@ -80,7 +82,7 @@ export function startWarp(w: Walker, s: Structure) {
 
 export function jump(w: Walker) {
   const grounded = w.vy === 0 && Math.abs(w.jump - supportAt(w.x)) < 0.5;
-  if (grounded && w.warp <= 0) w.vy = JUMP_SPEED;
+  if (grounded && w.warp <= 0 && w.rise <= 0) w.vy = JUMP_SPEED;
 }
 
 /** Advances the character. Returns true when it moved or animated. */
@@ -93,13 +95,19 @@ export function updateWalker(w: Walker, dir: number, run: boolean, dt: number): 
   if (w.warp > 0) {
     w.warp -= dt;
     if (w.warp <= 0) {
+      // Travel through the pipe network and rise out of the next district's arrival pipe.
       const d = DISTRICTS[w.warpTo];
-      w.x = d.x0 + 36;
-      w.jump = 0;
+      const exit = PIPES.find((s) => !s.ref && s.district === d.id);
+      w.x = exit ? exit.x + exit.w / 2 : d.x0 + 36;
+      w.jump = exit?.h ?? 0;
       w.vy = 0;
       w.facing = 1;
-      w.poof = 300;
+      w.rise = WARP_TIME;
     }
+    return true;
+  }
+  if (w.rise > 0) {
+    w.rise -= dt;
     return true;
   }
   const k = dt / 16.67;
@@ -134,13 +142,14 @@ export function drawWalker(ctx: CanvasRenderingContext2D, w: Walker, ox: number,
   const rows = [...SPRITE, ...legs];
 
   ctx.save();
-  if (w.warp > 0) {
-    // Sink into the pipe: clip everything below the pipe's lip.
+  if (w.warp > 0 || w.rise > 0) {
+    // Sinking in or rising out: clip everything below the pipe's lip.
     const pipeTop = GROUND + oy - 26;
     ctx.beginPath();
     ctx.rect(cx - 10, 0, 20, pipeTop);
     ctx.clip();
-    top = pipeTop - HEIGHT + Math.round((1 - w.warp / WARP_TIME) * (HEIGHT + 2));
+    const sunk = w.warp > 0 ? 1 - w.warp / WARP_TIME : w.rise / WARP_TIME;
+    top = pipeTop - HEIGHT + Math.round(sunk * (HEIGHT + 2));
   }
   rows.forEach((row, y) => {
     for (let x = 0; x < 8; x++) {
@@ -160,7 +169,7 @@ export function drawWalker(ctx: CanvasRenderingContext2D, w: Walker, ox: number,
 }
 
 export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structure | undefined, ox: number, oy: number) {
-  if (!s || w.warp > 0) return;
+  if (!s || w.warp > 0 || w.rise > 0) return;
   const label = s.ref?.type !== 'warp' ? 'UP: OPEN' : onPipe(w) ? 'DOWN: WARP' : w.jump === 0 ? 'SPACE: HOP ON' : '';
   if (!label) return;
   const cx = Math.round(w.x + ox);

@@ -308,6 +308,7 @@ export function mountCity(root: HTMLElement): City {
       const s = nearby(walker);
       if (s && startWarp(walker, s)) {
         sfx.warp();
+        setTimeout(() => sfx.warp(), 430);
         follow = true;
       } else if (s?.kind === 'warp') {
         sfx.tick();
