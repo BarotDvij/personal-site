@@ -2,6 +2,7 @@
   "name": "Dvij Barot",
   "headline": "Builds across product, data, AI and code. Starts with the friction, not the tech.",
   "location": "Waterloo, ON",
+  "seeking": "Summer 2027 internships",
   "links": {
     "email": "d2barot@uwaterloo.ca",
     "linkedin": "https://www.linkedin.com/in/barotdvij",
@@ -83,6 +84,7 @@
         "ai",
         "dev"
       ],
+      "now": "building an agentic product operations application for an enterprise client through Communitech's <a href=\"https://www.communitech.ca/programs/ai-at-work/\">AI@WORK program</a>",
       "summary": "Led an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
       "bullets": [
         "Led product development of a fullstack agentic application automating purchase-order drafts, AI image generation, and e-commerce listings for enterprise client Hauser Industries",

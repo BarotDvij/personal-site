@@ -14,7 +14,7 @@ const lensNames: Record<string, string> = {
   marketing: 'Marketer',
   data: 'Analyst',
   pm: 'PM',
-  ai: 'Developer',
+  ai: 'Engineer',
   dev: 'Builder',
 };
 
@@ -158,10 +158,9 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </aside>
 
     <p class="lead">
-      <b>Dvij Barot</b> is a Management Engineering student at the University of Waterloo who works across
-      product management, data engineering, AI, and software development. Barot is currently a {current.role} at
-      {current.org}, building an agentic operations application for an enterprise client through Communitech's
-      AI@WORK program.
+      <b>Dvij Barot</b> is a Management Engineering student at the University of Waterloo looking for <b>{profile.seeking}</b>. He works across
+      AI engineering and enablement, product management, data engineering, and software development. Barot is
+      currently holding the {current.role} position at {current.org}, <Fragment set:html={current.now} />.
     </p>
     <p class="lead-more">
       Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
@@ -301,7 +300,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <section id="talk" aria-labelledby="talk-h">
       <h2 id="talk-h">Contact</h2>
-      <p>Open to co-op roles in forward deployed engineering, technical product management, and product.</p>
+      <p>Open to {profile.seeking} in forward deployed engineering, technical product management, and product.</p>
       <ul class="contact">
         <li><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
         <li><a href={profile.links.linkedin}>LinkedIn</a></li>
