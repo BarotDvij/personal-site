@@ -2,7 +2,7 @@
 // No sprites to download, and day/night is just a palette swap.
 
 import {
-  WORLD_W, WORLD_H, GROUND, TRUNK_Y, DEEP_Y, JUNCTION_X, DISTRICTS, LENS_COLOR,
+  WORLD_W, WORLD_H, GROUND, TRUNK_Y, DEEP_Y, JUNCTION_X, TANK_BOTTOM, DISTRICTS, LENS_COLOR,
   STRUCTURES, PIPE_PATHS, type Structure, type PipePath,
 } from './world';
 
@@ -74,7 +74,7 @@ export const PALETTES: Record<'day' | 'night', Palette> = {
     earth: ['#7b4a2a', '#663c22', '#52301c', '#402516', '#301b10'],
     rock: ['#8d7966', '#a69380'],
     pipe: ['#4a2511', '#c8743a', '#f0a868'],
-    warp: ['#0b4a46', '#1aa39a', '#7fe3d8'],
+    warp: ['#0c1a08', '#008c00', '#a4cb0e'],
     glass: ['#8fc6ef', '#d6eeff'],
     lit: '#ffd76a',
     unlit: '#56708f',
@@ -92,7 +92,7 @@ export const PALETTES: Record<'day' | 'night', Palette> = {
     earth: ['#4d2f1c', '#402716', '#331f12', '#28180e', '#1d110a'],
     rock: ['#5a4c40', '#6c5d50'],
     pipe: ['#2c160a', '#a85f2c', '#d88d50'],
-    warp: ['#063431', '#13807a', '#5cc7bd'],
+    warp: ['#04100a', '#005a1c', '#6b8f1a'],
     glass: ['#2a3a5c', '#3d5280'],
     lit: '#ffd76a',
     unlit: '#232d48',
@@ -183,6 +183,16 @@ function lamp(ctx: Ctx, x: number, p: Palette) {
     ctx.fillStyle = 'rgba(255, 220, 140, 0.16)';
     ctx.fillRect(x - 5, GROUND - 21, 12, 21);
   }
+}
+
+// Classic green pipe: dark base with light highlight stripes on the left.
+function warpBody(ctx: Ctx, x: number, y: number, w: number, h: number, p: Palette) {
+  const [o, shadow, hi] = p.warp;
+  rect(ctx, x, y, w, h, o);
+  rect(ctx, x + 1, y, w - 2, h, shadow);
+  rect(ctx, x + 2, y, 2, h, hi);
+  if (w > 12) rect(ctx, x + 5, y, Math.floor((w - 8) / 3), h, hi);
+  if (w > 16) rect(ctx, x + 6 + Math.floor((w - 8) / 3), y, 1, h, hi);
 }
 
 // ---------- buildings ----------
@@ -426,15 +436,28 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, x + 40, GROUND - 60, '#3fb950', '#ffffff', p);
       break;
     }
+    case 'furniture': {
+      box(ctx, x, top + 10, w, h - 10, shade('#efe3cf', p), p);
+      rect(ctx, x - 2, top + 8, w + 4, 3, p.outline);
+      for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#f2a33a', p));
+      for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#fff4e0', p));
+      // Display window with a sofa and a floor lamp
+      const wx = x + 5, wy = GROUND - 30, ww = w - 22;
+      rect(ctx, wx, wy, ww, 26, p.night ? '#3a3a52' : '#cfe6f5');
+      rect(ctx, wx + 4, wy + 14, ww - 10, 6, shade('#7a4a8c', p));
+      rect(ctx, wx + 3, wy + 10, 3, 10, shade('#7a4a8c', p));
+      rect(ctx, wx + ww - 9, wy + 10, 3, 10, shade('#7a4a8c', p));
+      rect(ctx, wx + 6, wy + 12, ww - 16, 3, shade('#9b6bb0', p));
+      rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
+      rect(ctx, wx + ww - 6, wy + 4, 5, 3, p.night ? '#ffd76a' : '#f2c84b');
+      door(ctx, x + w - 8, 8, 14);
+      sign(ctx, label, cx, top + 12, '#f2a33a', '#2a2233', p);
+      break;
+    }
     case 'warp': {
-      const [o, b, hi] = p.warp;
-      rect(ctx, x + 2, top + 8, w - 4, h - 8, o);
-      rect(ctx, x + 3, top + 8, w - 6, h - 8, b);
-      rect(ctx, x + 5, top + 8, 2, h - 8, hi);
-      rect(ctx, x, top, w, 9, o);
-      rect(ctx, x + 1, top + 1, w - 2, 7, b);
-      rect(ctx, x + 3, top + 2, 2, 5, hi);
-      rect(ctx, x + 3, top, w - 6, 1, '#0a0a12');
+      warpBody(ctx, x + 2, top + 9, w - 4, h - 9, p);
+      rect(ctx, x, top, w, 10, p.warp[0]);
+      warpBody(ctx, x, top + 1, w, 8, p);
       break;
     }
   }
@@ -442,7 +465,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
 
 // ---------- underground ----------
 
-function pipe(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, p: Palette, t = 6) {
+function pipe(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, p: Palette, t = 8) {
   const [o, b, hi] = p.pipe;
   const x = Math.min(x0, x1) - t / 2, y = Math.min(y0, y1) - t / 2;
   const w = Math.abs(x1 - x0) + t, h = Math.abs(y1 - y0) + t;
@@ -454,8 +477,8 @@ function pipe(ctx: Ctx, x0: number, y0: number, x1: number, y1: number, p: Palet
 
 function flange(ctx: Ctx, x: number, y: number, vertical: boolean, p: Palette) {
   const [o, b] = p.pipe;
-  if (vertical) { rect(ctx, x - 5, y - 1, 10, 3, o); rect(ctx, x - 4, y, 8, 1, b); }
-  else { rect(ctx, x - 1, y - 5, 3, 10, o); rect(ctx, x, y - 4, 1, 8, b); }
+  if (vertical) { rect(ctx, x - 6, y - 1, 12, 3, o); rect(ctx, x - 5, y, 10, 1, b); }
+  else { rect(ctx, x - 1, y - 6, 3, 12, o); rect(ctx, x, y - 5, 1, 10, b); }
 }
 
 function drawUnderground(ctx: Ctx, p: Palette) {
@@ -477,7 +500,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Trunk lines
   pipe(ctx, 20, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
-  pipe(ctx, JUNCTION_X + 20, DEEP_Y, WORLD_W - 460, DEEP_Y, p, 5);
+  pipe(ctx, JUNCTION_X + 20, DEEP_Y, WORLD_W - 460, DEEP_Y, p, 7);
   for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings
@@ -487,7 +510,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
     pipe(ctx, s.riser, GROUND + 4, s.riser, deep ? DEEP_Y : TRUNK_Y, p);
     flange(ctx, s.riser, GROUND + 14, true, p);
   }
-  pipe(ctx, JUNCTION_X + 20, GROUND + 22, JUNCTION_X + 20, DEEP_Y, p, 5);
+  pipe(ctx, JUNCTION_X + 20, TANK_BOTTOM, JUNCTION_X + 20, DEEP_Y, p, 7);
 
   // Warehouse junction tank
   const tx = JUNCTION_X - 26, ty = GROUND + 14;
@@ -496,13 +519,12 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   centeredText(ctx, 'WAREHOUSE', tx + 36, ty + 8, '#ffffff');
   centeredText(ctx, '36 TABLES', tx + 36, ty + 17, '#9fc7ff');
   pipe(ctx, JUNCTION_X, GROUND - 2, JUNCTION_X, ty, p);
+  pipe(ctx, JUNCTION_X, TANK_BOTTOM, JUNCTION_X, TRUNK_Y, p);
 
   // Warp pipes drop into the trunk
   for (const s of STRUCTURES) {
     if (s.kind !== 'warp') continue;
-    const [o, b] = p.warp;
-    rect(ctx, s.x + 5, GROUND, s.w - 10, TRUNK_Y - GROUND - 3, o);
-    rect(ctx, s.x + 6, GROUND, s.w - 12, TRUNK_Y - GROUND - 3, b);
+    warpBody(ctx, s.x + 2, GROUND, s.w - 4, TRUNK_Y - GROUND - 4, p);
   }
 
   // Layer labels

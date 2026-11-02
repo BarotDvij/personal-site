@@ -451,5 +451,19 @@
   "photo": {
     "src": null,
     "alt": "Portrait of Dvij Barot"
-  }
+  },
+  "civic": [
+    {
+      "title": "Diwali fireworks bylaw",
+      "body": "Helped pass a bylaw at Kitchener City Hall to allow fireworks during Diwali."
+    },
+    {
+      "title": "Food bank drive",
+      "body": "As HSC President, set up a food bank drive with the City of Kitchener."
+    },
+    {
+      "title": "JA Fish Tank camp",
+      "body": "Volunteered at City Hall for the JA Fish Tank camp in high school."
+    }
+  ]
 }

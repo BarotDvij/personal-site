@@ -42,12 +42,13 @@ export type Ref =
   | { type: 'contact' }
   | { type: 'hackathons' }
   | { type: 'pipelines' }
+  | { type: 'civic' }
   | { type: 'warp'; to: number };
 
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp';
+  | 'grocer' | 'construction' | 'warp' | 'furniture';
 
 export interface Structure {
   id: string;
@@ -76,9 +77,10 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-2', label: 'Warp to Civic Center', kind: 'warp', x: 772, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 2 } },
 
   // Civic Center
-  { id: 'cityhall', label: 'City Hall: AltaML', kind: 'hall', x: 832, w: 128, h: 104, district: 'civic', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['CITY HALL'], riser: 896 },
-  { id: 'sevenafter', label: 'SevenAfter Studio', kind: 'studio', x: 984, w: 76, h: 74, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['STUDIO'] },
-  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 1078, w: 92, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
+  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 812, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
+  { id: 'altaml', label: 'Hauser Furniture: AltaML', kind: 'furniture', x: 934, w: 68, h: 66, district: 'civic', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['HAUSER'], riser: 968 },
+  { id: 'sevenafter', label: 'SevenAfter Studio', kind: 'studio', x: 1010, w: 62, h: 74, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['STUDIO'] },
+  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 1080, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'warp-3', label: 'Warp to AI Lab', kind: 'warp', x: 1172, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 3 } },
 
   // AI Lab
@@ -102,6 +104,8 @@ export const STRUCTURES: Structure[] = [
 
 // The warehouse junction every pipeline flows into.
 export const JUNCTION_X = 1700;
+// Bottom edge of the warehouse tank, where pipelines plug in.
+export const TANK_BOTTOM = GROUND + 44;
 
 export interface PipePath {
   color: string;
@@ -118,8 +122,8 @@ export const PIPE_PATHS: PipePath[] = STRUCTURES.filter((s) => s.riser && s.id !
   return {
     color: LENS_COLOR[districtLens(s.district)],
     points: deep
-      ? [[JUNCTION_X + 20, GROUND + 22], [JUNCTION_X + 20, y], [s.riser!, y], [s.riser!, GROUND + 4]]
-      : [[s.riser!, GROUND + 4], [s.riser!, y], [JUNCTION_X, y], [JUNCTION_X, GROUND + 22]],
+      ? [[JUNCTION_X + 20, TANK_BOTTOM], [JUNCTION_X + 20, y], [s.riser!, y], [s.riser!, GROUND + 4]]
+      : [[s.riser!, GROUND + 4], [s.riser!, y], [JUNCTION_X, y], [JUNCTION_X, TANK_BOTTOM]],
   };
 });
 

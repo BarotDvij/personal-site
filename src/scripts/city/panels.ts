@@ -81,6 +81,14 @@ export function panelFor(ref: Ref): PanelContent | null {
           .join('')}</ul>`,
       };
     }
+    case 'civic': {
+      return {
+        kicker: 'Kitchener City Hall',
+        title: 'Civic life',
+        html: `<p class="lead">City planning isn't just a theme here. Some of this city's history happened at the real City Hall.</p>
+          ${profile.civic.map((c) => `<p><strong>${esc(c.title)}.</strong> ${esc(c.body)}</p>`).join('')}`,
+      };
+    }
     case 'pipelines': {
       const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
       const rows = profile.experience.flatMap((e) =>

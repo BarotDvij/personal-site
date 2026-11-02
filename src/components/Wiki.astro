@@ -41,6 +41,7 @@ const sections = [
   ['projects', 'Projects'],
   ['hackathons', 'Hackathons'],
   ['approach', 'Approach'],
+  ['civic', 'Civic life'],
   ['skills', 'Skills'],
   ['education', 'Education'],
   ['history', 'History'],
@@ -217,6 +218,16 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       {profile.lessons.map((l) => (
         <p><b>{l.title}.</b> {l.body}</p>
       ))}
+    </section>
+
+    <section id="civic" aria-labelledby="civic-h">
+      <h2 id="civic-h">Civic life</h2>
+      <ul>
+        {profile.civic.map((c) => (
+          <li><b>{c.title}.</b> {c.body}</li>
+        ))}
+      </ul>
+      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
     </section>
 
     <section id="skills" aria-labelledby="skills-h">
