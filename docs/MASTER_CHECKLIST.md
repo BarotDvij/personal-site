@@ -38,7 +38,18 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 
 ---
 
-## V2: Plan (order to confirm)
+## Build order (confirmed Nov 2)
+
+**Now (autonomous):**
+1. Awards section in the Wiki (with hackathons) and a trophy case in the Visitor Center
+2. The Arcade: shared shell, then all games
+3. Character
+4. Museum of Favourites
+5. Fly-over intro
+
+**Parked until Dvij is back:** media (portrait, ads, screenshots, budget check), "Early life" section, NPC dialogue, final launch pass, domain, webring
+
+## V2: Plan (original draft)
 
 1. **Finish V1 content:** headline, facts, portrait, media, early life (DECA, JA)
 2. **The Arcade:** offline minigames
@@ -73,7 +84,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [ ] Bug Sweeper (Minesweeper) on the construction lot
 - [ ] Trap the Cat (Chat Noir) in the park
 - [ ] Rally (Tennis / Pong) in the Arcade
-- [ ] Block Stack (Tetris) in the Arcade
+- [ ] Block Stack (Tetris) in the Arcade. Credit line: how competitive Tetris started in high school
 - [ ] Pipe Muncher (Pac-Man) maze through the pipe network
 - [ ] Duck Flight (one Duck Life minigame) at the park pond
 - [ ] Chess, two players on one device, then a simple computer opponent
