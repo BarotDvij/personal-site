@@ -232,11 +232,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (const [px, ph, gold] of cups) {
         box(ctx, px - 7, GROUND - 24 - ph + 14, 14, ph - 14, shade('#d9d2c4', p), p);
         const cupY = GROUND - 24 - ph;
-        rect(ctx, px - 5, cupY, 10, 7, shade(gold, p));
-        rect(ctx, px - 7, cupY + 1, 2, 3, shade(gold, p));
-        rect(ctx, px + 5, cupY + 1, 2, 3, shade(gold, p));
-        rect(ctx, px - 1, cupY + 7, 2, 4, shade(gold, p));
-        rect(ctx, px - 3, cupY + 11, 6, 2, shade(gold, p));
+        // Trophy parts, drawn once with a dark outline and once filled so they
+        // stay readable against the daytime sky.
+        const parts: [number, number, number, number][] = [
+          [px - 5, cupY, 10, 7], [px - 7, cupY + 1, 2, 3], [px + 5, cupY + 1, 2, 3],
+          [px - 1, cupY + 7, 2, 4], [px - 3, cupY + 11, 6, 2],
+        ];
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
+        const fill = p.night || gold !== '#c9ccd6' ? shade(gold, p) : '#aab0c4';
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, fill);
         rect(ctx, px - 4, cupY + 1, 2, 3, '#fff6c8');
       }
       text(ctx, '1', cx - 35, GROUND - 24 - 42 + 18, shade('#3a3530', p));
@@ -261,7 +265,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       windows(ctx, p, r, x + 6, top + 18, w - 12, h - 46);
       for (let i = 0; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#9bd23c', p));
       for (let i = 4; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#f6ffe0', p));
-      rect(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#bfe6ff');
+      box(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#8fd14f', p);
       door(ctx, cx, 10, 14, shade('#24301f', p));
       sign(ctx, label, cx, top + 6, '#9bd23c', '#1d2a10', p);
       break;
@@ -375,7 +379,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         box(ctx, dx, GROUND - 24, 20, 24, shade('#4c5563', p), p);
         for (let yy = GROUND - 22; yy < GROUND; yy += 3) rect(ctx, dx + 1, yy, 18, 1, shade('#5d6676', p));
       }
-      sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
+      sign(ctx, label, cx, top + 20, LENS_COLOR.data, '#2a2233', p);
       break;
     }
     case 'library': {
@@ -432,8 +436,19 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'construction': {
-      box(ctx, x + 6, GROUND - 46, w - 40, 46, shade('#9aa3ad', p), p);
-      windows(ctx, p, r, x + 12, GROUND - 40, w - 52, 24, 5, 5, 4, 4);
+      // Brick schoolhouse behind the scaffolding: clock tower, door, three rows of windows.
+      const sx = x + 6, sw = w - 40, scx = sx + sw / 2;
+      box(ctx, sx, GROUND - 46, sw, 46, shade('#b5533c', p), p);
+      for (let yy = GROUND - 43; yy < GROUND - 2; yy += 4) rect(ctx, sx + 1, yy, sw - 2, 1, shade('#9a4330', p));
+      rect(ctx, sx - 2, GROUND - 48, sw + 4, 3, shade('#e6dfcf', p));
+      box(ctx, scx - 11, GROUND - 74, 22, 28, shade('#c46a50', p), p);
+      for (let i = 0; i < 6; i++) rect(ctx, scx - 12 + i * 2, GROUND - 79 - i, 24 - i * 4, 2, shade('#4a3a52', p));
+      rect(ctx, scx - 5, GROUND - 71, 10, 10, p.outline);
+      rect(ctx, scx - 4, GROUND - 70, 8, 8, '#fff6dc');
+      rect(ctx, scx, GROUND - 69, 1, 4, p.outline);
+      rect(ctx, scx, GROUND - 66, 3, 1, p.outline);
+      windows(ctx, p, r, sx + 6, GROUND - 40, sw - 12, 22, 6, 5, 4, 4);
+      door(ctx, scx, 12, 14, shade('#5a4030', p));
       const pole = shade('#e8a33a', p);
       for (let i = 0; i <= 4; i++) rect(ctx, x + 4 + i * ((w - 40) / 4), GROUND - 78, 2, 78, pole);
       for (let yy = GROUND - 78; yy < GROUND; yy += 16) rect(ctx, x + 4, yy, w - 38, 2, pole);
@@ -444,7 +459,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, x + w - 36 + i * 7, GROUND - 6, 5, 6, shade('#f28c28', p));
         rect(ctx, x + w - 35 + i * 7, GROUND - 4, 3, 1, '#ffffff');
       }
-      sign(ctx, label, x + 40, GROUND - 60, '#3fb950', '#ffffff', p);
+      sign(ctx, label, x + 44, GROUND - 56, '#3fb950', '#ffffff', p);
       break;
     }
     case 'furniture': {
@@ -708,7 +723,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[1850, 1], [1864, 2], [1896, 1], [1912, 2], [1940, 1]] as const) tree(ctx, tx, p, size);
+  for (const [tx, size] of [[2165, 1], [2179, 2], [2211, 1], [2227, 2], [2255, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -763,6 +778,123 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
   rect(ctx, sx + 2, sy - 2, 10, 18, p.sun);
   if (p.night) rect(ctx, sx + 5, sy + 1, 10, 10, p.sky[0]);
   return c;
+}
+
+// ---------- parallax skyline ----------
+// Two layers sit behind the street and slide slower than it, so the city has
+// depth. A layer's features are laid out at (world x * speed), and the draw
+// offset keeps a landmark centred on screen when the camera is over its
+// district. That is how the CN Tower stays "behind" the AI Lab.
+
+export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
+export type ParallaxKind = keyof typeof PARALLAX;
+
+// World x of each landmark's district centre.
+const CN_TOWER_X = 501;
+const WILLIS_TOWER_X = 1333;
+
+const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
+
+function mixHex(a: string, b: string, t: number) {
+  const x = parseInt(a.slice(1), 16), y = parseInt(b.slice(1), 16);
+  const m = (s: number, e: number) => Math.round(s + (e - s) * t);
+  const v = (m(x >> 16, y >> 16) << 16) | (m((x >> 8) & 255, (y >> 8) & 255) << 8) | m(x & 255, y & 255);
+  return `#${v.toString(16).padStart(6, '0')}`;
+}
+
+// Toronto's CN Tower: flared base, thin shaft, a two-tier pod, then the antenna.
+function cnTower(ctx: Ctx, cx: number, base: number, h: number, col: string, p: Palette) {
+  const top = base - h;
+  const pod = Math.round(base - h * 0.62);
+  rect(ctx, cx - 1, top, 3, h, col);
+  rect(ctx, cx, top - 6, 1, 6, col);
+  for (let i = 0; i < 14; i++) rect(ctx, cx - 1 - Math.round(i * 0.45), base - 1 - i * 2, 3 + Math.round(i * 0.9), 2, col);
+  rect(ctx, cx - 8, pod, 17, 3, col);
+  rect(ctx, cx - 6, pod + 3, 13, 2, col);
+  rect(ctx, cx - 4, pod - 2, 9, 2, col);
+  rect(ctx, cx - 2, pod - 4, 5, 2, col);
+  if (p.night) rect(ctx, cx - 6, pod + 1, 13, 1, '#ffd76a');
+  // The lookout pod on the shaft below, smaller and higher up.
+  rect(ctx, cx - 2, top + 8, 5, 2, col);
+}
+
+// Chicago's Willis (Sears) Tower: bundled tubes stepping up, two antennas.
+function willisTower(ctx: Ctx, cx: number, base: number, h: number, col: string, p: Palette) {
+  const heights = [0.58, 0.8, 1, 1, 0.5];
+  const w = 6, x0 = cx - Math.round((heights.length * w) / 2);
+  heights.forEach((k, i) => {
+    const th = Math.round(h * k);
+    rect(ctx, x0 + i * w, base - th, w, th, col);
+    if (p.night) for (let y = base - th + 5; y < base - 6; y += 9) rect(ctx, x0 + i * w + 2, y, 1, 1, '#ffd76a');
+  });
+  for (const i of [2, 3]) rect(ctx, x0 + i * w + 2, base - h - 12, 2, 12, col);
+  // Dark tube seams read as the tower's bundled shape.
+  const seam = mixHex(col, '#000000', 0.25);
+  for (let i = 1; i < heights.length; i++) {
+    const th = Math.round(h * Math.min(heights[i], heights[i - 1]));
+    rect(ctx, x0 + i * w, base - th, 1, th, seam);
+  }
+}
+
+export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number) {
+  const f = PARALLAX[kind];
+  const pad = parallaxPad(viewW);
+  const c = document.createElement('canvas');
+  c.width = Math.ceil(WORLD_W * f + 2 * pad);
+  c.height = WORLD_H;
+  const ctx = c.getContext('2d')!;
+  const far = kind === 'far';
+  const haze = p.sky[p.sky.length - 1];
+  const col = far
+    ? mixHex(haze, p.night ? '#04061a' : '#3d5f8f', p.night ? 0.45 : 0.3)
+    : mixHex(haze, p.night ? '#02030f' : '#2c4a78', p.night ? 0.72 : 0.52);
+  const winLit = p.night ? mixHex('#ffd76a', col, 0.45) : mixHex(col, '#ffffff', 0.3);
+  const winDim = mixHex(col, p.night ? '#3b4675' : '#ffffff', p.night ? 0.25 : 0.12);
+
+  // Landmarks only live in the far layer, and keep clear of the generic skyline.
+  const landmarks = far
+    ? [
+        { x: Math.round(CN_TOWER_X * f + pad), clear: 16 },
+        { x: Math.round(WILLIS_TOWER_X * f + pad), clear: 20 },
+      ]
+    : [];
+
+  const r = rng(far ? 7 : 11);
+  const minW = far ? 9 : 14, maxW = far ? 22 : 30;
+  const minH = far ? 28 : 22, maxH = far ? 92 : 64;
+  let x = -4;
+  while (x < c.width) {
+    const w = minW + Math.floor(r() * (maxW - minW));
+    const h = minH + Math.floor(r() * (maxH - minH));
+    const gap = far ? Math.floor(r() * 3) : 2 + Math.floor(r() * 6);
+    const blocked = landmarks.some((l) => x + w > l.x - l.clear && x < l.x + l.clear);
+    if (!blocked) {
+      rect(ctx, x, GROUND - h, w, h, col);
+      if (r() < 0.35) rect(ctx, x + 2, GROUND - h - 3, w - 4, 3, col); // stepped top
+      if (r() < 0.25) rect(ctx, x + Math.floor(w / 2), GROUND - h - 8, 1, 8, col); // antenna
+      if (!far) {
+        for (let yy = GROUND - h + 4; yy < GROUND - 4; yy += 5) {
+          for (let xx = x + 3; xx < x + w - 3; xx += 4) rect(ctx, xx, yy, 2, 2, r() < (p.night ? 0.3 : 0.5) ? winLit : winDim);
+        }
+      } else if (p.night) {
+        for (let k = 0; k < 3; k++) rect(ctx, x + 2 + Math.floor(r() * (w - 4)), GROUND - h + 4 + Math.floor(r() * (h - 8)), 1, 1, winLit);
+      }
+    }
+    x += w + gap;
+  }
+  if (far) {
+    const mark = mixHex(col, p.night ? '#000000' : '#1c3358', 0.4);
+    cnTower(ctx, landmarks[0].x, GROUND, 150, mark, p);
+    willisTower(ctx, landmarks[1].x, GROUND, 130, mark, p);
+  }
+  return c;
+}
+
+// Left edge of a parallax layer on screen, given the street layer's origin
+// (the negated camera x, or a positive offset when the world is centred).
+export function parallaxX(kind: ParallaxKind, viewW: number, originX: number) {
+  const f = PARALLAX[kind];
+  return Math.round((1 - f) * (viewW / 2) + f * originX - parallaxPad(viewW));
 }
 
 export interface Cloud { x: number; y: number; w: number; speed: number }
