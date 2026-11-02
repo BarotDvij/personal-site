@@ -1,6 +1,7 @@
 ---
 import profile from '../../content/profile.json';
 import Cite from './Cite.astro';
+import PixelIcon from './PixelIcon.astro';
 import { STRUCTURES } from '../scripts/city/world';
 
 // Map each role and project to its building so the Wiki can link into the city.
@@ -47,6 +48,7 @@ const sections = [
   ['history', 'History'],
   ['talk', 'Contact'],
   ['references', 'References'],
+  ['external', 'External links'],
 ];
 
 const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
@@ -89,7 +91,27 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   </nav>
 
   <main class="article" id="article" tabindex="-1">
-    <h1>{profile.name}</h1>
+    <div class="sitenotice">
+      <button type="button" class="notice-thumb" data-set-mode="city" aria-label="Open Dvij City">
+        <img src="/city-thumb.png" alt="" width="240" height="105" />
+      </button>
+      <div class="notice-text">
+        <p><b>This article is also a city.</b> Every role and project below is a building you can walk into, with data pipelines running underground.</p>
+        <button type="button" class="tour-btn" data-set-mode="city">
+          <span class="px-icon" aria-hidden="true"></span> Explore Dvij City
+        </button>
+      </div>
+    </div>
+
+    <div class="title-row">
+      <h1>{profile.name}</h1>
+      <nav class="title-links" aria-label="Contact and profiles">
+        <a href={profile.links.github} aria-label="GitHub" title="GitHub"><PixelIcon name="github" /></a>
+        <a href={profile.links.devpost} aria-label="Devpost" title="Devpost"><PixelIcon name="devpost" /></a>
+        <a href={profile.links.linkedin} aria-label="LinkedIn" title="LinkedIn"><PixelIcon name="linkedin" /></a>
+        <a href={`mailto:${profile.links.email}`} aria-label={`Email ${profile.links.email}`} title="Email"><PixelIcon name="mail" /></a>
+      </nav>
+    </div>
     <p class="from">From dvijbarot.wiki, a living article about one builder</p>
 
     <aside class="infobox" aria-label="Quick facts">
@@ -102,6 +124,11 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         </div>
       )}
       <p class="caption">Waterloo, Ontario</p>
+      <button type="button" class="locator" data-set-mode="city" aria-label="Location in Dvij City. Open the city">
+        <img src="/city-thumb.png" alt="" width="280" height="122" loading="lazy" />
+        <span class="pin" aria-hidden="true"></span>
+      </button>
+      <p class="caption">Location in Dvij City. <button type="button" class="linklike" data-set-mode="city">Explore</button></p>
       <table>
         <tbody>
           <tr><th scope="row">Occupation</th><td>{current.role}, {current.org}</td></tr>
@@ -273,7 +300,26 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         {refs.map((r) => <li id={r.id}><a href={r.href}>{r.label}</a></li>)}
       </ol>
     </section>
+
+    <section id="external" aria-labelledby="ext-h">
+      <h2 id="ext-h">External links</h2>
+      <ul class="ext">
+        <li><a href={profile.links.linkedin}>Dvij Barot on LinkedIn</a></li>
+        <li><a href={profile.links.github}>Dvij Barot on GitHub</a></li>
+        <li><a href={profile.links.devpost}>Dvij Barot on Devpost</a></li>
+      </ul>
+      <h3>Colleagues</h3>
+      <ul class="ext">
+        {profile.colleagues.map((c) => (
+          <li><a href={c.url}>{c.name}</a>{c.note && <span> ({c.note})</span>} on LinkedIn</li>
+        ))}
+      </ul>
+    </section>
   </main>
+
+  <button type="button" class="tour-float" data-set-mode="city" hidden>
+    <span class="px-icon" aria-hidden="true"></span> Explore the city
+  </button>
 
   <footer class="wiki-foot">
     <p>This article was last edited by its subject. Prefer exploring? <button type="button" class="linklike" data-set-mode="city">Visit Dvij City</button>.</p>
