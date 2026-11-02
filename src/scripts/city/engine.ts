@@ -9,7 +9,7 @@ import {
 } from './art';
 import { panelFor, highlights } from './panels';
 import { FrameProbe, hintTier, type Tier } from '../quality';
-import { createWalker, drawPrompt, drawWalker, jump, nearby, startWarp, updateWalker } from './walker';
+import { createWalker, drawPrompt, drawWalker, jump, nearby, standOn, startWarp, updateWalker } from './walker';
 import { sfx } from '../sfx';
 
 export interface City {
@@ -113,7 +113,7 @@ export function mountCity(root: HTMLElement): City {
     b.type = 'button';
     b.className = `bldg${s.kind === 'warp' ? ' warp' : ''}`;
     b.dataset.sid = s.id;
-    b.setAttribute('aria-label', s.kind === 'warp' ? s.label : `${s.label}. Open details`);
+    b.setAttribute('aria-label', s.kind === 'warp' ? 'Warp pipe. Travel to the next pipe' : `${s.label}. Open details`);
     const tag = document.createElement('span');
     tag.className = 'tag';
     tag.textContent = s.label;
@@ -136,6 +136,7 @@ export function mountCity(root: HTMLElement): City {
     const content = s.ref && panelFor(s.ref);
     if (!content) return false;
     current = s;
+    delete panel.dataset.help;
     const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
     panel.style.setProperty('--lens', LENS_COLOR[lens]);
     panel.querySelector('.panel-kicker')!.textContent = content.kicker;
@@ -152,9 +153,14 @@ export function mountCity(root: HTMLElement): City {
   function activate(s: Structure, from: HTMLElement | null) {
     dismissWelcome();
     if (s.ref?.type === 'warp') {
-      sfx.warp();
-      const d = DISTRICTS[s.ref.to];
-      lookAt(d.x0 + 200);
+      // Clicking a pipe hops the character on and sends it forward.
+      standOn(walker, s);
+      walker.facing = 1;
+      if (startWarp(walker, s)) {
+        sfx.warp();
+        setTimeout(() => sfx.warp(), 430);
+      }
+      follow = true;
       return;
     }
     if (s.ref?.type === 'game') {
@@ -291,6 +297,8 @@ export function mountCity(root: HTMLElement): City {
 
   function teleport(x: number) {
     walker.x = x;
+    walker.jump = 0;
+    walker.vy = 0;
     walker.poof = 300;
     follow = true;
   }
@@ -305,7 +313,10 @@ export function mountCity(root: HTMLElement): City {
       const s = nearby(walker);
       if (s && startWarp(walker, s)) {
         sfx.warp();
+        setTimeout(() => sfx.warp(), 430);
         follow = true;
+      } else if (s?.kind === 'warp') {
+        sfx.tick();
       }
       return true;
     }
@@ -382,10 +393,57 @@ export function mountCity(root: HTMLElement): City {
     welcomed = true;
     welcome.hidden = true;
   }
-  welcome.querySelector('button')?.addEventListener('click', () => {
+  welcome.querySelector('[data-start]')?.addEventListener('click', () => {
     dismissWelcome();
     sfx.start();
     root.focus({ preventScroll: true });
+  });
+
+  // ----- controls help -----
+
+  const HELP = `<p class="lead">Explore however you like. Every building is a role, project, or game.</p>
+    <table class="controls">
+      <thead><tr><th scope="col">To</th><th scope="col">Keyboard</th><th scope="col">Touch or mouse</th></tr></thead>
+      <tbody>
+        <tr><td>Walk</td><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd>, hold <kbd>Shift</kbd> to run</td><td>Arrow buttons</td></tr>
+        <tr><td>Open a building</td><td><kbd>&uarr;</kbd> or <kbd>W</kbd> in front of it</td><td>Tap or click it</td></tr>
+        <tr><td>Jump</td><td><kbd>Space</kbd></td><td>Jump button</td></tr>
+        <tr><td>Warp</td><td>Hop onto a green pipe, face the way you want to go, then <kbd>&darr;</kbd> or <kbd>S</kbd>. Right goes to the next pipe, left to the previous one.</td><td>Tap a pipe, or Jump then Warp</td></tr>
+        <tr><td>Next district</td><td><kbd>Page Up</kbd> <kbd>Page Down</kbd></td><td>Tap the map bar</td></tr>
+        <tr><td>Look around</td><td>Scroll</td><td>Drag or swipe</td></tr>
+        <tr><td>Guided tour</td><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd> inside any building</td><td>Prev and Next</td></tr>
+        <tr><td>Keyboard only</td><td><kbd>Tab</kbd> to a building, <kbd>Enter</kbd> to open, <kbd>Esc</kbd> to close</td><td></td></tr>
+        <tr><td>This help</td><td><kbd>?</kbd> or <kbd>H</kbd></td><td>The ? button</td></tr>
+      </tbody>
+    </table>
+    <h3>How the city works</h3>
+    <ul>
+      <li>Districts are lenses: AI, play, marketing, civic life and product, data, and building.</li>
+      <li>The copper pipes underground are data pipelines. The packets are real flows of work into the warehouse.</li>
+      <li>Day, night, sound, and motion live in Settings.</li>
+    </ul>`;
+
+  function showHelp() {
+    dismissWelcome();
+    endIntro();
+    current = null;
+    panel.style.setProperty('--lens', '#e8c547');
+    panel.dataset.help = '';
+    panel.querySelector('.panel-kicker')!.textContent = 'Help';
+    panel.querySelector('.panel-title')!.textContent = 'Controls';
+    panel.querySelector('.panel-body')!.innerHTML = HELP;
+    panel.returnTo = (document.activeElement as HTMLElement) ?? undefined;
+    if (!panel.open) panel.showModal();
+    sfx.open();
+  }
+  for (const b of root.querySelectorAll('[data-help]')) b.addEventListener('click', showHelp);
+  document.addEventListener('keydown', (e) => {
+    if (!running || panel.open || html.dataset.arcade) return;
+    if ((e.target as HTMLElement).closest('input, select, textarea')) return;
+    if (e.key === '?' || e.key === 'h') {
+      e.preventDefault();
+      showHelp();
+    }
   });
 
   // ----- HUD score ticker -----
@@ -532,9 +590,10 @@ export function mountCity(root: HTMLElement): City {
       if (!s) return;
       endIntro();
       dismissWelcome();
-      walker.x = s.x + s.w / 2;
+      standOn(walker, s);
       lookAt(s.x + s.w / 2, true);
-      if (open && s.ref) activate(s, buttonFor(s));
+      // Linking to a pipe stands you on it; it doesn't warp you away.
+      if (open && s.ref && s.kind !== 'warp') activate(s, buttonFor(s));
       else buttonFor(s)?.focus({ preventScroll: true });
     },
     stop() {

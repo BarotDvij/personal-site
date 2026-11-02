@@ -95,6 +95,29 @@ function rng(seed: number) {
   };
 }
 
+// ---------- contrast ----------
+
+function luminance(hex: string) {
+  const n = parseInt(hex.slice(1), 16);
+  const lin = (c: number) => {
+    const v = c / 255;
+    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * lin(n >> 16) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+}
+
+export function contrast(a: string, b: string) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+const DARK_INK = '#2a2233';
+/** Text colour for a background: keeps the requested ink when it reads well, otherwise picks dark or white. */
+export function ink(bg: string, preferred = '#ffffff') {
+  if (contrast(bg, preferred) >= 4.5) return preferred;
+  return contrast(bg, DARK_INK) >= contrast(bg, '#ffffff') ? DARK_INK : '#ffffff';
+}
+
 // ---------- primitives ----------
 
 const rect = (ctx: Ctx, x: number, y: number, w: number, h: number, color: string) => {
@@ -136,7 +159,7 @@ function door(ctx: Ctx, cx: number, w = 8, h = 12, color = '#3a2a24') {
 function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
   const w = textWidth(label) + 6;
   box(ctx, cx - w / 2, y, w, 9, bg, p);
-  centeredText(ctx, label, cx, y + 2, fg);
+  centeredText(ctx, label, cx, y + 2, ink(bg, fg));
 }
 
 function tree(ctx: Ctx, x: number, p: Palette, size = 1) {
@@ -183,16 +206,20 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 6, 4, 6, shade('#fff4e0', p));
       rect(ctx, x - 2, top + 4, w + 4, 2, p.outline);
       // Trophy case in the window
-      rect(ctx, x + 5, top + 16, w - 30, 16, p.night ? '#3a3a52' : '#d6eeff');
+      rect(ctx, x + 5, top + 16, w - 30, 16, p.night ? '#2a2240' : '#d6eeff');
       rect(ctx, x + 5, top + 28, w - 30, 1, shade('#8a6a3a', p));
       for (let i = 0; i < 5; i++) {
+        // The case is lit, so trophies keep full colour at night.
         const tx = x + 8 + i * 7, gold = i % 3 === 1 ? '#c9ccd6' : '#f2c84b';
-        rect(ctx, tx, top + 20, 4, 3, shade(gold, p));
-        rect(ctx, tx + 1, top + 23, 2, 3, shade(gold, p));
-        rect(ctx, tx, top + 26, 4, 2, shade(gold, p));
+        rect(ctx, tx, top + 20, 4, 3, gold);
+        rect(ctx, tx + 1, top + 23, 2, 3, gold);
+        rect(ctx, tx, top + 26, 4, 2, gold);
       }
-      rect(ctx, x + w - 20, top + 16, 14, 14, shade('#3b82f6', p));
-      text(ctx, 'I', x + w - 14, top + 21, '#ffffff');
+      // Gold star emblem
+      rect(ctx, x + w - 20, top + 16, 14, 14, shade('#2a2233', p));
+      rect(ctx, x + w - 14, top + 18, 2, 10, '#f2c84b');
+      rect(ctx, x + w - 18, top + 21, 10, 2, '#f2c84b');
+      rect(ctx, x + w - 16, top + 19, 6, 6, '#f2c84b');
       door(ctx, x + 16);
       sign(ctx, label, cx, top - 6, '#e8c547', '#2a2233', p);
       break;
@@ -290,6 +317,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       tree(ctx, x + 2, p, 2);
       tree(ctx, x + w - 26, p, 2);
       tree(ctx, x + 32, p, 1);
+      tree(ctx, x + 20, p, 1);
+      tree(ctx, x + 50, p, 1);
       rect(ctx, cx - 7, GROUND - 6, 14, 2, shade('#8a5a34', p));
       rect(ctx, cx - 6, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, cx + 5, GROUND - 4, 1, 4, shade('#5b3b22', p));
@@ -306,7 +335,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       windows(ctx, p, r, x + 13, top + 26, w - 26, h - 50, 3, 4, 2, 3);
       box(ctx, x, GROUND - 16, w, 16, shade('#2c3a56', p), p);
       door(ctx, cx, 12, 12, shade('#1a2236', p));
-      sign(ctx, label, cx, top + 14, '#9b6bf2', '#ffffff', p);
+      sign(ctx, label, cx, top + 14, '#7c4ddb', '#ffffff', p);
       break;
     }
     case 'lab': {
@@ -320,7 +349,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, cx - 4, top + 2, 8, 2, p.lamp);
       windows(ctx, p, r, x + 6, top + 40, w - 12, h - 56, 6, 5, 4, 4);
       door(ctx, cx, 10, 14, shade('#5c4a8a', p));
-      sign(ctx, label, cx, top + 26, '#9b6bf2', '#ffffff', p);
+      sign(ctx, label, cx, top + 26, '#7c4ddb', '#ffffff', p);
       break;
     }
     case 'marble': {
@@ -346,7 +375,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         box(ctx, dx, GROUND - 24, 20, 24, shade('#4c5563', p), p);
         for (let yy = GROUND - 22; yy < GROUND; yy += 3) rect(ctx, dx + 1, yy, 18, 1, shade('#5d6676', p));
       }
-      sign(ctx, label, cx, top + 20, '#3b82f6', '#ffffff', p);
+      sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
       break;
     }
     case 'library': {
@@ -357,7 +386,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 6, top + 17, w - 12, 2, p.outline);
       for (let i = 0; i < 4; i++) rect(ctx, x + 16 + i * ((w - 38) / 3), top + 30, 5, h - 40, shade('#f4ecd8', p));
       door(ctx, cx, 10, 14, shade('#5a4030', p));
-      sign(ctx, label, cx, top + 20, '#3b82f6', '#ffffff', p);
+      sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
       break;
     }
     case 'watertower': {
@@ -425,7 +454,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#fff4e0', p));
       // Display window with a sofa and a floor lamp
       const wx = x + 5, wy = GROUND - 30, ww = w - 22;
-      rect(ctx, wx, wy, ww, 26, p.night ? '#3a3a52' : '#cfe6f5');
+      // Shop windows glow warm at night so the furniture reads against them.
+      rect(ctx, wx, wy, ww, 26, p.night ? '#e6cf8f' : '#cfe6f5');
       rect(ctx, wx + 4, wy + 14, ww - 10, 6, shade('#7a4a8c', p));
       rect(ctx, wx + 3, wy + 10, 3, 10, shade('#7a4a8c', p));
       rect(ctx, wx + ww - 9, wy + 10, 3, 10, shade('#7a4a8c', p));
@@ -434,6 +464,36 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, wx + ww - 6, wy + 4, 5, 3, p.night ? '#ffd76a' : '#f2c84b');
       door(ctx, x + w - 8, 8, 14);
       sign(ctx, label, cx, top + 12, '#f2a33a', '#2a2233', p);
+      break;
+    }
+    case 'school': {
+      const brick = shade('#b5533c', p), trim = shade('#f1e3c6', p);
+      box(ctx, x, top + 20, w, h - 20, brick, p);
+      for (let yy = top + 24; yy < GROUND - 2; yy += 4) rect(ctx, x + 1, yy, w - 2, 1, shade('#9a4330', p));
+      // Roof and bell tower with a clock
+      for (let i = 0; i < 8; i++) rect(ctx, x - 2 + i * 2, top + 20 - i * 2, w + 4 - i * 4, 2, shade('#5a3a3a', p));
+      box(ctx, cx - 9, top - 4, 18, 24, trim, p);
+      for (let i = 0; i < 5; i++) rect(ctx, cx - 9 + i * 2, top - 4 - i * 2, 18 - i * 4, 2, shade('#5a3a3a', p));
+      rect(ctx, cx - 5, top + 2, 10, 10, '#ffffff');
+      rect(ctx, cx - 5, top + 2, 10, 1, p.outline);
+      rect(ctx, cx, top + 4, 1, 4, p.outline);
+      rect(ctx, cx, top + 7, 3, 1, p.outline);
+      rect(ctx, cx - 3, top + 14, 6, 5, shade('#e8c547', p));
+      // Rows of classroom windows with white trim
+      for (let row = 0; row < 2; row++)
+        for (let i = 0; i < 5; i++) {
+          if (row === 1 && i === 2) continue;
+          const wx = x + 8 + i * ((w - 24) / 4), wy = top + 30 + row * 18;
+          rect(ctx, wx - 1, wy - 1, 10, 10, trim);
+          rect(ctx, wx, wy, 8, 8, p.night ? (i % 2 ? p.lit : p.unlit) : p.glass[0]);
+          rect(ctx, wx + 4, wy, 1, 8, trim);
+        }
+      rect(ctx, cx - 9, GROUND - 4, 18, 4, shade('#b9ae96', p));
+      door(ctx, cx, 12, 16, shade('#5a4030', p));
+      sign(ctx, label, cx, top + 22, '#f2a33a', '#2a2233', p);
+      // Flagpole
+      rect(ctx, x + w - 6, top + 4, 1, 16, p.lamp);
+      rect(ctx, x + w - 5, top + 4, 6, 4, shade('#e0302f', p));
       break;
     }
     case 'arcadehall': {
@@ -543,7 +603,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Trunk lines
   pipe(ctx, 20, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
-  pipe(ctx, JUNCTION_X + 20, DEEP_Y, 1940, DEEP_Y, p, 7);
+  pipe(ctx, JUNCTION_X + 20, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
   for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings
@@ -572,7 +632,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Layer labels
   text(ctx, 'DATA LAYER', 26, GROUND + 44, '#f0a868');
-  text(ctx, '22 PIPELINES KEPT RUNNING', 1766, TRUNK_Y + 7, '#f0a868');
+  text(ctx, '22 PIPELINES KEPT RUNNING', JUNCTION_X - 140, TRUNK_Y + 7, '#f0a868');
 }
 
 function drawStreet(ctx: Ctx, p: Palette) {
@@ -583,13 +643,24 @@ function drawStreet(ctx: Ctx, p: Palette) {
   // District name plates sit in the curb so buildings never cover them.
   for (const d of DISTRICTS) {
     const label = d.name.toUpperCase().replace("'", '');
-    box(ctx, d.x0 + 4, GROUND + 6, textWidth(label) + 6, 9, shade(LENS_COLOR[d.lens], p), p);
-    text(ctx, label, d.x0 + 7, GROUND + 8, '#ffffff');
+    const plate = shade(LENS_COLOR[d.lens], p);
+    box(ctx, d.x0 + 4, GROUND + 6, textWidth(label) + 6, 9, plate, p);
+    text(ctx, label, d.x0 + 7, GROUND + 8, ink(plate));
   }
 
-  const lampXs = [120, 262, 538, 645, 820, 1072, 1210, 1306, 1420, 1610, 1792, 1905, 2016, 2120, 2222];
-  for (const lx of lampXs) lamp(ctx, lx, p);
-  for (const tx of [104, 258, 412, 966, 1500, 1520, 2010]) tree(ctx, tx, p, 1);
+  // Street furniture fills the gaps between buildings: lamps and trees alternate.
+  const sorted = [...STRUCTURES].sort((a, b) => a.x - b.x);
+  sorted.forEach((s, i) => {
+    const next = sorted[i + 1];
+    const gapStart = s.x + s.w, gapEnd = next ? next.x : WORLD_W;
+    const gap = gapEnd - gapStart;
+    if (gap < 14) return;
+    const mid = Math.round(gapStart + gap / 2);
+    if (i % 2) lamp(ctx, mid, p);
+    else tree(ctx, mid - 5, p, 1);
+  });
+  // The civic green: extra trees behind the duck pond and around the park.
+  for (const [tx, size] of [[1650, 1], [1664, 2], [1696, 1], [1712, 2], [1740, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {

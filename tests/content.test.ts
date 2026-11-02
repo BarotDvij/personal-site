@@ -3,6 +3,8 @@ import profile from '../content/profile.json';
 import { DISTRICTS, STRUCTURES, WORLD_W, WORLD_H, GROUND } from '../src/scripts/city/world';
 import { panelFor } from '../src/scripts/city/panels';
 import { GAMES } from '../src/scripts/arcade/catalog';
+import { contrast, ink } from '../src/scripts/city/art';
+import { LENS_COLOR } from '../src/scripts/city/world';
 
 describe('content and city stay in sync', () => {
   it('every clickable building opens a real panel', () => {
@@ -53,6 +55,13 @@ describe('content and city stay in sync', () => {
     for (const g of GAMES) {
       expect(g.title && g.credit && g.help && g.blurb, `${g.id} is missing text`).toBeTruthy();
       expect(g.credit.includes('—'), `${g.id} credit uses an em dash`).toBe(false);
+    }
+  });
+
+  it('district plates and signs keep readable text (4.5:1 or better)', () => {
+    const backgrounds = [...Object.values(LENS_COLOR), '#2f6fd6', '#9bd23c', '#e8c547', '#f2a33a', '#f2c84b'];
+    for (const bg of backgrounds) {
+      expect(contrast(bg, ink(bg)), `text on ${bg}`).toBeGreaterThanOrEqual(4.5);
     }
   });
 

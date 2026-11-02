@@ -43,7 +43,7 @@ const sections = [
   ['external', 'External links'],
 ];
 
-const awardGroups = ['Business competitions', 'Junior Achievement', 'School'].map(
+const awardGroups = ['Dance', 'Business competitions', 'Junior Achievement', 'School'].map(
   (g) => [g, profile.awards.filter((a) => a.group === g)] as const,
 );
 
@@ -235,7 +235,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           </ul>
         </>
       ))}
-      <a class="city-link" href="#tour/visitor" data-city-target="visitor">See the trophy case in Dvij City</a>
+      <a class="city-link" href="#tour/halloffame" data-city-target="halloffame">See the trophy case in Dvij City</a>
     </section>
 
     <section id="approach" aria-labelledby="approach-h">
@@ -275,7 +275,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <section id="talk" aria-labelledby="talk-h">
       <h2 id="talk-h">Contact</h2>
-      <p>Open to {profile.seeking} in forward deployed engineering, technical product management, and product.</p>
+      <p>Open to {profile.seeking} in forward deployed engineering, technical product management, data engineering, and AI engineering.</p>
       <ul class="contact">
         <li><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
         <li><a href={profile.links.linkedin}>LinkedIn</a></li>
