@@ -601,8 +601,17 @@ export function buildCityLayer(p: Palette) {
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
   for (const d of DISTRICTS) {
-    rect(ctx, d.x0 + 3, GROUND - 26, 1, 26, p.lamp);
-    rect(ctx, d.x0 + 4, GROUND - 26, 8, 5, shade(LENS_COLOR[d.lens], p));
+    // Tall flag so it clears the street lamps (which top out at GROUND - 24).
+    // At night the pole and cloth stay bright so they read against the sky.
+    const pole = p.night ? '#c9cde8' : p.lamp;
+    const cloth = p.night ? LENS_COLOR[d.lens] : shade(LENS_COLOR[d.lens], p);
+    rect(ctx, d.x0 + 3, GROUND - 46, 1, 46, pole);
+    rect(ctx, d.x0 + 3, GROUND - 48, 1, 2, p.night ? '#ffffff' : p.lamp);
+    rect(ctx, d.x0 + 4, GROUND - 46, 10, 7, cloth);
+    if (p.night) {
+      rect(ctx, d.x0 + 4, GROUND - 46, 10, 1, '#ffffff');
+      rect(ctx, d.x0 + 4, GROUND - 40, 10, 1, p.outline);
+    }
   }
   // Welcome banner
   sign(ctx, 'WELCOME TO DVIJ CITY', 200, 48, '#e8c547', '#2a2233', p);
