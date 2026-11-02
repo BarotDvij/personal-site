@@ -3,7 +3,8 @@
 ## Rules for every game
 - **Offline only.** No servers, no accounts, no leaderboards. The site stays static, free to run, and fast for any number of visitors.
 - **Loaded on demand.** Each game is its own small file that downloads only when someone starts it. First load never gets heavier.
-- **Inspired by, not copied.** Our own art, names, and sounds. The launch post can name the originals as inspiration.
+- **Inspired by, not copied.** Our own art, names, and sounds.
+- **Credit the originals by name.** Each game gets a generic title (Block Stack, Pipe Muncher) plus a plain-text credit line, for example: "Inspired by Tetris, which I played constantly growing up." Names in plain text only: no logos, and nothing that suggests the game is official or endorsed.
 
 ## Playable in the city (built in-house)
 | Game | Inspired by | Where in the city | Effort |
