@@ -28,6 +28,15 @@ Change `content/profile.json` and both modes update.
 - `lenses` on each item drive the Wiki's "View as" filter
 - `highlights` feed the Wiki stat strip and the City's score ticker
 
+### Photos and media
+
+- **Portrait:** put a square image in `public/media/` (for example `public/media/dvij.jpg`, at least 400×400) and set `photo.src` in `profile.json` to `/media/dvij.jpg`. The pixel placeholder disappears automatically.
+- **Go Lime ads and project demos:** drop files in `public/media/` and tell Claude where they should appear. Billboards and panels are ready to take them.
+
+### Tests
+
+`npm test` checks that every building points at real content in `profile.json`, every city role and project has a building, and no buildings overlap or spill out of their district. CI runs it on every push.
+
 To move or add a building, edit `STRUCTURES` in [`src/scripts/city/world.ts`](src/scripts/city/world.ts). Each structure has a `kind` (its look), a position, and a `ref` that points at a role or project in `profile.json`.
 
 ## How it's built

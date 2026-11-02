@@ -359,6 +359,14 @@ q {
   image-rendering: pixelated;
 }
 
+.portrait.photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  background: none;
+}
+
 .portrait span {
   font-family: var(--pixel);
   font-size: 3rem;

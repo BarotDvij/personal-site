@@ -447,5 +447,9 @@
       "title": "The output is the product",
       "body": "A heat map nobody understands helps nobody. Polish is what turns data into something people actually feel."
     }
-  ]
+  ],
+  "photo": {
+    "src": null,
+    "alt": "Portrait of Dvij Barot"
+  }
 }
