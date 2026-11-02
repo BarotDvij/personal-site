@@ -1,6 +1,6 @@
 {
   "name": "Dvij Barot",
-  "headline": "TODO: one-line spine in Dvij's own words",
+  "headline": "Builds across product, data, AI and code. Starts with the friction, not the tech.",
   "location": "Waterloo, ON",
   "links": {
     "email": "d2barot@uwaterloo.ca",
@@ -413,5 +413,57 @@
     ]
   },
   "philosophy": "Start with the friction, not the tech.",
-  "spice": "TODO: hobbies, fun facts, taste"
+  "spice": "TODO: hobbies, fun facts, taste",
+  "headlineDraft": true,
+  "hackathons": [
+    {
+      "place": "1st",
+      "event": "Claude Hacks @ UWaterloo",
+      "project": "CityScapes",
+      "link": "https://devpost.com/software/cityscape-b02jei"
+    },
+    {
+      "place": "2nd",
+      "event": "Talent Tank Hackathon, San Francisco",
+      "project": "Invited straight to the semi-finals the day after CityScapes won"
+    },
+    {
+      "place": "1st",
+      "event": "DD x Ignition Hackathon",
+      "project": "Urban Marble",
+      "link": "https://devpost.com/software/urban-marble"
+    }
+  ],
+  "lessons": [
+    {
+      "title": "Start with the friction, not the tech",
+      "body": "Every hackathon started with the temptation to ask which API to use. By the end the opening question was who is frustrated, and why."
+    },
+    {
+      "title": "Vertical slicing before shared code",
+      "body": "Each teammate owned an isolated directory, so no two people touched the same file. Coordination lives in communicated decisions, not chance."
+    },
+    {
+      "title": "The output is the product",
+      "body": "A heat map nobody understands helps nobody. Polish is what turns data into something people actually feel."
+    }
+  ],
+  "photo": {
+    "src": null,
+    "alt": "Portrait of Dvij Barot"
+  },
+  "civic": [
+    {
+      "title": "Diwali fireworks bylaw",
+      "body": "Helped pass a bylaw at Kitchener City Hall to allow fireworks during Diwali."
+    },
+    {
+      "title": "Food bank drive",
+      "body": "As HSC President, set up a food bank drive with the City of Kitchener."
+    },
+    {
+      "title": "JA Fish Tank camp",
+      "body": "Volunteered at City Hall for the JA Fish Tank camp in high school."
+    }
+  ]
 }

@@ -1,0 +1,52 @@
+---
+// Shell for Dvij City. The engine is loaded only when a visitor opens the tour.
+---
+
+<section class="city" id="city" aria-label="Dvij City, an explorable map of Dvij's work" tabindex="-1">
+  <canvas class="city-canvas" aria-hidden="true"></canvas>
+  <div class="city-overlay" role="group" aria-label="Buildings"></div>
+
+  <header class="hud">
+    <div class="hud-left">
+      <span class="hud-title">Dvij City</span>
+      <span class="hud-district" data-hud-district>Welcome Plaza</span>
+    </div>
+    <p class="hud-score" data-hud-score aria-live="off"></p>
+    <div class="hud-right">
+      <button type="button" class="hud-btn hud-icon" data-toggle-theme aria-label="Toggle day and night">
+        <svg class="i-sun" viewBox="0 0 9 9" width="18" height="18" aria-hidden="true" shape-rendering="crispEdges"><path fill="#e8c547" d="M3 2h3v1h1v3H6v1H3V6H2V3h1zM4 0h1v1H4zM4 8h1v1H4zM0 4h1v1H0zM8 4h1v1H8zM1 1h1v1H1zM7 1h1v1H7zM1 7h1v1H1zM7 7h1v1H7z"/></svg>
+        <svg class="i-moon" viewBox="0 0 9 9" width="18" height="18" aria-hidden="true" shape-rendering="crispEdges"><path fill="#f4f1d0" d="M3 1h3v1H4v1H3v3h1v1h3v1H3V7H2V6H1V3h1V2h1z"/></svg>
+      </button>
+      <button type="button" class="hud-btn hud-icon" data-toggle-sound aria-pressed="false" aria-label="Sound effects">
+        <svg viewBox="0 0 9 9" width="18" height="18" aria-hidden="true" shape-rendering="crispEdges"><path fill="#fff" d="M0 3h2V2h1V1h1v7H3V7H2V6H0z"/><path class="i-waves" fill="#9bd23c" d="M5 3h1v3H5zM7 2h1v5H7z"/><path class="i-mute" fill="#e0457b" d="M5 2h1v1h1v1h1v1H7v1H6v1H5V6h1V5h1V4H6V3H5zM7 2h1v1H7zM7 6h1v1H7z"/></svg>
+      </button>
+      <button type="button" class="hud-btn" data-open-settings aria-haspopup="dialog">Settings</button>
+      <button type="button" class="hud-btn" data-set-mode="cv">Read the <span class="wide">full </span>article</button>
+    </div>
+  </header>
+
+  <nav class="minimap" aria-label="Districts">
+    <div class="minimap-view" aria-hidden="true"></div>
+  </nav>
+
+  <div class="welcome" role="note">
+    <p class="welcome-title">Welcome to Dvij City</p>
+    <p>Every building is a role or a project I built. The copper pipes underground are data pipelines.</p>
+    <p class="welcome-keys">Scroll, drag, or use arrow keys to explore. Click a building to open it.</p>
+    <button type="button" class="px-btn">Start exploring</button>
+  </div>
+
+  <dialog class="city-panel" aria-labelledby="panel-title">
+    <form method="dialog" class="panel-close-form">
+      <button class="panel-close" aria-label="Close">X</button>
+    </form>
+    <p class="panel-kicker"></p>
+    <h2 class="panel-title" id="panel-title"></h2>
+    <div class="panel-body"></div>
+    <div class="panel-nav">
+      <button type="button" class="px-btn small" data-panel-prev aria-label="Previous building">&lt; Prev</button>
+      <span class="panel-count" aria-live="polite"></span>
+      <button type="button" class="px-btn small" data-panel-next aria-label="Next building">Next &gt;</button>
+    </div>
+  </dialog>
+</section>

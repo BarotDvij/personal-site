@@ -1,0 +1,282 @@
+---
+import profile from '../../content/profile.json';
+import Cite from './Cite.astro';
+import { STRUCTURES } from '../scripts/city/world';
+
+// Map each role and project to its building so the Wiki can link into the city.
+const buildingFor = (match: (r: NonNullable<(typeof STRUCTURES)[number]['ref']>) => boolean) =>
+  STRUCTURES.find((s) => s.ref && s.kind !== 'billboard' && match(s.ref))?.id;
+const roleBuilding = (org: string) => buildingFor((r) => r.type === 'role' && r.org === org);
+const projectBuilding = (name: string) => buildingFor((r) => r.type === 'project' && r.name === name);
+
+const lensNames: Record<string, string> = {
+  marketing: 'Marketer',
+  data: 'Analyst',
+  pm: 'Product Manager',
+  ai: 'AI Engineer',
+  dev: 'Builder',
+};
+
+// Footnotes: every claim that has public proof gets a citation.
+const refs: { id: string; label: string; href: string }[] = [];
+const cite = (label: string, href: string) => {
+  let i = refs.findIndex((r) => r.href === href);
+  if (i < 0) {
+    refs.push({ id: `ref-${refs.length + 1}`, label, href });
+    i = refs.length - 1;
+  }
+  return i + 1;
+};
+
+const cityscapes = cite('CityScapes on Devpost', 'https://devpost.com/software/cityscape-b02jei');
+const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/software/urban-marble');
+const projectRefs = profile.projects.map((p) => {
+  const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
+  return cite(`${p.name} source`, href);
+});
+
+const current = profile.experience[0];
+const sections = [
+  ['career', 'Career'],
+  ['projects', 'Projects'],
+  ['hackathons', 'Hackathons'],
+  ['approach', 'Approach'],
+  ['civic', 'Civic life'],
+  ['skills', 'Skills'],
+  ['education', 'Education'],
+  ['history', 'History'],
+  ['talk', 'Contact'],
+  ['references', 'References'],
+];
+
+const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<div class="wiki" id="wiki">
+  <a class="skip" href="#article">Skip to article</a>
+  <header class="wiki-bar">
+    <a class="wordmark" href="/" aria-label="dvijbarot.wiki home">
+      <svg viewBox="0 0 16 16" width="28" height="28" aria-hidden="true" shape-rendering="crispEdges">
+        <rect width="16" height="16" fill="var(--ink)" />
+        <path d="M3 3h6v1h1v1h1v6h-1v1h-1v1H3zM5 5v6h3v-1h1V6H8V5z" fill="var(--paper)" />
+        <rect x="12" y="11" width="2" height="2" fill="#e8c547" />
+      </svg>
+      <span>dvijbarot<b>.wiki</b></span>
+    </a>
+    <div class="bar-actions">
+      <button type="button" class="ghost" data-open-settings aria-haspopup="dialog">Settings</button>
+      <button type="button" class="tour-btn" data-set-mode="city">
+        <span class="px-icon" aria-hidden="true"></span> <span class="wide">Take the </span>city tour
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Article views">
+    <div class="tab-group">
+      <a href="#article" aria-current="page">Article</a>
+      <a href="#talk">Talk</a>
+    </div>
+    <div class="tab-group">
+      <a href="#history">View history</a>
+      <label class="lens-pick">
+        <span>View as</span>
+        <select id="lens-select">
+          <option value="all">Everyone</option>
+          {profile.lenses.map((l) => <option value={l}>{lensNames[l]}</option>)}
+        </select>
+      </label>
+    </div>
+  </nav>
+
+  <main class="article" id="article" tabindex="-1">
+    <h1>{profile.name}</h1>
+    <p class="from">From dvijbarot.wiki, a living article about one builder</p>
+
+    <aside class="infobox" aria-label="Quick facts">
+      <div class="infobox-title">{profile.name}</div>
+      {profile.photo.src ? (
+        <img class="portrait photo" src={profile.photo.src} alt={profile.photo.alt} width="200" height="200" />
+      ) : (
+        <div class="portrait" role="img" aria-label="Portrait coming soon">
+          <span>DB</span>
+        </div>
+      )}
+      <p class="caption">Waterloo, Ontario</p>
+      <table>
+        <tbody>
+          <tr><th scope="row">Occupation</th><td>{current.role}, {current.org}</td></tr>
+          <tr><th scope="row">Education</th><td>{profile.education.school}<br /><small>{profile.education.degree}, expected {profile.education.expected}</small></td></tr>
+          <tr><th scope="row">Disciplines</th><td>Product · Data · AI · Software · Marketing</td></tr>
+          <tr>
+            <th scope="row">Known for</th>
+            <td>
+              <ul>
+                <li>3 hackathon podiums in 7 days<Cite n={cityscapes} /></li>
+                <li>Eval-driven agents (68% → 97%)</li>
+                <li>Booking time 6 min → 30 s</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Links</th>
+            <td class="infobox-links">
+              <a href={profile.links.linkedin}>LinkedIn</a>
+              <a href={profile.links.github}>GitHub</a>
+              <a href={profile.links.devpost}>Devpost</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
+
+    <p class="lead">
+      <b>Dvij Barot</b> is a Management Engineering student at the University of Waterloo who works across
+      product management, data engineering, AI, and software development. Barot is currently a {current.role} at
+      {current.org}, building an agentic operations application for an enterprise client through Communitech's
+      AI@WORK program.
+    </p>
+    <p class="lead-more">
+      Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
+      2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
+      Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
+    </p>
+
+    <div class="highlights" role="list" aria-label="Highlights">
+      {profile.highlights.map((h) => (
+        <div class="stat lensed" role="listitem" data-lenses={h.lenses.join(' ')}>
+          <span class="stat-value">{h.value}</span>
+          <span class="stat-label">{h.label}</span>
+        </div>
+      ))}
+    </div>
+
+    <nav class="toc" aria-label="Contents">
+      <div class="toc-title">Contents</div>
+      <ol>
+        {sections.map(([id, name]) => <li><a href={`#${id}`}>{name}</a></li>)}
+      </ol>
+    </nav>
+
+    <p class="lens-note" id="lens-note" hidden aria-live="polite"></p>
+
+    <section id="career" aria-labelledby="career-h">
+      <h2 id="career-h">Career</h2>
+      {profile.experience.map((e) => (
+        <article class="role lensed" data-lenses={e.lenses.join(' ')} id={anchor(e.org)}>
+          <h3>{e.org}</h3>
+          <p class="meta"><b>{e.role}</b> · {e.dates} · {e.place}</p>
+          <p>{e.summary}</p>
+          <ul>{e.bullets.map((b) => <li>{b}</li>)}</ul>
+          {roleBuilding(e.org) && (
+            <a class="city-link" href={`#tour/${roleBuilding(e.org)}`} data-city-target={roleBuilding(e.org)}>See it in Dvij City</a>
+          )}
+        </article>
+      ))}
+    </section>
+
+    <section id="projects" aria-labelledby="projects-h">
+      <h2 id="projects-h">Projects</h2>
+      <div class="project-grid">
+        {profile.projects.map((p, i) => (
+          <article class="project lensed" data-lenses={p.lenses.join(' ')}>
+            <h3>
+              {p.name}
+              <Cite n={projectRefs[i]} />
+            </h3>
+            {'award' in p && p.award && <p class="award">{p.award}</p>}
+            {'status' in p && p.status && <p class="award status">{p.status}</p>}
+            <p>{p.tagline}</p>
+            <p class="stack">{p.stack.join(' · ')}</p>
+            {projectBuilding(p.name) && (
+              <a class="city-link" href={`#tour/${projectBuilding(p.name)}`} data-city-target={projectBuilding(p.name)}>See it in Dvij City</a>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="hackathons" aria-labelledby="hack-h">
+      <h2 id="hack-h">Hackathons</h2>
+      <table class="wikitable">
+        <caption>Results from one week in 2026</caption>
+        <thead><tr><th scope="col">Place</th><th scope="col">Event</th><th scope="col">Project</th></tr></thead>
+        <tbody>
+          {profile.hackathons.map((h) => (
+            <tr>
+              <td class="place">{h.place}</td>
+              <td>{h.event}</td>
+              <td>{'link' in h && h.link ? <a href={h.link as string}>{h.project}</a> : h.project}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <section id="approach" aria-labelledby="approach-h">
+      <h2 id="approach-h">Approach</h2>
+      <blockquote><p>{profile.philosophy}</p></blockquote>
+      {profile.lessons.map((l) => (
+        <p><b>{l.title}.</b> {l.body}</p>
+      ))}
+    </section>
+
+    <section id="civic" aria-labelledby="civic-h">
+      <h2 id="civic-h">Civic life</h2>
+      <ul>
+        {profile.civic.map((c) => (
+          <li><b>{c.title}.</b> {c.body}</li>
+        ))}
+      </ul>
+      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-h">
+      <h2 id="skills-h">Skills</h2>
+      <dl class="skills">
+        <dt>Languages</dt><dd>{profile.skills.languages.join(', ')}</dd>
+        <dt>Frameworks</dt><dd>{profile.skills.frameworks.join(', ')}</dd>
+        <dt>Methods</dt><dd>{profile.skills.methods.join(', ')}</dd>
+        <dt>Tools</dt><dd>{profile.skills.tools.join(', ')}</dd>
+      </dl>
+    </section>
+
+    <section id="education" aria-labelledby="edu-h">
+      <h2 id="edu-h">Education</h2>
+      <p><b>{profile.education.school}</b>, {profile.education.degree}, expected {profile.education.expected}.</p>
+      <p>Relevant courses: {profile.education.courses.join(', ')}.</p>
+      <p>Clubs: {profile.education.clubs.join(', ')}.</p>
+    </section>
+
+    <section id="history" aria-labelledby="history-h">
+      <h2 id="history-h">History</h2>
+      <ol class="timeline">
+        {profile.experience.map((e) => (
+          <li><time>{e.dates}</time> <span>{e.role}, <a href={`#${anchor(e.org)}`}>{e.org}</a></span></li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="talk" aria-labelledby="talk-h">
+      <h2 id="talk-h">Contact</h2>
+      <p>Open to co-op roles in forward deployed engineering, technical product management, and product.</p>
+      <ul class="contact">
+        <li><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
+        <li><a href={profile.links.linkedin}>LinkedIn</a></li>
+        <li><a href={profile.links.github}>GitHub</a></li>
+        <li><a href={profile.links.devpost}>Devpost</a></li>
+      </ul>
+    </section>
+
+    <section id="references" aria-labelledby="refs-h">
+      <h2 id="refs-h">References</h2>
+      <ol class="refs">
+        {refs.map((r) => <li id={r.id}><a href={r.href}>{r.label}</a></li>)}
+      </ol>
+    </section>
+  </main>
+
+  <footer class="wiki-foot">
+    <p>This article was last edited by its subject. Prefer exploring? <button type="button" class="linklike" data-set-mode="city">Visit Dvij City</button>.</p>
+    <p class="webring-slot" data-webring-slot></p>
+  </footer>
+</div>

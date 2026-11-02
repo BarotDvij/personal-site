@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Empty lot | dvijbarot.wiki" description="This page doesn't exist yet.">
+  <main class="lot">
+    <div class="lot-card">
+      <p class="lot-code">404</p>
+      <h1>This lot is still empty</h1>
+      <p>It's zoned for future projects, but nothing has been built here yet.</p>
+      <p class="lot-links">
+        <a href="/">Read the article</a>
+        <a href="/#tour">Tour Dvij City</a>
+      </p>
+    </div>
+    <div class="lot-ground" aria-hidden="true">
+      <span class="cone"></span><span class="cone"></span><span class="cone"></span>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .lot {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px 140px;
+    position: relative;
+    background: linear-gradient(#4f8fe0 0 20%, #6aa6ec 20% 40%, #86bbf2 40% 60%, #a5cff6 60% 80%, #c6e2f8 80%);
+  }
+
+  :global(html[data-theme='dark']) .lot {
+    background: linear-gradient(#0b1030 0 20%, #121a45 20% 40%, #1a2558 40% 60%, #24306a 60% 80%, #33407a 80%);
+  }
+
+  .lot-card {
+    font-family: var(--pixel);
+    color: #fff;
+    background: rgb(26 22 38 / 0.94);
+    padding: 24px 28px;
+    max-width: 440px;
+    text-align: center;
+    box-shadow: 0 -4px 0 #fff, 0 4px 0 #fff, -4px 0 0 #fff, 4px 0 0 #fff, 0 0 0 8px #2a2233;
+  }
+
+  .lot-code {
+    font-size: 56px;
+    line-height: 1;
+    margin: 0 0 8px;
+    color: #e8c547;
+  }
+
+  h1 {
+    font-weight: 400;
+    font-size: 20px;
+    margin: 0 0 12px;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .lot-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .lot-links a {
+    color: #1d2a10;
+    background: #9bd23c;
+    padding: 8px 14px;
+    text-decoration: none;
+    box-shadow: inset -3px -3px 0 #6fa21f, 0 0 0 3px #fff;
+  }
+
+  .lot-ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 110px;
+    background: linear-gradient(#c9c3b6 0 12px, #7b4a2a 12px 50%, #52301c 50%);
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .cone {
+    width: 18px;
+    height: 24px;
+    margin-top: -24px;
+    background: linear-gradient(#f28c28 0 30%, #fff 30% 45%, #f28c28 45%);
+    clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+  }
+</style>
