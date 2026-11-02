@@ -49,6 +49,8 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 4. Museum of Favourites
 5. Fly-over intro
 
+**Results (Nov 2 build):** all five done. Regression suite passes with zero console errors. Lighthouse mobile: Wiki 100 / 100 / 100 / 100 (layout shift 0 after preloading fonts), City 99 / 100 / 100 / 100. City holds 60 fps at 6x CPU throttle. Each game is 1 to 3 KB gzipped and loads only when played.
+
 **Parked until Dvij is back:** media (portrait, ads, screenshots, budget check), "Early life" section, NPC dialogue, final launch pass, domain, webring
 
 ## V2: Plan (original draft)
