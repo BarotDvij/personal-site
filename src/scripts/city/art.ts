@@ -729,6 +729,123 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
   return c;
 }
 
+// ---------- parallax skyline ----------
+// Two layers sit behind the street and slide slower than it, so the city has
+// depth. A layer's features are laid out at (world x * speed), and the draw
+// offset keeps a landmark centred on screen when the camera is over its
+// district. That is how the CN Tower stays "behind" the AI Lab.
+
+export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
+export type ParallaxKind = keyof typeof PARALLAX;
+
+// World x of each landmark's district centre.
+const CN_TOWER_X = 580;
+const WILLIS_TOWER_X = 1458;
+
+const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
+
+function mixHex(a: string, b: string, t: number) {
+  const x = parseInt(a.slice(1), 16), y = parseInt(b.slice(1), 16);
+  const m = (s: number, e: number) => Math.round(s + (e - s) * t);
+  const v = (m(x >> 16, y >> 16) << 16) | (m((x >> 8) & 255, (y >> 8) & 255) << 8) | m(x & 255, y & 255);
+  return `#${v.toString(16).padStart(6, '0')}`;
+}
+
+// Toronto's CN Tower: flared base, thin shaft, a two-tier pod, then the antenna.
+function cnTower(ctx: Ctx, cx: number, base: number, h: number, col: string, p: Palette) {
+  const top = base - h;
+  const pod = Math.round(base - h * 0.62);
+  rect(ctx, cx - 1, top, 3, h, col);
+  rect(ctx, cx, top - 6, 1, 6, col);
+  for (let i = 0; i < 14; i++) rect(ctx, cx - 1 - Math.round(i * 0.45), base - 1 - i * 2, 3 + Math.round(i * 0.9), 2, col);
+  rect(ctx, cx - 8, pod, 17, 3, col);
+  rect(ctx, cx - 6, pod + 3, 13, 2, col);
+  rect(ctx, cx - 4, pod - 2, 9, 2, col);
+  rect(ctx, cx - 2, pod - 4, 5, 2, col);
+  if (p.night) rect(ctx, cx - 6, pod + 1, 13, 1, '#ffd76a');
+  // The lookout pod on the shaft below, smaller and higher up.
+  rect(ctx, cx - 2, top + 8, 5, 2, col);
+}
+
+// Chicago's Willis (Sears) Tower: bundled tubes stepping up, two antennas.
+function willisTower(ctx: Ctx, cx: number, base: number, h: number, col: string, p: Palette) {
+  const heights = [0.58, 0.8, 1, 1, 0.5];
+  const w = 6, x0 = cx - Math.round((heights.length * w) / 2);
+  heights.forEach((k, i) => {
+    const th = Math.round(h * k);
+    rect(ctx, x0 + i * w, base - th, w, th, col);
+    if (p.night) for (let y = base - th + 5; y < base - 6; y += 9) rect(ctx, x0 + i * w + 2, y, 1, 1, '#ffd76a');
+  });
+  for (const i of [2, 3]) rect(ctx, x0 + i * w + 2, base - h - 12, 2, 12, col);
+  // Dark tube seams read as the tower's bundled shape.
+  const seam = mixHex(col, '#000000', 0.25);
+  for (let i = 1; i < heights.length; i++) {
+    const th = Math.round(h * Math.min(heights[i], heights[i - 1]));
+    rect(ctx, x0 + i * w, base - th, 1, th, seam);
+  }
+}
+
+export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number) {
+  const f = PARALLAX[kind];
+  const pad = parallaxPad(viewW);
+  const c = document.createElement('canvas');
+  c.width = Math.ceil(WORLD_W * f + 2 * pad);
+  c.height = WORLD_H;
+  const ctx = c.getContext('2d')!;
+  const far = kind === 'far';
+  const haze = p.sky[p.sky.length - 1];
+  const col = far
+    ? mixHex(haze, p.night ? '#04061a' : '#3d5f8f', p.night ? 0.45 : 0.3)
+    : mixHex(haze, p.night ? '#02030f' : '#2c4a78', p.night ? 0.72 : 0.52);
+  const winLit = p.night ? mixHex('#ffd76a', col, 0.45) : mixHex(col, '#ffffff', 0.3);
+  const winDim = mixHex(col, p.night ? '#3b4675' : '#ffffff', p.night ? 0.25 : 0.12);
+
+  // Landmarks only live in the far layer, and keep clear of the generic skyline.
+  const landmarks = far
+    ? [
+        { x: Math.round(CN_TOWER_X * f + pad), clear: 16 },
+        { x: Math.round(WILLIS_TOWER_X * f + pad), clear: 20 },
+      ]
+    : [];
+
+  const r = rng(far ? 7 : 11);
+  const minW = far ? 9 : 14, maxW = far ? 22 : 30;
+  const minH = far ? 28 : 22, maxH = far ? 92 : 64;
+  let x = -4;
+  while (x < c.width) {
+    const w = minW + Math.floor(r() * (maxW - minW));
+    const h = minH + Math.floor(r() * (maxH - minH));
+    const gap = far ? Math.floor(r() * 3) : 2 + Math.floor(r() * 6);
+    const blocked = landmarks.some((l) => x + w > l.x - l.clear && x < l.x + l.clear);
+    if (!blocked) {
+      rect(ctx, x, GROUND - h, w, h, col);
+      if (r() < 0.35) rect(ctx, x + 2, GROUND - h - 3, w - 4, 3, col); // stepped top
+      if (r() < 0.25) rect(ctx, x + Math.floor(w / 2), GROUND - h - 8, 1, 8, col); // antenna
+      if (!far) {
+        for (let yy = GROUND - h + 4; yy < GROUND - 4; yy += 5) {
+          for (let xx = x + 3; xx < x + w - 3; xx += 4) rect(ctx, xx, yy, 2, 2, r() < (p.night ? 0.3 : 0.5) ? winLit : winDim);
+        }
+      } else if (p.night) {
+        for (let k = 0; k < 3; k++) rect(ctx, x + 2 + Math.floor(r() * (w - 4)), GROUND - h + 4 + Math.floor(r() * (h - 8)), 1, 1, winLit);
+      }
+    }
+    x += w + gap;
+  }
+  if (far) {
+    const mark = mixHex(col, p.night ? '#000000' : '#1c3358', 0.4);
+    cnTower(ctx, landmarks[0].x, GROUND, 150, mark, p);
+    willisTower(ctx, landmarks[1].x, GROUND, 130, mark, p);
+  }
+  return c;
+}
+
+// Left edge of a parallax layer on screen, given the street layer's origin
+// (the negated camera x, or a positive offset when the world is centred).
+export function parallaxX(kind: ParallaxKind, viewW: number, originX: number) {
+  const f = PARALLAX[kind];
+  return Math.round((1 - f) * (viewW / 2) + f * originX - parallaxPad(viewW));
+}
+
 export interface Cloud { x: number; y: number; w: number; speed: number }
 
 export function makeClouds(n: number): Cloud[] {

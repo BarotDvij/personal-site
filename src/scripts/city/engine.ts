@@ -4,7 +4,7 @@ import {
   WORLD_W, WORLD_H, GROUND, DISTRICTS, LENS_COLOR, STRUCTURES, districtAt, type Structure,
 } from './world';
 import {
-  PALETTES, buildCityLayer, buildSkyLayer, makeClouds, drawClouds, preparePaths,
+  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, preparePaths,
   drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor, highlights } from './panels';
@@ -35,6 +35,8 @@ export function mountCity(root: HTMLElement): City {
   let palette: Palette = PALETTES.day;
   let cityLayer: HTMLCanvasElement | null = null;
   let skyLayer: HTMLCanvasElement | null = null;
+  let farLayer: HTMLCanvasElement | null = null;
+  let midLayer: HTMLCanvasElement | null = null;
   let tier: Tier = hintTier();
   const probe = new FrameProbe();
   const paths = preparePaths();
@@ -58,6 +60,8 @@ export function mountCity(root: HTMLElement): City {
     palette = html.dataset.theme === 'dark' ? PALETTES.night : PALETTES.day;
     cityLayer = buildCityLayer(palette);
     skyLayer = buildSkyLayer(palette, viewW, Math.max(1, offsetY + GROUND));
+    farLayer = buildParallaxLayer(palette, 'far', viewW);
+    midLayer = buildParallaxLayer(palette, 'mid', viewW);
     html.dataset.tier = tier;
     dirty = true;
   }
@@ -86,6 +90,8 @@ export function mountCity(root: HTMLElement): City {
     }
     root.style.setProperty('--px', `${scale}px`);
     skyLayer = buildSkyLayer(palette, viewW, Math.max(1, offsetY + GROUND));
+    farLayer = buildParallaxLayer(palette, 'far', viewW);
+    midLayer = buildParallaxLayer(palette, 'mid', viewW);
     clampTarget();
     camX = targetX;
     dirty = true;
@@ -486,6 +492,11 @@ export function mountCity(root: HTMLElement): City {
     ctx.drawImage(skyLayer, 0, 0);
     drawClouds(ctx, clouds, palette, camX, t, viewW, offsetY);
     const dw = WORLD_W * z, dh = WORLD_H * z;
+    for (const [layer, f] of [[farLayer, PARALLAX.far], [midLayer, PARALLAX.mid]] as const) {
+      if (!layer) continue;
+      const pad = Math.ceil(viewW / 2) + 2;
+      ctx.drawImage(layer, Math.round(viewW / 2 - (c * f + pad) * z), Math.round(viewH - dh), Math.round(layer.width * z), Math.round(dh));
+    }
     ctx.drawImage(cityLayer, 0, 0, WORLD_W, WORLD_H, Math.round(viewW / 2 - c * z), Math.round(viewH - dh), Math.round(dw), Math.round(dh));
   }
 
@@ -499,6 +510,9 @@ export function mountCity(root: HTMLElement): City {
     ctx.drawImage(skyLayer, 0, 0);
     const motion = !reduced();
     if (tier === 'high' || !motion) drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
+    // Far skyline and mid-ground slide slower than the street for depth.
+    if (farLayer) ctx.drawImage(farLayer, parallaxX('far', viewW, ox), offsetY);
+    if (midLayer) ctx.drawImage(midLayer, parallaxX('mid', viewW, ox), offsetY);
     ctx.drawImage(cityLayer, ox, offsetY);
     drawPackets(ctx, paths, motion ? t : 0, tier === 'high' ? 4 : 1, ox, offsetY, viewW);
     drawProps(ctx, motion ? t : 0, ox, offsetY, palette);
