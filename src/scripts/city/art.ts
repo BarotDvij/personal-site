@@ -723,7 +723,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[2290, 1], [2304, 2], [2336, 1], [2352, 2], [2380, 1]] as const) tree(ctx, tx, p, size);
+  for (const [tx, size] of [[2244, 1], [2258, 2], [2290, 1], [2306, 2], [2334, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -791,7 +791,7 @@ export type ParallaxKind = keyof typeof PARALLAX;
 
 // World x of each landmark's district centre.
 const CN_TOWER_X = 580;
-const WILLIS_TOWER_X = 1458;
+const WILLIS_TOWER_X = 1412;
 
 const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
