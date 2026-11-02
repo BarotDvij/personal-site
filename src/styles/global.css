@@ -1749,7 +1749,12 @@ html.party .hud-title {
   gap: 10px;
 }
 
+.panel-body .game-list li {
+  display: flex;
+}
+
 .panel-body .game-btn {
+  flex: 1;
   width: 100%;
   text-align: left;
   border: 0;

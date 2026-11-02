@@ -72,7 +72,7 @@ export const GAMES: GameInfo[] = [
   {
     id: 'chess',
     title: 'Chess',
-    blurb: 'Two players on one device, or play the city.',
+    blurb: '2 players on one device, or play the city.',
     credit: 'One of my favourite games growing up.',
     help: 'Click a piece, then a square. Press C to switch between two players and the computer.',
     load: () => import('./games/chess'),
@@ -80,7 +80,7 @@ export const GAMES: GameInfo[] = [
   {
     id: 'tanks',
     title: 'Tank Duel',
-    blurb: 'Two players, one keyboard, bouncing shells.',
+    blurb: '2 players, one keyboard, bouncing shells.',
     credit: 'Inspired by Tank Trouble, which I played growing up.',
     help: 'Green: WASD to drive, Q to fire. Blue: arrow keys to drive, M or / to fire. Best on a keyboard.',
     load: () => import('./games/tanks'),
