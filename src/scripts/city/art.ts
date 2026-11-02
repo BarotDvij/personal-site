@@ -676,13 +676,17 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       // Marquee
       box(ctx, x + 10, top, w - 20, 18, shade('#1a1626', p), p);
       const neon = ['#e0457b', '#f2a33a', '#e8c547', '#3fb950', '#22b8cf', '#9b6bf2'];
-      label.split('').forEach((ch, i) => text(ctx, ch, x + 22 + i * 15, top + 7, neon[i % neon.length]));
+      // Letter spacing and screen size follow the building width.
+      const sp = Math.min(15, Math.floor((w - 28) / label.length));
+      const lx0 = x + 10 + Math.round((w - 20 - ((label.length - 1) * sp + 5)) / 2);
+      label.split('').forEach((ch, i) => text(ctx, ch, lx0 + i * sp, top + 7, neon[i % neon.length]));
       for (let i = 0; i < w - 24; i += 4) rect(ctx, x + 12 + i, top + 2, 2, 1, i % 8 ? '#e8c547' : '#ffffff');
       // Screens
       for (let i = 0; i < 4; i++) {
-        const sx = x + 10 + i * ((w - 20) / 4);
-        box(ctx, sx, top + 28, 22, 18, shade('#120f1e', p), p);
-        rect(ctx, sx + 3, top + 31, 16, 10, ['#22b8cf', '#3fb950', '#e0457b', '#f2a33a'][i]);
+        const cell = (w - 20) / 4, sw = Math.min(22, Math.floor(cell) - 2);
+        const sx = Math.round(x + 10 + i * cell + (cell - sw) / 2);
+        box(ctx, sx, top + 28, sw, 18, shade('#120f1e', p), p);
+        rect(ctx, sx + 3, top + 31, sw - 6, 10, ['#22b8cf', '#3fb950', '#e0457b', '#f2a33a'][i]);
         rect(ctx, sx + 6, top + 34, 4, 2, '#ffffff');
       }
       // Joystick sign and doors

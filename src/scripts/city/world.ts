@@ -91,10 +91,10 @@ export const STRUCTURES: Structure[] = [
 
   // Commercial District
   { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 1240, w: 84, h: 56, district: 'commercial', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 1282 },
-  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1344, w: 132, h: 98, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
-  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1494, w: 92, h: 86, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
-  { id: 'halloffame', label: 'Hall of Fame: trophy case', kind: 'kiosk', x: 1604, w: 76, h: 52, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
-  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1700, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
+  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1344, w: 100, h: 94, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
+  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1462, w: 132, h: 98, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
+  { id: 'halloffame', label: 'Hall of Fame: trophy case', kind: 'kiosk', x: 1612, w: 76, h: 52, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
+  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1708, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
   // Mixed-Use Zone
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1780, w: 92, h: 140, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1826 },
