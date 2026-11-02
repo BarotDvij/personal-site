@@ -217,7 +217,7 @@
         "Built and UX-tested self-serve learning modules from the most common advising questions",
         "Built a FastAPI prototype on a team of 5 feeding a BigQuery warehouse and Looker Studio KPI dashboard"
       ],
-      "journey": false
+      "journey": true
     },
     {
       "role": "Business Development Representative",
@@ -235,7 +235,7 @@
         "Automated KPI reporting with VBA and Power BI, cutting reporting time by 70%",
         "Migrated CRM data from Close.io to Salesforce, improving pipeline accuracy by 31%"
       ],
-      "journey": false
+      "journey": true
     }
   ],
   "projects": [

@@ -496,6 +496,53 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + w - 5, top + 4, 6, 4, shade('#e0302f', p));
       break;
     }
+    case 'showroom': {
+      // A lawn out front with ground-mounted solar panels (the robot mower is
+      // animated in drawProps), and the showroom itself on the right.
+      const lawn = 40, bx = x + lawn, bw = w - lawn, bcx = bx + bw / 2;
+      for (let i = 0; i < lawn; i += 4) rect(ctx, x + i, GROUND - 3, 4, 3, shade(i % 8 ? '#4fa84f' : '#5fbe5a', p));
+      for (const [px, ph] of [[x + 3, 0], [x + 21, 0]]) {
+        rect(ctx, px + 7, GROUND - 12 - ph, 1, 9, p.lamp);
+        for (let k = 0; k < 6; k++) rect(ctx, px + k * 2, GROUND - 14 - ph + k, 16 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
+        rect(ctx, px, GROUND - 14 - ph, 16, 1, shade('#5d86c9', p));
+      }
+      box(ctx, bx, top + 12, bw, h - 12, shade('#e8eef2', p), p);
+      for (let i = 0; i < 4; i++) {
+        const px = bx + 4 + i * ((bw - 8) / 4);
+        rect(ctx, px, top + 4, (bw - 8) / 4 - 2, 8, shade('#1f3a6b', p));
+        rect(ctx, px + 1, top + 5, (bw - 8) / 4 - 4, 1, shade('#5d86c9', p));
+        rect(ctx, px + 2, top + 12, 1, 2, p.lamp);
+      }
+      const wx = bx + 5, wy = GROUND - 30, ww = bw - 20;
+      rect(ctx, wx, wy, ww, 24, p.night ? '#e6cf8f' : '#cfe6f5');
+      for (let k = 0; k < 4; k++) rect(ctx, wx + 4 + k * 2, wy + 6 + k, 20 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
+      rect(ctx, wx + 13, wy + 10, 1, 8, p.lamp);
+      rect(ctx, wx, wy + 18, ww, 6, shade('#4fa84f', p));
+      door(ctx, bx + bw - 8, 8, 14);
+      sign(ctx, label, bcx, top + 16, '#c8336c', '#ffffff', p);
+      break;
+    }
+    case 'chamber': {
+      // Limestone civic front: a business building that looks toward City Hall.
+      const stone = shade('#d9d2c2', p), dark = shade('#a89f8c', p);
+      box(ctx, x, top + 14, w, h - 14, stone, p);
+      for (let i = 0; i < 6; i++) rect(ctx, x - 2 + i, top + 14 - i * 2, w + 4 - i * 2, 2, dark);
+      rect(ctx, x - 2, top + 14, w + 4, 2, p.outline);
+      for (let row = 0; row < 2; row++)
+        for (let i = 0; i < 4; i++) {
+          const wx = x + 10 + i * ((w - 28) / 3), wy = top + 30 + row * 20;
+          rect(ctx, wx - 1, wy - 1, 10, 13, dark);
+          rect(ctx, wx, wy, 8, 11, p.night ? (i % 2 ? p.lit : p.unlit) : p.glass[0]);
+          rect(ctx, wx, wy + 5, 8, 1, dark);
+        }
+      for (let i = 0; i < 2; i++) rect(ctx, cx - 16 + i * 28, GROUND - 26, 4, 26, shade('#efe9dc', p));
+      rect(ctx, cx - 18, GROUND - 3, 36, 3, dark);
+      door(ctx, cx, 14, 18, shade('#3a4a5a', p));
+      rect(ctx, x + w - 7, top - 6, 1, 20, p.lamp);
+      rect(ctx, x + w - 6, top - 6, 7, 5, shade('#2f6fd6', p));
+      sign(ctx, label, cx, top + 18, '#2f6fd6', '#ffffff', p);
+      break;
+    }
     case 'arcadehall': {
       box(ctx, x, top + 16, w, h - 16, shade('#2a1f4a', p), p);
       // Marquee
@@ -661,7 +708,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[1650, 1], [1664, 2], [1696, 1], [1712, 2], [1740, 1]] as const) tree(ctx, tx, p, size);
+  for (const [tx, size] of [[1850, 1], [1864, 2], [1896, 1], [1912, 2], [1940, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -848,6 +895,24 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       rect(ctx, hx, top + 3, 1, len, p.lamp);
       rect(ctx, hx - 3, top + 3 + len, 7, 5, shade('#9aa3ad', p));
       rect(ctx, hx - 3, top + 3 + len, 7, 1, shade('#c4ccd4', p));
+    }
+    if (s.kind === 'showroom') {
+      // Robot mower driving back and forth across the lawn.
+      const span = 24, period = 6000;
+      const phase = (t % period) / period;
+      const dir = phase < 0.5 ? 1 : -1;
+      const off = phase < 0.5 ? phase * 2 * span : (1 - phase) * 2 * span;
+      const mx = Math.round(s.x + 2 + off + originX);
+      const gy = GROUND + offsetY;
+      rect(ctx, mx, gy - 6, 12, 4, shade('#f2a33a', p));
+      rect(ctx, mx + 2, gy - 8, 7, 2, shade('#2a2233', p));
+      rect(ctx, mx + (dir > 0 ? 9 : 1), gy - 11, 1, 3, p.lamp);
+      rect(ctx, mx + (dir > 0 ? 8 : 0), gy - 12, 3, 1, t > 0 && Math.floor(t / 400) % 2 ? '#e33b3b' : '#7a1f1f');
+      rect(ctx, mx + 1, gy - 2, 3, 2, p.outline);
+      rect(ctx, mx + 8, gy - 2, 3, 2, p.outline);
+      // Freshly cut stripe behind the mower
+      ctx.fillStyle = p.night ? 'rgba(160, 230, 140, 0.25)' : 'rgba(200, 255, 170, 0.45)';
+      ctx.fillRect(dir > 0 ? Math.round(s.x + 2 + originX) : mx + 12, gy - 3, dir > 0 ? Math.max(0, mx - Math.round(s.x + 2 + originX)) : Math.max(0, Math.round(s.x + 2 + span + 12 + originX) - (mx + 12)), 1);
     }
     if (s.id === 'ab' && t > 0 && Math.floor(t / 1600) % 2 === 1) {
       const cx = s.x + (3 * s.w) / 4 + originX;
