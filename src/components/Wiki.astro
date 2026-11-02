@@ -65,7 +65,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <div class="bar-actions">
       <button type="button" class="ghost" data-open-settings aria-haspopup="dialog">Settings</button>
       <button type="button" class="tour-btn" data-set-mode="city">
-        <span class="px-icon" aria-hidden="true"></span> Take the city tour
+        <span class="px-icon" aria-hidden="true"></span> <span class="wide">Take the </span>city tour
       </button>
     </div>
   </header>
@@ -130,7 +130,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       {current.org}, building an agentic operations application for an enterprise client through Communitech's
       AI@WORK program.
     </p>
-    <p>
+    <p class="lead-more">
       Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
       2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
