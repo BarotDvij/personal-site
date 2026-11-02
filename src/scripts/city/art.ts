@@ -432,8 +432,19 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'construction': {
-      box(ctx, x + 6, GROUND - 46, w - 40, 46, shade('#9aa3ad', p), p);
-      windows(ctx, p, r, x + 12, GROUND - 40, w - 52, 24, 5, 5, 4, 4);
+      // Brick schoolhouse behind the scaffolding: clock tower, door, three rows of windows.
+      const sx = x + 6, sw = w - 40, scx = sx + sw / 2;
+      box(ctx, sx, GROUND - 46, sw, 46, shade('#b5533c', p), p);
+      for (let yy = GROUND - 43; yy < GROUND - 2; yy += 4) rect(ctx, sx + 1, yy, sw - 2, 1, shade('#9a4330', p));
+      rect(ctx, sx - 2, GROUND - 48, sw + 4, 3, shade('#e6dfcf', p));
+      box(ctx, scx - 11, GROUND - 74, 22, 28, shade('#c46a50', p), p);
+      for (let i = 0; i < 6; i++) rect(ctx, scx - 12 + i * 2, GROUND - 79 - i, 24 - i * 4, 2, shade('#4a3a52', p));
+      rect(ctx, scx - 5, GROUND - 71, 10, 10, p.outline);
+      rect(ctx, scx - 4, GROUND - 70, 8, 8, '#fff6dc');
+      rect(ctx, scx, GROUND - 69, 1, 4, p.outline);
+      rect(ctx, scx, GROUND - 66, 3, 1, p.outline);
+      windows(ctx, p, r, sx + 6, GROUND - 40, sw - 12, 22, 6, 5, 4, 4);
+      door(ctx, scx, 12, 14, shade('#5a4030', p));
       const pole = shade('#e8a33a', p);
       for (let i = 0; i <= 4; i++) rect(ctx, x + 4 + i * ((w - 40) / 4), GROUND - 78, 2, 78, pole);
       for (let yy = GROUND - 78; yy < GROUND; yy += 16) rect(ctx, x + 4, yy, w - 38, 2, pole);
@@ -444,7 +455,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, x + w - 36 + i * 7, GROUND - 6, 5, 6, shade('#f28c28', p));
         rect(ctx, x + w - 35 + i * 7, GROUND - 4, 3, 1, '#ffffff');
       }
-      sign(ctx, label, x + 40, GROUND - 60, '#3fb950', '#ffffff', p);
+      sign(ctx, label, x + 44, GROUND - 56, '#3fb950', '#ffffff', p);
       break;
     }
     case 'furniture': {
