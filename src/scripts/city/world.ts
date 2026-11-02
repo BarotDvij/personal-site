@@ -1,7 +1,7 @@
 // Dvij City layout, in world pixels. The world is drawn at a tiny base
 // resolution and scaled up by whole numbers so the pixel art stays crisp.
 
-export const WORLD_W = 2400;
+export const WORLD_W = 2800;
 export const WORLD_H = 270;
 export const GROUND = 176; // y of the street surface
 export const TRUNK_Y = GROUND + 58; // main underground pipeline
@@ -9,8 +9,9 @@ export const DEEP_Y = GROUND + 78; // second, deeper pipeline
 
 export type Lens = 'marketing' | 'data' | 'pm' | 'ai' | 'dev';
 
-export const LENS_COLOR: Record<Lens | 'plaza', string> = {
+export const LENS_COLOR: Record<Lens | 'plaza' | 'play', string> = {
   plaza: '#e8c547',
+  play: '#22b8cf',
   marketing: '#e0457b',
   pm: '#f2a33a',
   ai: '#9b6bf2',
@@ -21,7 +22,7 @@ export const LENS_COLOR: Record<Lens | 'plaza', string> = {
 export interface District {
   id: string;
   name: string;
-  lens: Lens | 'plaza';
+  lens: Lens | 'plaza' | 'play';
   x0: number;
   x1: number;
 }
@@ -33,6 +34,7 @@ export const DISTRICTS: District[] = [
   { id: 'ai', name: 'AI Lab', lens: 'ai', x0: 1200, x1: 1600 },
   { id: 'data', name: 'Data District', lens: 'data', x0: 1600, x1: 2000 },
   { id: 'yard', name: "Builder's Yard", lens: 'dev', x0: 2000, x1: 2400 },
+  { id: 'play', name: 'Play District', lens: 'play', x0: 2400, x1: 2800 },
 ];
 
 export type Ref =
@@ -43,12 +45,14 @@ export type Ref =
   | { type: 'hackathons' }
   | { type: 'pipelines' }
   | { type: 'civic' }
+  | { type: 'arcade' }
+  | { type: 'game'; id: string }
   | { type: 'warp'; to: number };
 
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp' | 'furniture';
+  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'arcadehall' | 'pond';
 
 export interface Structure {
   id: string;
@@ -99,7 +103,12 @@ export const STRUCTURES: Structure[] = [
   { id: 'boggle', label: 'Boggle Zen Arcade', kind: 'arcade', x: 2026, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
   { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 2128, w: 84, h: 56, district: 'yard', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 2170 },
   { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2236, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
-  { id: 'warp-0', label: 'Warp back to Welcome Plaza', kind: 'warp', x: 2366, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
+  { id: 'warp-6', label: 'Warp to Play District', kind: 'warp', x: 2366, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 6 } },
+
+  // Play District
+  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 2428, w: 132, h: 98, district: 'play', ref: { type: 'arcade' }, text: ['ARCADE'] },
+  { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2580, w: 76, h: 30, district: 'play', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
+  { id: 'warp-0', label: 'Warp back to Welcome Plaza', kind: 'warp', x: 2766, w: 22, h: 26, district: 'play', ref: { type: 'warp', to: 0 } },
 ];
 
 // The warehouse junction every pipeline flows into.

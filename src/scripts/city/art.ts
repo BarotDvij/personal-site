@@ -8,35 +8,9 @@ import {
 
 type Ctx = CanvasRenderingContext2D;
 
-// ---------- 3x5 pixel font ----------
+import { text, textWidth } from '../pixelfont';
 
-const GLYPHS: Record<string, string> = {
-  A: '010101111101101', B: '110101110101110', C: '011100100100011', D: '110101101101110',
-  E: '111100110100111', F: '111100110100100', G: '011100101101011', H: '101101111101101',
-  I: '111010010010111', J: '001001001101010', K: '101101110101101', L: '100100100100111',
-  M: '101111111101101', N: '110101101101101', O: '010101101101010', P: '110101110100100',
-  Q: '010101101110011', R: '110101110101101', S: '011100010001110', T: '111010010010010',
-  U: '101101101101111', V: '101101101101010', W: '101101111111101', X: '101101010101101',
-  Y: '101101010010010', Z: '111001010100111',
-  '0': '111101101101111', '1': '010110010010111', '2': '110001010100111', '3': '110001010001110',
-  '4': '101101111001001', '5': '111100110001110', '6': '011100111101111', '7': '111001010010010',
-  '8': '111101111101111', '9': '111101111001110',
-  ' ': '000000000000000', '.': '000000000000010', ':': '000010000010000', '-': '000000111000000',
-  '>': '100010001010100', '%': '101001010100101', '$': '011110010011110', '!': '010010010000010',
-  '/': '001001010100100', '&': '010101010101011', "'": '010010000000000', '+': '000010111010000',
-};
-
-export const textWidth = (s: string) => s.length * 4 - 1;
-
-export function text(ctx: Ctx, s: string, x: number, y: number, color: string) {
-  ctx.fillStyle = color;
-  let cx = Math.round(x);
-  for (const ch of s.toUpperCase()) {
-    const g = GLYPHS[ch] ?? GLYPHS[' '];
-    for (let i = 0; i < 15; i++) if (g[i] === '1') ctx.fillRect(cx + (i % 3), Math.round(y) + Math.floor(i / 3), 1, 1);
-    cx += 4;
-  }
-}
+export { text, textWidth };
 
 const centeredText = (ctx: Ctx, s: string, cx: number, y: number, color: string) =>
   text(ctx, s, Math.round(cx - textWidth(s) / 2), y, color);
@@ -462,6 +436,48 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, cx, top + 12, '#f2a33a', '#2a2233', p);
       break;
     }
+    case 'arcadehall': {
+      box(ctx, x, top + 16, w, h - 16, shade('#2a1f4a', p), p);
+      // Marquee
+      box(ctx, x + 10, top, w - 20, 18, shade('#1a1626', p), p);
+      const neon = ['#e0457b', '#f2a33a', '#e8c547', '#3fb950', '#22b8cf', '#9b6bf2'];
+      label.split('').forEach((ch, i) => text(ctx, ch, x + 22 + i * 15, top + 7, neon[i % neon.length]));
+      for (let i = 0; i < w - 24; i += 4) rect(ctx, x + 12 + i, top + 2, 2, 1, i % 8 ? '#e8c547' : '#ffffff');
+      // Screens
+      for (let i = 0; i < 4; i++) {
+        const sx = x + 10 + i * ((w - 20) / 4);
+        box(ctx, sx, top + 28, 22, 18, shade('#120f1e', p), p);
+        rect(ctx, sx + 3, top + 31, 16, 10, ['#22b8cf', '#3fb950', '#e0457b', '#f2a33a'][i]);
+        rect(ctx, sx + 6, top + 34, 4, 2, '#ffffff');
+      }
+      // Joystick sign and doors
+      rect(ctx, x + 12, GROUND - 30, 20, 4, shade('#e0457b', p));
+      rect(ctx, x + 21, GROUND - 40, 2, 10, shade('#9aa3ad', p));
+      rect(ctx, x + 19, GROUND - 44, 6, 5, shade('#e0457b', p));
+      box(ctx, x + w / 2 - 14, GROUND - 26, 28, 26, p.night ? '#3a2f6a' : '#5a4a8a', p);
+      rect(ctx, x + w / 2, GROUND - 25, 1, 25, p.outline);
+      for (let i = 0; i < w; i += 6) rect(ctx, x + i, top + 16, 3, 2, neon[(i / 6) % neon.length]);
+      break;
+    }
+    case 'pond': {
+      const water = shade('#3b82f6', p), light = shade('#7fb0ff', p);
+      rect(ctx, x + 6, GROUND - 10, w - 12, 10, water);
+      rect(ctx, x + 2, GROUND - 7, w - 4, 7, water);
+      rect(ctx, x + 10, GROUND - 9, 14, 1, light);
+      rect(ctx, x + 40, GROUND - 6, 18, 1, light);
+      for (const [dx, dy] of [[16, -14], [44, -12]]) {
+        rect(ctx, x + dx, GROUND + dy, 7, 4, shade('#f2c84b', p));
+        rect(ctx, x + dx + 5, GROUND + dy - 3, 3, 3, shade('#f2c84b', p));
+        rect(ctx, x + dx + 8, GROUND + dy - 2, 2, 1, shade('#f28c28', p));
+        rect(ctx, x + dx + 6, GROUND + dy - 2, 1, 1, p.outline);
+      }
+      for (const rx of [x + 2, x + w - 6]) {
+        rect(ctx, rx, GROUND - 14, 1, 14, shade('#3f9a48', p));
+        rect(ctx, rx + 2, GROUND - 11, 1, 11, shade('#3f9a48', p));
+      }
+      sign(ctx, label, cx, GROUND - 30, '#22b8cf', '#ffffff', p);
+      break;
+    }
     case 'warp': {
       warpBody(ctx, x + 2, top + 9, w - 4, h - 9, p);
       rect(ctx, x, top, w, 10, p.warp[0]);
@@ -508,7 +524,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Trunk lines
   pipe(ctx, 20, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
-  pipe(ctx, JUNCTION_X + 20, DEEP_Y, WORLD_W - 460, DEEP_Y, p, 7);
+  pipe(ctx, JUNCTION_X + 20, DEEP_Y, 1940, DEEP_Y, p, 7);
   for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings

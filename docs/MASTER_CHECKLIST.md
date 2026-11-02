@@ -23,6 +23,8 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [x] CI: type check, content tests, build
 - [x] Vercel connected, merged to `main`, production live
 
+- [x] Awards section in the Wiki (hackathons, DECA, JA, BLC, school) and a trophy case in the Visitor Center
+
 ### Left from V1
 - [ ] **(you)** Final headline (current one is a draft)
 - [ ] **(you)** Fun facts and hobbies for the Visitor Center
@@ -70,25 +72,25 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 ## The Arcade
 
 ### Shared game shell (build once)
-- [ ] Arcade building replaces the Boggle Zen interior (Boggle stays as its sign)
-- [ ] Game window: pixel frame, pause, restart, close, back to city
-- [ ] Controls: keyboard, touch, and on-screen buttons on phones
-- [ ] Each game is its own file, loaded only when started
-- [ ] Best scores saved on the device only (no server)
-- [ ] Credit line under each game: "Inspired by ..., which I played growing up"
-- [ ] Respects reduced motion and the sound setting
-- [ ] Test that the city stays at 60 fps after a game closes
+- [x] Arcade Hall in a new Play District (Boggle Zen stays its own building)
+- [x] Game window: pixel frame, pause, restart, close, back to city
+- [x] Controls: keyboard, touch, and on-screen buttons on phones
+- [x] Each game is its own file, loaded only when started
+- [x] Best scores saved on the device only (no server)
+- [x] Credit line under each game: "Inspired by ..., which I played growing up"
+- [x] Respects reduced motion and the sound setting
+- [x] Test that the city stays at 60 fps after a game closes
 
 ### Games (easy first)
-- [ ] Packet Snake (Snake) inside the pipes
-- [ ] Bug Sweeper (Minesweeper) on the construction lot
-- [ ] Trap the Cat (Chat Noir) in the park
-- [ ] Rally (Tennis / Pong) in the Arcade
-- [ ] Block Stack (Tetris) in the Arcade. Credit line: how competitive Tetris started in high school
-- [ ] Pipe Muncher (Pac-Man) maze through the pipe network
-- [ ] Duck Flight (one Duck Life minigame) at the park pond
-- [ ] Chess, two players on one device, then a simple computer opponent
-- [ ] Tank Duel (Tank Trouble), two players on one keyboard
+- [x] Packet Snake (Snake) inside the pipes
+- [x] Bug Sweeper (Minesweeper) on the construction lot
+- [x] Trap the Cat (Chat Noir) in the park
+- [x] Rally (Tennis / Pong) in the Arcade
+- [x] Block Stack (Tetris) in the Arcade. Credit line: how competitive Tetris started in high school
+- [x] Pipe Muncher (Pac-Man) maze through the pipe network
+- [x] Duck Flight (one Duck Life minigame) at the park pond
+- [x] Chess, two players on one device, then a simple computer opponent
+- [x] Tank Duel (Tank Trouble), two players on one keyboard
 
 ---
 

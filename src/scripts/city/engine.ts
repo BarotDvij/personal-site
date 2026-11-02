@@ -149,6 +149,10 @@ export function mountCity(root: HTMLElement): City {
       lookAt(d.x0 + 200);
       return;
     }
+    if (s.ref?.type === 'game') {
+      document.dispatchEvent(new CustomEvent('arcade:launch', { detail: s.ref.id }));
+      return;
+    }
     if (!fill(s)) return;
     panel.returnTo = from ?? undefined;
     if (!panel.open) panel.showModal();
@@ -181,6 +185,30 @@ export function mountCity(root: HTMLElement): City {
   });
   panel.addEventListener('click', (e) => {
     if (e.target === panel) panel.close();
+    const game = (e.target as HTMLElement).closest<HTMLElement>('[data-game]');
+    if (game) {
+      backToArcade = true;
+      panel.close();
+      document.dispatchEvent(new CustomEvent('arcade:launch', { detail: game.dataset.game }));
+    }
+  });
+
+  // Pause the city while a game runs so the two never compete for frames.
+  document.addEventListener('arcade:open', () => {
+    if (running) cancelAnimationFrame(raf);
+  });
+  let backToArcade = false;
+  document.addEventListener('arcade:close', () => {
+    if (!running) return;
+    last = 0;
+    dirty = true;
+    raf = requestAnimationFrame(frame);
+    // Games started from the Arcade Hall return to its game list.
+    if (backToArcade) {
+      backToArcade = false;
+      const hall = STRUCTURES.find((x) => x.id === 'arcade')!;
+      activate(hall, buttonFor(hall));
+    }
   });
 
   // ----- minimap -----
@@ -242,7 +270,7 @@ export function mountCity(root: HTMLElement): City {
   }, true);
 
   function onKey(e: KeyboardEvent) {
-    if (!running || panel.open || (e.target as HTMLElement).closest('input, select, textarea, dialog')) return;
+    if (!running || panel.open || html.dataset.arcade || (e.target as HTMLElement).closest('input, select, textarea, dialog')) return;
     const step: Record<string, number> = { ArrowRight: 48, ArrowLeft: -48, d: 48, a: -48 };
     if (e.key in step) {
       targetX += step[e.key];

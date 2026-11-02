@@ -2,6 +2,7 @@
 
 import profile from '../../../content/profile.json';
 import type { Ref } from './world';
+import { GAMES } from '../arcade/catalog';
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -94,6 +95,15 @@ export function panelFor(ref: Ref): PanelContent | null {
         title: 'Civic life',
         html: `<p class="lead">City planning isn't just a theme here. Some of this city's history happened at the real City Hall.</p>
           ${profile.civic.map((c) => `<p><strong>${esc(c.title)}.</strong> ${esc(c.body)}</p>`).join('')}`,
+      };
+    }
+    case 'arcade': {
+      return {
+        kicker: 'Arcade Hall',
+        title: 'Insert coin',
+        html: `<p class="lead">Browser games I grew up on, rebuilt from scratch in the city's own pixel style. Everything runs offline, and each game only downloads when you start it.</p>
+          <ul class="game-list">${GAMES.map((g) => `<li><button type="button" class="game-btn" data-game="${g.id}">
+            <span class="game-name">${esc(g.title)}</span><span class="game-blurb">${esc(g.blurb)}</span></button></li>`).join('')}</ul>`,
       };
     }
     case 'pipelines': {
