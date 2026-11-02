@@ -5,6 +5,7 @@ import { panelFor } from '../src/scripts/city/panels';
 import { GAMES } from '../src/scripts/arcade/catalog';
 import { contrast, ink } from '../src/scripts/city/art';
 import { LENS_COLOR } from '../src/scripts/city/world';
+import { EXHIBITS, HISTORY } from '../src/scripts/city/museum';
 
 describe('content and city stay in sync', () => {
   it('every clickable building opens a real panel', () => {
@@ -56,6 +57,14 @@ describe('content and city stay in sync', () => {
       expect(g.title && g.credit && g.help && g.blurb, `${g.id} is missing text`).toBeTruthy();
       expect(g.credit.includes('—'), `${g.id} credit uses an em dash`).toBe(false);
     }
+  });
+
+  it('museum copy has no em dashes or semicolons, and history links go to Wikipedia', () => {
+    const text = [...EXHIBITS.flatMap((e) => [e.title, e.note]), ...HISTORY.flatMap((w) => [w.title, w.intro, ...w.lines.flat()])];
+    for (const line of text) {
+      expect(/[—;]/.test(line), `museum copy: ${line}`).toBe(false);
+    }
+    for (const w of HISTORY) expect(w.link.href.startsWith('https://en.wikipedia.org/wiki/'), w.title).toBe(true);
   });
 
   it('district plates and signs keep readable text (4.5:1 or better)', () => {

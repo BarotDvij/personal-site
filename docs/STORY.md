@@ -57,3 +57,5 @@ No console or gaming PC growing up, so the gaming was browser games. Planned min
 - Every building opens real work, and a guided tour walks all of them
 - Keyboard accessible, respects reduced motion, works on phones
 - Content tests in CI make sure every building points at real content
+
+- **Museum History Wing**: a short history of Wikipedia and the 16-bit era (what each changed for engineering, product, and product management) and how the site borrows their optimization, creativity, and free-information values. Good launch-post angle: "built like a 16-bit game, published like Wikipedia."

@@ -2020,6 +2020,30 @@ html.party .hud-title {
   color: #e8c547;
 }
 
+.panel-body .wing {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.panel-body .wing dl {
+  margin: 8px 0;
+}
+
+.panel-body .wing dt {
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.panel-body .wing dd {
+  margin: 0;
+}
+
 /* ---------- controls help ---------- */
 
 .city-panel[data-help] .panel-nav {
