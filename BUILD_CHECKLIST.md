@@ -52,6 +52,20 @@ Decisions made without asking are logged at the bottom so they are easy to revie
 - [x] README with how to run, deploy, and edit content
 - [x] Webring widget slot ready (stays off until the webring PR is merged)
 
+## Phase 8: Depth (added after phases 1 to 7 finished)
+- [x] Guided tour: Next and Previous buttons in building panels walk the whole city in order
+- [x] Cross-links: each Wiki role and project gets a "See it in the city" link that flies to its building
+- [x] Deep links like `/#tour/genledge` open the city on a specific building
+- [x] Data Lake opens a "Pipelines" panel summarizing the data work across roles
+- [x] Day/night and sound quick toggles in the HUD
+- [x] Street life on the high tier: walkers and a delivery truck
+- [x] A/B billboard animates a winner; construction crane hook bobs
+- [x] Touch: horizontal swipe pans the city on phones
+- [x] Print stylesheet for the Wiki (recruiters print)
+- [x] JSON-LD Person data, sitemap, robots.txt
+- [x] CI: GitHub Actions runs type check and build on every push
+- [ ] Final screenshot pass of everything
+
 ## Not doing without you
 - Opening a pull request, merging to `main`, or touching the live domain
 - Submitting the uwaterloo.network webring PR (needs your photo and approval)
@@ -64,3 +78,6 @@ Decisions made without asking are logged at the bottom so they are easy to revie
 - Wiki copy avoids pronouns and uses "Barot" in encyclopedia style.
 - Warp pipes use an original teal and data pipes an original copper. No Nintendo colors, sprites, sounds, or fonts.
 - Packet colors follow the lens of the district they come from.
+- Bug fixed: changing theme or sound on a deep-linked city visit used to drop you back to the article. Preference changes now keep the current view.
+- The Pipelines panel pulls bullets from profile.json automatically by keyword (dbt, Snowflake, Airbyte, Glue, ingestion...), excluding CRM "pipeline accuracy" lines.
+- Wiki roles and projects link into the city with "See it in Dvij City". Swap Robotics and OCC have no building, so no link.

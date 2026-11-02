@@ -51,7 +51,10 @@ export function apply(p: Prefs) {
 }
 
 export function update(patch: Partial<Prefs>) {
-  const next = { ...load(), ...patch };
+  // The current view wins over what was saved, so a deep link into the city
+  // isn't undone by changing the theme or sound.
+  const mode = document.documentElement.dataset.mode as Mode | undefined;
+  const next = { ...load(), ...(mode ? { mode } : {}), ...patch };
   save(next);
   apply(next);
   return next;
@@ -61,6 +64,9 @@ export function update(patch: Partial<Prefs>) {
 export function watchSystem() {
   if (typeof matchMedia !== 'function') return;
   for (const q of ['(prefers-color-scheme: dark)', '(prefers-reduced-motion: reduce)']) {
-    matchMedia(q).addEventListener('change', () => apply(load()));
+    matchMedia(q).addEventListener('change', () => {
+      const mode = document.documentElement.dataset.mode as Mode | undefined;
+      apply({ ...load(), ...(mode ? { mode } : {}) });
+    });
   }
 }

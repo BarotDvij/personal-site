@@ -5,7 +5,7 @@ import {
 } from './world';
 import {
   PALETTES, buildCityLayer, buildSkyLayer, makeClouds, drawClouds, preparePaths,
-  drawPackets, drawBeacons, drawHighlight, type Palette,
+  drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor, highlights } from './panels';
 import { FrameProbe, hintTier, type Tier } from '../quality';
@@ -14,6 +14,7 @@ import { sfx } from '../sfx';
 export interface City {
   start(): void;
   stop(): void;
+  focusBuilding(id: string, open?: boolean): void;
 }
 
 export function mountCity(root: HTMLElement): City {
@@ -117,7 +118,30 @@ export function mountCity(root: HTMLElement): City {
     overlay.append(b);
   }
 
-  function activate(s: Structure, from: HTMLElement) {
+  // Guided tour order: every clickable building except warp pipes.
+  const tourStops = STRUCTURES.filter((s) => s.ref && s.ref.type !== 'warp');
+  const countEl = panel.querySelector<HTMLElement>('.panel-count')!;
+  let current: Structure | null = null;
+  const buttonFor = (s: Structure) => overlay.querySelector<HTMLElement>(`[data-sid="${s.id}"]`);
+
+  function fill(s: Structure) {
+    const content = s.ref && panelFor(s.ref);
+    if (!content) return false;
+    current = s;
+    const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
+    panel.style.setProperty('--lens', LENS_COLOR[lens]);
+    panel.querySelector('.panel-kicker')!.textContent = content.kicker;
+    panel.querySelector('.panel-title')!.textContent = content.title;
+    panel.querySelector('.panel-body')!.innerHTML = content.html;
+    countEl.textContent = `${tourStops.indexOf(s) + 1} / ${tourStops.length}`;
+    panel.scrollTop = 0;
+    hovered = s;
+    lookAt(s.x + s.w / 2);
+    history.replaceState(null, '', `#tour/${s.id}`);
+    return true;
+  }
+
+  function activate(s: Structure, from: HTMLElement | null) {
     dismissWelcome();
     if (s.ref?.type === 'warp') {
       sfx.warp();
@@ -125,20 +149,34 @@ export function mountCity(root: HTMLElement): City {
       lookAt(d.x0 + 200);
       return;
     }
-    const content = s.ref && panelFor(s.ref);
-    if (!content) return;
-    const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
-    panel.style.setProperty('--lens', LENS_COLOR[lens]);
-    panel.querySelector('.panel-kicker')!.textContent = content.kicker;
-    panel.querySelector('.panel-title')!.textContent = content.title;
-    panel.querySelector('.panel-body')!.innerHTML = content.html;
-    panel.returnTo = from;
-    panel.showModal();
+    if (!fill(s)) return;
+    panel.returnTo = from ?? undefined;
+    if (!panel.open) panel.showModal();
     sfx.open();
   }
 
+  function step(dir: 1 | -1) {
+    if (!current) return;
+    const n = tourStops.length;
+    const next = tourStops[(tourStops.indexOf(current) + dir + n) % n];
+    fill(next);
+    panel.returnTo = buttonFor(next) ?? undefined;
+    sfx.tick();
+  }
+
+  panel.querySelector('[data-panel-next]')!.addEventListener('click', () => step(1));
+  panel.querySelector('[data-panel-prev]')!.addEventListener('click', () => step(-1));
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+  });
+
   panel.addEventListener('close', () => {
     sfx.close();
+    current = null;
+    hovered = null;
+    dirty = true;
+    if (running) history.replaceState(null, '', '#tour');
     panel.returnTo?.focus();
   });
   panel.addEventListener('click', (e) => {
@@ -264,6 +302,8 @@ export function mountCity(root: HTMLElement): City {
     if (tier === 'high' || !motion) drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
     ctx.drawImage(cityLayer, ox, offsetY);
     drawPackets(ctx, paths, motion ? t : 0, tier === 'high' ? 4 : 1, ox, offsetY, viewW);
+    drawProps(ctx, motion ? t : 0, ox, offsetY, palette);
+    if (tier === 'high' && motion) drawStreetLife(ctx, t, ox, offsetY, viewW, palette);
     if (motion) drawBeacons(ctx, t, ox, offsetY, palette);
     if (hovered) drawHighlight(ctx, hovered, ox, offsetY, motion ? t : 0);
 
@@ -325,6 +365,14 @@ export function mountCity(root: HTMLElement): City {
       scoreTimer = window.setInterval(showScore, 3500);
       last = 0;
       raf = requestAnimationFrame(frame);
+    },
+    focusBuilding(id: string, open = false) {
+      const s = STRUCTURES.find((x) => x.id === id);
+      if (!s) return;
+      dismissWelcome();
+      lookAt(s.x + s.w / 2, true);
+      if (open && s.ref) activate(s, buttonFor(s));
+      else buttonFor(s)?.focus({ preventScroll: true });
     },
     stop() {
       if (!running) return;

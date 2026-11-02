@@ -419,8 +419,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + w - 22, top, 4, h, shade('#e8c547', p));
       for (let yy = top + 4; yy < GROUND; yy += 6) rect(ctx, x + w - 22, yy, 4, 1, p.outline);
       rect(ctx, x + 18, top, w - 30, 3, shade('#e8c547', p));
-      rect(ctx, x + 24, top + 3, 1, 22, p.lamp);
-      rect(ctx, x + 21, top + 25, 7, 5, shade('#9aa3ad', p));
       for (let i = 0; i < 3; i++) {
         rect(ctx, x + w - 36 + i * 7, GROUND - 6, 5, 6, shade('#f28c28', p));
         rect(ctx, x + w - 35 + i * 7, GROUND - 4, 3, 1, '#ffffff');
@@ -509,7 +507,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Layer labels
   text(ctx, 'DATA LAYER', 26, GROUND + 44, '#f0a868');
-  text(ctx, '22 PIPELINES KEPT RUNNING', 1820, DEEP_Y + 7, '#f0a868');
+  text(ctx, '22 PIPELINES KEPT RUNNING', 1766, TRUNK_Y + 7, '#f0a868');
 }
 
 function drawStreet(ctx: Ctx, p: Palette) {
@@ -649,4 +647,67 @@ export function drawHighlight(ctx: Ctx, s: Structure, originX: number, offsetY: 
   ctx.fillStyle = Math.floor(t / 250) % 2 ? '#ffffff' : '#e8c547';
   for (let i = 0; i < w; i += 4) { ctx.fillRect(x + i, y, 2, 1); ctx.fillRect(x + i, y + h, 2, 1); }
   for (let i = 0; i < h; i += 4) { ctx.fillRect(x, y + i, 1, 2); ctx.fillRect(x + w, y + i, 1, 2); }
+}
+
+// ---------- street life (live layer) ----------
+
+const SHIRTS = ['#e0457b', '#3b82f6', '#f2a33a', '#9b6bf2', '#3fb950', '#e8c547'];
+const SKIN = ['#f1c7a0', '#c98e64', '#8d5a3b'];
+
+const WALKERS = Array.from({ length: 10 }, (_, i) => ({
+  x: (i * 263) % WORLD_W,
+  speed: (i % 2 ? 1 : -1) * (0.008 + (i % 3) * 0.003),
+  shirt: SHIRTS[i % SHIRTS.length],
+  skin: SKIN[i % SKIN.length],
+}));
+
+export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: number, viewW: number, p: Palette) {
+  const y = GROUND + offsetY;
+  WALKERS.forEach((w, i) => {
+    const wx = ((((w.x + t * w.speed) % WORLD_W) + WORLD_W) % WORLD_W) + originX;
+    if (wx < -4 || wx > viewW + 4) return;
+    const x = Math.round(wx);
+    const step = Math.floor(t / 200 + i) % 2;
+    rect(ctx, x, y - 10, 3, 3, shade(w.skin, p));
+    rect(ctx, x, y - 7, 3, 4, shade(w.shirt, p));
+    rect(ctx, x + (step ? 0 : 1), y - 3, 1, 3, shade('#2a2233', p));
+    rect(ctx, x + (step ? 2 : 1), y - 3, 1, 3, shade('#2a2233', p));
+  });
+
+  // Delivery truck carrying data between districts
+  const span = WORLD_W + 80;
+  const tx = Math.round((t * 0.035) % span) - 40 + originX;
+  if (tx > -40 && tx < viewW + 10) {
+    rect(ctx, tx, y - 13, 22, 11, p.outline);
+    rect(ctx, tx + 1, y - 12, 20, 9, shade('#f5f1e8', p));
+    text(ctx, 'DATA', tx + 3, y - 10, shade('#3b82f6', p));
+    rect(ctx, tx + 22, y - 9, 7, 7, p.outline);
+    rect(ctx, tx + 23, y - 8, 5, 5, shade('#3b82f6', p));
+    rect(ctx, tx + 25, y - 8, 3, 2, p.night ? '#ffd76a' : p.glass[1]);
+    rect(ctx, tx + 4, y - 3, 4, 3, p.outline);
+    rect(ctx, tx + 21, y - 3, 4, 3, p.outline);
+    if (p.night) {
+      ctx.fillStyle = 'rgba(255, 230, 150, 0.25)';
+      ctx.fillRect(tx + 29, y - 8, 10, 4);
+    }
+  }
+}
+
+export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
+  for (const s of STRUCTURES) {
+    const top = GROUND - s.h + offsetY;
+    if (s.kind === 'construction') {
+      const len = 20 + Math.round(Math.sin(t / 700) * 5);
+      const hx = s.x + 24 + originX;
+      rect(ctx, hx, top + 3, 1, len, p.lamp);
+      rect(ctx, hx - 3, top + 3 + len, 7, 5, shade('#9aa3ad', p));
+      rect(ctx, hx - 3, top + 3 + len, 7, 1, shade('#c4ccd4', p));
+    }
+    if (s.id === 'ab' && t > 0 && Math.floor(t / 1600) % 2 === 1) {
+      const cx = s.x + (3 * s.w) / 4 + originX;
+      rect(ctx, cx - 10, top + 4, 21, 9, p.outline);
+      rect(ctx, cx - 9, top + 5, 19, 7, '#e8c547');
+      text(ctx, 'WIN', cx - 5, top + 6, '#2a2233');
+    }
+  }
 }

@@ -611,6 +611,24 @@ blockquote p {
   cursor: pointer;
 }
 
+.city-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--pixel);
+  font-size: 0.72rem;
+  min-height: 24px;
+  text-decoration: none;
+}
+
+.city-link::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #9bd23c;
+  box-shadow: 0 0 0 2px #2a2233;
+}
+
 /* Lens filter: dim what doesn't match */
 .lensed {
   transition: opacity 200ms;
@@ -671,7 +689,7 @@ blockquote p {
   inset: 0;
   overflow: hidden;
   background: #4f8fe0;
-  touch-action: pan-y;
+  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
@@ -826,6 +844,45 @@ blockquote p {
 
 .hud-btn:hover {
   background: #3d3560;
+}
+
+.hud-icon {
+  display: grid;
+  place-items: center;
+  padding: 4px 6px;
+}
+
+.hud-icon svg {
+  image-rendering: pixelated;
+}
+
+html[data-theme='dark'] .i-sun,
+html[data-theme='light'] .i-moon,
+html[data-sound='on'] .i-mute,
+html[data-sound='off'] .i-waves {
+  display: none;
+}
+
+.panel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px dashed rgb(255 255 255 / 0.2);
+  font-size: 12px;
+}
+
+.px-btn.small {
+  font-size: 11px;
+  padding: 6px 10px;
+  margin: 0;
+}
+
+.panel-body .src {
+  color: #b8b2cf;
+  font-size: 13px;
 }
 
 .minimap {
@@ -1215,4 +1272,62 @@ html.party .hud-title {
 @keyframes party {
   from { filter: hue-rotate(0deg); }
   to { filter: hue-rotate(360deg); }
+}
+
+/* ---------- print ---------- */
+
+@media print {
+  html[data-mode] .wiki {
+    display: block !important;
+  }
+
+  .city,
+  .settings,
+  .mode-wipe,
+  .wiki-bar .bar-actions,
+  .tabs,
+  .toc,
+  .lens-note,
+  .city-link,
+  .wiki-foot,
+  .skip {
+    display: none !important;
+  }
+
+  body,
+  .article {
+    background: #fff;
+    color: #000;
+    border: 0;
+    font-size: 11pt;
+  }
+
+  .article {
+    padding: 0;
+    max-width: none;
+  }
+
+  .infobox {
+    width: 230px;
+  }
+
+  .lensed {
+    opacity: 1 !important;
+    box-shadow: none !important;
+  }
+
+  a {
+    color: #000;
+  }
+
+  .refs a::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+  }
+
+  section,
+  .role,
+  .project {
+    break-inside: avoid;
+  }
 }

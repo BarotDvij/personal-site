@@ -1,6 +1,13 @@
 ---
 import profile from '../../content/profile.json';
 import Cite from './Cite.astro';
+import { STRUCTURES } from '../scripts/city/world';
+
+// Map each role and project to its building so the Wiki can link into the city.
+const buildingFor = (match: (r: NonNullable<(typeof STRUCTURES)[number]['ref']>) => boolean) =>
+  STRUCTURES.find((s) => s.ref && s.kind !== 'billboard' && match(s.ref))?.id;
+const roleBuilding = (org: string) => buildingFor((r) => r.type === 'role' && r.org === org);
+const projectBuilding = (name: string) => buildingFor((r) => r.type === 'project' && r.name === name);
 
 const lensNames: Record<string, string> = {
   marketing: 'Marketer',
@@ -155,6 +162,9 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           <p class="meta"><b>{e.role}</b> · {e.dates} · {e.place}</p>
           <p>{e.summary}</p>
           <ul>{e.bullets.map((b) => <li>{b}</li>)}</ul>
+          {roleBuilding(e.org) && (
+            <a class="city-link" href={`#tour/${roleBuilding(e.org)}`} data-city-target={roleBuilding(e.org)}>See it in Dvij City</a>
+          )}
         </article>
       ))}
     </section>
@@ -172,6 +182,9 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
             {'status' in p && p.status && <p class="award status">{p.status}</p>}
             <p>{p.tagline}</p>
             <p class="stack">{p.stack.join(' · ')}</p>
+            {projectBuilding(p.name) && (
+              <a class="city-link" href={`#tour/${projectBuilding(p.name)}`} data-city-target={projectBuilding(p.name)}>See it in Dvij City</a>
+            )}
           </article>
         ))}
       </div>

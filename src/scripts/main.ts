@@ -1,4 +1,4 @@
-import { apply, load, update, watchSystem, type Mode, type Prefs } from './prefs';
+import { apply, load, resolvedTheme, update, watchSystem, type Mode, type Prefs } from './prefs';
 import { sfx } from './sfx';
 import type { City } from './city/engine';
 
@@ -11,7 +11,7 @@ let city: City | null = null;
 
 // ----- modes -----
 
-async function enterMode(mode: Mode, opts: { focus?: boolean } = {}) {
+async function enterMode(mode: Mode, opts: { focus?: boolean; target?: string } = {}) {
   if (mode === 'city') {
     if (!city) {
       const { mountCity } = await import('./city/engine');
@@ -19,20 +19,21 @@ async function enterMode(mode: Mode, opts: { focus?: boolean } = {}) {
     }
     city.start();
     history.replaceState(null, '', '#tour');
-    if (opts.focus) cityRoot.focus({ preventScroll: true });
+    if (opts.target) city.focusBuilding(opts.target, true);
+    else if (opts.focus) cityRoot.focus({ preventScroll: true });
   } else {
     city?.stop();
-    if (location.hash === '#tour') history.replaceState(null, '', location.pathname);
+    if (location.hash.startsWith('#tour')) history.replaceState(null, '', location.pathname);
     if (opts.focus) document.getElementById('article')?.focus({ preventScroll: true });
   }
 }
 
-function switchMode(mode: Mode) {
+function switchMode(mode: Mode, target?: string) {
   if (html.dataset.mode === mode) return;
   const go = () => {
     update({ mode });
     window.scrollTo(0, 0);
-    void enterMode(mode, { focus: true });
+    void enterMode(mode, { focus: true, target });
   };
   mode === 'city' ? sfx.start() : sfx.close();
   if (html.dataset.motion === 'reduced') return go();
@@ -43,8 +44,29 @@ function switchMode(mode: Mode) {
 }
 
 document.addEventListener('click', (e) => {
-  const target = (e.target as HTMLElement).closest<HTMLElement>('[data-set-mode]');
-  if (target) switchMode(target.dataset.setMode as Mode);
+  const el = e.target as HTMLElement;
+  const modeBtn = el.closest<HTMLElement>('[data-set-mode]');
+  if (modeBtn) switchMode(modeBtn.dataset.setMode as Mode);
+  const cityLink = el.closest<HTMLElement>('[data-city-target]');
+  if (cityLink) {
+    e.preventDefault();
+    switchMode('city', cityLink.dataset.cityTarget);
+  }
+});
+
+// ----- HUD quick toggles -----
+
+const soundBtn = document.querySelector<HTMLElement>('[data-toggle-sound]');
+const syncToggles = () => soundBtn?.setAttribute('aria-pressed', String(html.dataset.sound === 'on'));
+document.addEventListener('prefs:change', syncToggles);
+
+document.querySelector('[data-toggle-theme]')?.addEventListener('click', () => {
+  update({ theme: resolvedTheme(load()) === 'dark' ? 'light' : 'dark' });
+  sfx.tick();
+});
+soundBtn?.addEventListener('click', () => {
+  update({ sound: html.dataset.sound === 'on' ? 'off' : 'on' });
+  sfx.coin();
 });
 
 // ----- settings dialog -----
@@ -113,7 +135,9 @@ document.addEventListener('keydown', (e) => {
 // ----- boot -----
 
 const initial = load();
-if (location.hash === '#tour') initial.mode = 'city';
+const [hashMode, hashTarget] = location.hash.slice(1).split('/');
+if (hashMode === 'tour') initial.mode = 'city';
 apply(initial);
 watchSystem();
-if (initial.mode === 'city') void enterMode('city');
+syncToggles();
+if (initial.mode === 'city') void enterMode('city', { target: hashTarget });

@@ -41,6 +41,7 @@ export type Ref =
   | { type: 'about' }
   | { type: 'contact' }
   | { type: 'hackathons' }
+  | { type: 'pipelines' }
   | { type: 'warp'; to: number };
 
 export type Kind =
@@ -89,7 +90,7 @@ export const STRUCTURES: Structure[] = [
   // Data District
   { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 1622, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 1700 },
   { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 1800, w: 96, h: 74, district: 'data', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 1848 },
-  { id: 'lake', label: 'Data Lake', kind: 'watertower', x: 1916, w: 36, h: 96, district: 'data', text: ['DATA', 'LAKE'], riser: 1934 },
+  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 1916, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 1934 },
   { id: 'warp-5', label: "Warp to Builder's Yard", kind: 'warp', x: 1972, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 5 } },
 
   // Builder's Yard

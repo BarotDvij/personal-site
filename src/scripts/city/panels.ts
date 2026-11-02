@@ -81,6 +81,18 @@ export function panelFor(ref: Ref): PanelContent | null {
           .join('')}</ul>`,
       };
     }
+    case 'pipelines': {
+      const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
+      const rows = profile.experience.flatMap((e) =>
+        e.bullets.filter((b) => pattern.test(b) && !/pipeline accuracy|sales pipeline/i.test(b)).map((b) => ({ org: e.org, b })),
+      );
+      return {
+        kicker: 'Data Lake',
+        title: 'The plumbing under the city',
+        html: `<p class="lead">Every copper pipe in this city is real data work. Here is what flows through them.</p>
+          <ul>${rows.map((r) => `<li>${esc(r.b)} <span class="src">(${esc(r.org)})</span></li>`).join('')}</ul>`,
+      };
+    }
     default:
       return null;
   }
