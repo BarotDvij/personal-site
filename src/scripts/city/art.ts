@@ -2,7 +2,7 @@
 // No sprites to download, and day/night is just a palette swap.
 
 import {
-  WORLD_W, WORLD_H, GROUND, TRUNK_Y, DEEP_Y, JUNCTION_X, TANK_BOTTOM, DISTRICTS, LENS_COLOR,
+  WORLD_W, WORLD_H, GROUND, TRUNK_Y, DEEP_Y, DEEP_X, JUNCTION_X, TANK_BOTTOM, DISTRICTS, LENS_COLOR,
   STRUCTURES, PIPE_PATHS, type Structure, type PipePath,
 } from './world';
 
@@ -364,6 +364,32 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       text(ctx, '1', x + w - 42, GROUND - 25, '#2a2233');
       break;
     }
+    case 'glass': {
+      // All-glass curtain wall: mullions, a diagonal sky reflection, lit floors at night.
+      const gx = x + 6, gw = w - 12, gTop = top + 10;
+      const pane = p.night ? '#1c2a4a' : shade('#7fb6e6', p);
+      const paneHi = p.night ? '#2a3c66' : '#b9dcf8';
+      rect(ctx, gx - 1, gTop - 1, gw + 2, GROUND - gTop + 1, p.outline);
+      rect(ctx, gx, gTop, gw, GROUND - gTop, pane);
+      if (p.night) {
+        for (let yy = gTop + 4; yy < GROUND - 14; yy += 5)
+          for (let xx = gx + 1; xx < gx + gw - 1; xx += 4) if (r() < 0.55) rect(ctx, xx, yy, 3, 3, p.lit);
+      } else {
+        for (let k = 0; k < GROUND - gTop; k += 1) {
+          const rx = gx + Math.round(k * 0.35) % (gw + 18) - 6;
+          if (rx >= gx && rx + 5 <= gx + gw) rect(ctx, rx, gTop + k, 5, 1, paneHi);
+        }
+      }
+      for (let xx = gx + 4; xx < gx + gw; xx += 4) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#4a6f96', p));
+      for (let yy = gTop + 10; yy < GROUND; yy += 10) rect(ctx, gx, yy, gw, 1, shade('#5d84ad', p));
+      box(ctx, x + 14, top, w - 28, 12, p.night ? '#24365e' : shade('#9cc8ee', p), p);
+      rect(ctx, cx, top - 16, 1, 16, p.lamp);
+      box(ctx, x, GROUND - 14, w, 14, shade('#2c3a56', p), p);
+      rect(ctx, cx - 7, GROUND - 12, 14, 12, p.night ? '#e6cf8f' : '#cfe6f5');
+      rect(ctx, cx, GROUND - 12, 1, 12, p.outline);
+      sign(ctx, label, cx, top + 18, '#7c4ddb', '#ffffff', p);
+      break;
+    }
     case 'tower': {
       box(ctx, x + 8, top + 10, w - 16, h - 10, shade('#3c4f73', p), p);
       box(ctx, x + 16, top, w - 32, 12, shade('#4b6190', p), p);
@@ -371,7 +397,13 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       windows(ctx, p, r, x + 13, top + 26, w - 26, h - 50, 3, 4, 2, 3);
       box(ctx, x, GROUND - 16, w, 16, shade('#2c3a56', p), p);
       door(ctx, cx, 12, 12, shade('#1a2236', p));
-      sign(ctx, label, cx, top + 14, '#7c4ddb', '#ffffff', p);
+      // One sign per text line, in the district's colour (two lines for long names).
+      const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
+      (s.text ?? [label]).forEach((line, i) => sign(ctx, line, cx, top + 14 + i * 10, LENS_COLOR[lens], '#ffffff', p));
+      if (s.id === 'occ') {
+        rect(ctx, cx + 1, top - 16, 7, 5, shade('#e8e0d0', p));
+        rect(ctx, cx + 3, top - 15, 3, 3, shade('#c62828', p));
+      }
       break;
     }
     case 'lab': {
@@ -578,27 +610,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, bcx, top + 16, '#c8336c', '#ffffff', p);
       break;
     }
-    case 'chamber': {
-      // Limestone civic front: a business building that looks toward City Hall.
-      const stone = shade('#d9d2c2', p), dark = shade('#a89f8c', p);
-      box(ctx, x, top + 14, w, h - 14, stone, p);
-      for (let i = 0; i < 6; i++) rect(ctx, x - 2 + i, top + 14 - i * 2, w + 4 - i * 2, 2, dark);
-      rect(ctx, x - 2, top + 14, w + 4, 2, p.outline);
-      for (let row = 0; row < 2; row++)
-        for (let i = 0; i < 4; i++) {
-          const wx = x + 10 + i * ((w - 28) / 3), wy = top + 30 + row * 20;
-          rect(ctx, wx - 1, wy - 1, 10, 13, dark);
-          rect(ctx, wx, wy, 8, 11, p.night ? (i % 2 ? p.lit : p.unlit) : p.glass[0]);
-          rect(ctx, wx, wy + 5, 8, 1, dark);
-        }
-      for (let i = 0; i < 2; i++) rect(ctx, cx - 16 + i * 28, GROUND - 26, 4, 26, shade('#efe9dc', p));
-      rect(ctx, cx - 18, GROUND - 3, 36, 3, dark);
-      door(ctx, cx, 14, 18, shade('#3a4a5a', p));
-      rect(ctx, x + w - 7, top - 6, 1, 20, p.lamp);
-      rect(ctx, x + w - 6, top - 6, 7, 5, shade('#2f6fd6', p));
-      sign(ctx, label, cx, top + 18, '#2f6fd6', '#ffffff', p);
-      break;
-    }
     case 'refinery': {
       // Data refinery: files ride the conveyor in on the right, tables leave by pipe.
       const hallW = w - 40, belt = GROUND - 10;
@@ -768,7 +779,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Trunk lines
   pipe(ctx, 20, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
-  pipe(ctx, JUNCTION_X + 20, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
+  pipe(ctx, DEEP_X, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
   for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings
@@ -778,7 +789,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
     pipe(ctx, s.riser, GROUND + 4, s.riser, deep ? DEEP_Y : TRUNK_Y, p);
     flange(ctx, s.riser, GROUND + 14, true, p);
   }
-  pipe(ctx, JUNCTION_X + 20, TANK_BOTTOM, JUNCTION_X + 20, DEEP_Y, p, 7);
+  pipe(ctx, DEEP_X, TANK_BOTTOM, DEEP_X, DEEP_Y, p, 7);
 
   // Warehouse junction tank
   const tx = JUNCTION_X - 26, ty = GROUND + 14;
@@ -797,7 +808,8 @@ function drawUnderground(ctx: Ctx, p: Palette) {
 
   // Layer labels
   text(ctx, 'DATA LAYER', 26, GROUND + 44, '#f0a868');
-  text(ctx, '22 PIPELINES KEPT RUNNING', JUNCTION_X - 140, TRUNK_Y + 7, '#f0a868');
+  // 22 safeguarded at Super.com, plus GenLedge's 2 data and 2 CI/CD pipelines.
+  text(ctx, '26 PIPELINES KEPT RUNNING', JUNCTION_X - 140, TRUNK_Y + 7, '#f0a868');
 }
 
 function drawStreet(ctx: Ctx, p: Palette) {
@@ -810,7 +822,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const label = d.name.toUpperCase().replace("'", '');
     const plate = shade(LENS_COLOR[d.lens], p);
     // Long names would run under the pipes beside them, so these two stack on two lines.
-    const stacked = d.id === 'commercial' || d.id === 'marketing';
+    const stacked = d.id === 'commercial' || d.id === 'marketing' || d.id === 'data';
     const lines = stacked ? [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)] : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
     box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
@@ -1066,7 +1078,7 @@ export function drawBeacons(ctx: Ctx, t: number, originX: number, offsetY: numbe
   if (!on) return;
   const tops: [number, number][] = [];
   for (const s of STRUCTURES) {
-    if (s.kind === 'tower') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
+    if (s.kind === 'tower' || s.kind === 'glass') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
     if (s.kind === 'hq') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 13]);
     if (s.kind === 'marble') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 7]);
     if (s.kind === 'lab') tops.push([s.x + s.w / 2 - 1, GROUND - s.h + 1]);

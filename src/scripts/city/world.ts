@@ -12,7 +12,7 @@ export type Lens = 'marketing' | 'data' | 'pm' | 'ai' | 'dev' | 'downtown';
 export const LENS_COLOR: Record<Lens | 'plaza' | 'play', string> = {
   plaza: '#e8c547',
   play: '#22b8cf',
-  marketing: '#c8336c',
+  marketing: '#c62828', // Mixed-Use Zone red
   pm: '#f2a33a',
   ai: '#7c4ddb',
   data: '#ff6fb5', // Super.com pink
@@ -33,7 +33,7 @@ export const DISTRICTS: District[] = [
   { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 200, x1: 650 },
   { id: 'ai', name: 'Downtown AI District', lens: 'ai', x0: 650, x1: 1200 },
   { id: 'commercial', name: 'Commercial District', lens: 'play', x0: 1200, x1: 1740 },
-  { id: 'marketing', name: 'Financial District', lens: 'marketing', x0: 1740, x1: 2280 },
+  { id: 'marketing', name: 'Mixed-Use Zone', lens: 'marketing', x0: 1740, x1: 2280 },
   { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 2280, x1: 2914 },
   { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2914, x1: 3230 },
 ];
@@ -55,7 +55,7 @@ export type Ref =
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'chamber' | 'refinery' | 'hq' | 'mediahq';
+  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'refinery' | 'hq' | 'mediahq' | 'glass';
 
 export interface Structure {
   id: string;
@@ -76,14 +76,14 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-1', label: 'Warp pipe', kind: 'warp', x: 160, w: 22, h: 26, district: 'plaza', ref: { type: 'warp', to: 1 } },
 
   // Industrial Zone
-  { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 240, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 300 },
-  { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 376, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 454 },
-  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 550, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 568 },
+  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 240, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 258 },
+  { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 296, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 356 },
+  { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 432, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 510 },
   { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 610, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
 
   // Downtown AI District
   { id: 'podium', label: 'Podium: hackathon wins', kind: 'monument', x: 690, w: 112, h: 66, district: 'ai', ref: { type: 'hackathons' }, text: ['PODIUM'] },
-  { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'tower', x: 822, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 858 },
+  { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 822, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 858 },
   { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 914, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
   { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 982, w: 76, h: 152, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1020 },
   { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1076, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
@@ -96,11 +96,11 @@ export const STRUCTURES: Structure[] = [
   { id: 'halloffame', label: 'Hall of Fame: trophy case', kind: 'kiosk', x: 1604, w: 76, h: 52, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
   { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1700, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
-  // Financial District
+  // Mixed-Use Zone
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1780, w: 92, h: 140, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1826 },
-  { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 1890, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN>10 S'] },
-  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2004, w: 110, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2080 },
-  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'chamber', x: 2128, w: 94, h: 88, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF COMMERCE'], riser: 2175 },
+  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1890, w: 72, h: 150, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1926 },
+  { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 1980, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN>10 S'] },
+  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2094, w: 110, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2170 },
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
 
   // Civic Centre
@@ -120,7 +120,11 @@ export const STRUCTURES: Structure[] = [
 
 
 // The warehouse junction every pipeline flows into.
-export const JUNCTION_X = 454;
+export const JUNCTION_X = 510;
+// Where the deep line to the Data Lake drops out of the warehouse tank: the
+// side of the tank that faces the lake.
+const LAKE_RISER = STRUCTURES.find((s) => s.id === 'lake')!.riser!;
+export const DEEP_X = JUNCTION_X + (LAKE_RISER < JUNCTION_X ? -20 : 20);
 // Bottom edge of the warehouse tank, where pipelines plug in.
 export const TANK_BOTTOM = GROUND + 44;
 
@@ -139,7 +143,7 @@ export const PIPE_PATHS: PipePath[] = STRUCTURES.filter((s) => s.riser && s.id !
   return {
     color: LENS_COLOR[districtLens(s.district)],
     points: deep
-      ? [[JUNCTION_X + 20, TANK_BOTTOM], [JUNCTION_X + 20, y], [s.riser!, y], [s.riser!, GROUND + 4]]
+      ? [[DEEP_X, TANK_BOTTOM], [DEEP_X, y], [s.riser!, y], [s.riser!, GROUND + 4]]
       : [[s.riser!, GROUND + 4], [s.riser!, y], [JUNCTION_X, y], [JUNCTION_X, TANK_BOTTOM]],
   };
 });
