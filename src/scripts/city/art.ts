@@ -419,6 +419,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, mx + 3, top + 23, 10, 6, p.night ? '#7fe3d8' : '#4fb3a8');
       }
       door(ctx, cx, 12, 16, shade('#0e0c18', p));
+      if (s.label.includes('under construction')) {
+        const pole = shade('#e8a33a', p);
+        for (let i = 0; i <= 3; i++) rect(ctx, x - 2 + i * ((w + 2) / 3), top - 6, 2, h + 6, pole);
+        for (let yy = top - 6; yy < GROUND; yy += 16) rect(ctx, x - 2, yy, w + 4, 2, pole);
+        for (let i = 0; i < 2; i++) {
+          rect(ctx, x + w + 4 + i * 7, GROUND - 6, 5, 6, shade('#f28c28', p));
+          rect(ctx, x + w + 5 + i * 7, GROUND - 4, 3, 1, '#ffffff');
+        }
+      }
       break;
     }
     case 'grocer': {
@@ -556,6 +565,64 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + w - 7, top - 6, 1, 20, p.lamp);
       rect(ctx, x + w - 6, top - 6, 7, 5, shade('#2f6fd6', p));
       sign(ctx, label, cx, top + 18, '#2f6fd6', '#ffffff', p);
+      break;
+    }
+    case 'refinery': {
+      // Data refinery: files ride the conveyor in on the right, tables leave by pipe.
+      const hallW = w - 40, belt = GROUND - 10;
+      box(ctx, x, top + 26, hallW, h - 26, shade('#6f6252', p), p);
+      for (let yy = top + 30; yy < GROUND - 2; yy += 5) rect(ctx, x + 1, yy, hallW - 2, 1, shade('#5e5244', p));
+      for (let i = 0; i < hallW; i += 20) {
+        for (let k = 0; k < 12; k++) rect(ctx, x + i + k, top + 26 - k, 1, k, shade('#8a7c68', p));
+        rect(ctx, x + i + 12, top + 14, 1, 12, p.outline);
+      }
+      // Smokestacks with warning bands
+      for (const sx of [x + 6, x + 22]) {
+        box(ctx, sx, top, 8, 26, shade('#9aa3ad', p), p);
+        for (let yy = top + 3; yy < top + 24; yy += 7) rect(ctx, sx + 1, yy, 6, 2, shade('#c8336c', p));
+      }
+      windows(ctx, p, r, x + 6, top + 46, hallW - 12, 10, 6, 5, 5, 4);
+      box(ctx, x + hallW - 16, GROUND - 18, 14, 18, shade('#3a3530', p), p);
+      // Conveyor and intake hopper
+      rect(ctx, x + hallW - 4, belt, 44, 3, shade('#3a3a44', p));
+      for (let i = 0; i < 44; i += 6) rect(ctx, x + hallW - 3 + i, belt + 3, 2, 7, p.lamp);
+      for (let k = 0; k < 6; k++) rect(ctx, x + w - 16 + k, belt - 22 + k * 2, 16 - k * 2, 2, shade('#9aa3ad', p));
+      rect(ctx, x + w - 12, belt - 10, 8, 10, shade('#9aa3ad', p));
+      sign(ctx, label, x + hallW / 2 + 14, top + 32, '#ff6fb5', '#2a2233', p);
+      break;
+    }
+    case 'hq': {
+      // AltaML x Communitech: a tall glass tower, crown sign up top, partner sign below.
+      const body = shade('#2f5f7a', p), crown = shade('#244a60', p);
+      box(ctx, x, GROUND - 18, w, 18, shade('#1f3a4a', p), p);
+      box(ctx, x + 6, top + 18, w - 12, h - 36, body, p);
+      box(ctx, x + 14, top + 4, w - 28, 16, crown, p);
+      rect(ctx, cx, top - 12, 1, 16, p.lamp);
+      windows(ctx, p, r, x + 11, top + 34, w - 22, h - 80, 4, 4, 3, 3);
+      for (let yy = top + 30; yy < GROUND - 22; yy += 24) rect(ctx, x + 7, yy, w - 14, 1, shade('#f2a33a', p));
+      door(ctx, cx, 14, 14, shade('#122230', p));
+      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#7c4ddb', '#ffffff', p);
+      if (s.text?.[1]) sign(ctx, s.text[1], cx, GROUND - 32, '#f2a33a', '#2a2233', p);
+      break;
+    }
+    case 'mediahq': {
+      // Go Lime HQ: a tall office with the A/B test billboard on the roof.
+      const bTop = top, bH = 24, roof = top + 34;
+      rect(ctx, x + 14, bTop + bH, 2, roof - bTop - bH, shade('#5b5560', p));
+      rect(ctx, x + w - 16, bTop + bH, 2, roof - bTop - bH, shade('#5b5560', p));
+      box(ctx, x + 4, bTop, w - 8, bH, shade('#f5f1e8', p), p);
+      rect(ctx, x + 6, bTop + 2, (w - 12) / 2 - 1, bH - 4, shade('#c8336c', p));
+      rect(ctx, x + 6 + (w - 12) / 2 + 1, bTop + 2, (w - 12) / 2 - 1, bH - 4, shade('#2f6fd6', p));
+      text(ctx, 'A', x + 6 + (w - 12) / 4 - 1, bTop + 9, '#ffffff');
+      text(ctx, 'B', x + 6 + (3 * (w - 12)) / 4 - 1, bTop + 9, '#ffffff');
+      box(ctx, x, roof, w, GROUND - roof, shade('#2f3b2b', p), p);
+      rect(ctx, x + 1, roof + 1, w - 2, 3, shade('#9bd23c', p));
+      windows(ctx, p, r, x + 6, roof + 18, w - 12, GROUND - roof - 48);
+      for (let i = 0; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#9bd23c', p));
+      for (let i = 4; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#f6ffe0', p));
+      box(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#8fd14f', p);
+      door(ctx, cx, 10, 14, shade('#24301f', p));
+      sign(ctx, label, cx, roof + 6, '#9bd23c', '#1d2a10', p);
       break;
     }
     case 'arcadehall': {
@@ -723,7 +790,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[2165, 1], [2179, 2], [2211, 1], [2227, 2], [2255, 1]] as const) tree(ctx, tx, p, size);
+  for (const [tx, size] of [[2410, 1], [2424, 2], [2456, 1], [2472, 2], [2500, 1]] as const) tree(ctx, tx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -790,8 +857,8 @@ export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
 export type ParallaxKind = keyof typeof PARALLAX;
 
 // World x of each landmark's district centre.
-const CN_TOWER_X = 501;
-const WILLIS_TOWER_X = 1333;
+const CN_TOWER_X = 925; // Downtown AI District
+const WILLIS_TOWER_X = 1470; // Commercial District
 
 const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
@@ -961,6 +1028,7 @@ export function drawBeacons(ctx: Ctx, t: number, originX: number, offsetY: numbe
   const tops: [number, number][] = [];
   for (const s of STRUCTURES) {
     if (s.kind === 'tower') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
+    if (s.kind === 'hq') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 13]);
     if (s.kind === 'marble') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 7]);
     if (s.kind === 'lab') tops.push([s.x + s.w / 2 - 1, GROUND - s.h + 1]);
   }
@@ -1046,8 +1114,29 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       ctx.fillStyle = p.night ? 'rgba(160, 230, 140, 0.25)' : 'rgba(200, 255, 170, 0.45)';
       ctx.fillRect(dir > 0 ? Math.round(s.x + 2 + originX) : mx + 12, gy - 3, dir > 0 ? Math.max(0, mx - Math.round(s.x + 2 + originX)) : Math.max(0, Math.round(s.x + 2 + span + 12 + originX) - (mx + 12)), 1);
     }
-    if (s.id === 'ab' && t > 0 && Math.floor(t / 1600) % 2 === 1) {
-      const cx = s.x + (3 * s.w) / 4 + originX;
+    if (s.kind === 'refinery') {
+      // File crates ride the conveyor into the refinery; smoke drifts up.
+      const hallW = s.w - 40, belt = GROUND + offsetY - 10;
+      const labels = ['CSV', 'TSV', 'XLS', 'JSON'];
+      const cycle = 2400, k = Math.floor(t / cycle) % labels.length, f = (t % cycle) / cycle;
+      const crateX = Math.round(s.x + s.w - 18 - f * 34 + originX);
+      rect(ctx, crateX - 1, belt - 9, 19, 9, p.outline);
+      rect(ctx, crateX, belt - 8, 17, 7, shade('#c8a24a', p));
+      text(ctx, labels[k], crateX + 9 - Math.floor((labels[k].length * 4 - 1) / 2), belt - 7, '#2a2233');
+      if (t > 0) {
+        for (const [sx, phase] of [[s.x + 10, 0], [s.x + 26, 900]]) {
+          for (let i = 0; i < 3; i++) {
+            const age = ((t + phase + i * 600) % 1800) / 1800;
+            const r2 = 2 + Math.round(age * 3);
+            ctx.fillStyle = p.night ? `rgba(150,150,170,${0.5 - age * 0.45})` : `rgba(235,235,240,${0.8 - age * 0.7})`;
+            ctx.fillRect(Math.round(sx + originX - r2 / 2 + age * 6), Math.round(top - 4 - age * 22), r2, r2);
+          }
+        }
+      }
+      void hallW;
+    }
+    if (s.kind === 'mediahq' && t > 0 && Math.floor(t / 1600) % 2 === 1) {
+      const cx = s.x + 6 + (3 * (s.w - 12)) / 4 + originX;
       rect(ctx, cx - 10, top + 4, 21, 9, p.outline);
       rect(ctx, cx - 9, top + 5, 19, 7, '#e8c547');
       text(ctx, 'WIN', cx - 5, top + 6, '#2a2233');

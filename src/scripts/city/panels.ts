@@ -99,7 +99,15 @@ export function panelFor(ref: Ref): PanelContent | null {
       };
     }
     case 'museum':
-      return { kicker: 'Play District', title: 'Museum of Favourites', html: museumHtml() };
+      return { kicker: 'Commercial District', title: 'Museum of Favourites', html: museumHtml() };
+    case 'client': {
+      return {
+        kicker: 'Downtown AI District',
+        title: 'Hauser Industries',
+        html: `<p class="lead">Hauser Industries, a furniture company, was our enterprise client through Communitech's AI@WORK program.</p>
+          <p><button type="button" class="game-btn inline" data-goto="altaml">See the project at AltaML x Communitech</button></p>`,
+      };
+    }
     case 'pipelines': {
       const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
       const rows = profile.experience.flatMap((e) =>

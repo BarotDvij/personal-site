@@ -74,7 +74,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 ## The Arcade
 
 ### Shared game shell (build once)
-- [x] Arcade Hall in a new Play District (Boggle Zen stays its own building)
+- [x] Arcade Hall (now in the Commercial District)
 - [x] Game window: pixel frame, pause, restart, close, back to city
 - [x] Controls: keyboard, touch, and on-screen buttons on phones
 - [x] Each game is its own file, loaded only when started
