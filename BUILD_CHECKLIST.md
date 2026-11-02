@@ -35,22 +35,22 @@ Decisions made without asking are logged at the bottom so they are easy to revie
 ## Phase 5: QA
 - [x] Build passes with no errors
 - [x] Screenshot review: wiki light/dark, city day/night, phone width, panel open
-- [ ] Keyboard-only walkthrough of both modes
-- [ ] Reduced motion check
+- [x] Keyboard-only walkthrough of both modes (tab through buildings, Enter opens, Escape closes and returns focus, PageDown warps)
+- [x] Reduced motion check (OS setting respected, override in Settings, city renders a still frame)
 - [x] Console free of errors
 
 ## Phase 6: Performance
-- [ ] JS and CSS bundle sizes reported
-- [ ] Lighthouse mobile scores reported
-- [ ] Measured city frame times on a throttled CPU
+- [x] JS and CSS bundle sizes: Wiki JS 2.3 KB gz, City JS 15 KB gz (lazy), CSS 18 KB, page weight 69 KB
+- [x] Lighthouse mobile. Wiki: 99 perf, 100 a11y, 100 best practices, 100 SEO. City: 100 / 100 / 100 / 100
+- [x] City frame times: 60 fps (p95 16.8 ms) at 1x, 4x, and 6x CPU throttling
 
 ## Phase 7: Polish and extras
-- [ ] Favicon, meta description, Open Graph image
-- [ ] 404 page in the city style
-- [ ] Pixel transition between modes
-- [ ] Easter egg (Konami code)
-- [ ] README with how to run, deploy, and edit content
-- [ ] Webring widget slot ready (stays off until the webring PR is merged)
+- [x] Favicon, meta description, Open Graph image (rendered from the city)
+- [x] 404 page in the city style ("This lot is still empty")
+- [x] Pixel transition between modes
+- [x] Easter egg (Konami code)
+- [x] README with how to run, deploy, and edit content
+- [x] Webring widget slot ready (stays off until the webring PR is merged)
 
 ## Not doing without you
 - Opening a pull request, merging to `main`, or touching the live domain

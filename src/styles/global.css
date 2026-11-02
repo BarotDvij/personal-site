@@ -316,6 +316,11 @@ sup {
 
 sup a {
   text-decoration: none;
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0 2px;
+  text-align: center;
 }
 
 q {
@@ -443,6 +448,12 @@ q {
 .toc ol {
   margin: 4px 0 0;
   padding-left: 22px;
+}
+
+.toc a {
+  display: inline-block;
+  padding: 2px 0;
+  min-height: 24px;
 }
 
 .lens-note {
