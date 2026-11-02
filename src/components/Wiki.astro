@@ -53,6 +53,11 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 <div class="wiki" id="wiki">
   <a class="skip" href="#article">Skip to article</a>
   <header class="wiki-bar">
+    <button type="button" class="toc-toggle" aria-controls="toc" aria-expanded="false" aria-label="Contents">
+      <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" shape-rendering="crispEdges">
+        <path d="M2 3h2v2H2zM6 3h8v2H6zM2 7h2v2H2zM6 7h8v2H6zM2 11h2v2H2zM6 11h8v2H6z" fill="currentColor" />
+      </svg>
+    </button>
     <a class="wordmark" href="/" aria-label="dvijbarot.wiki home">
       <svg viewBox="0 0 16 16" width="28" height="28" aria-hidden="true" shape-rendering="crispEdges">
         <rect width="16" height="16" fill="var(--ink)" />
@@ -74,6 +79,15 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <div class="tab-group">
       <a href="#career">View history</a>
     </div>
+  </nav>
+
+  <div class="wiki-body">
+  <nav class="toc" id="toc" aria-label="Contents">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#article" data-toc="article">(Top)</a></li>
+      {sections.map(([id, name]) => <li><a href={`#${id}`} data-toc={id}>{name}</a></li>)}
+    </ol>
   </nav>
 
   <main class="article" id="article" tabindex="-1">
@@ -154,15 +168,9 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
 
-    <nav class="toc" aria-label="Contents">
-      <div class="toc-title">Contents</div>
-      <ol>
-        {sections.map(([id, name]) => <li><a href={`#${id}`}>{name}</a></li>)}
-      </ol>
-    </nav>
-
     <section id="career" aria-labelledby="career-h">
       <h2 id="career-h">Career</h2>
+      <div class="table-wrap">
       <table class="wikitable career-table">
         <thead>
           <tr><th scope="col">Dates</th><th scope="col">Organization</th><th scope="col">Role</th><th scope="col">Description</th></tr>
@@ -183,6 +191,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           ))}
         </tbody>
       </table>
+      </div>
     </section>
 
     <section id="projects" aria-labelledby="projects-h">
@@ -296,6 +305,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       </ol>
     </section>
   </main>
+  </div>
 
   <button type="button" class="tour-float" data-set-mode="city" hidden>
     <span class="px-icon" aria-hidden="true"></span> Explore the city

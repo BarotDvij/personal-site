@@ -1,6 +1,8 @@
 /* ---------- tokens ---------- */
 
 :root {
+  --wiki-max: 1400px;
+  --toc-w: 220px;
   --paper: #ffffff;
   --page: #f6f6f4;
   --ink: #1f2328;
@@ -115,7 +117,7 @@ html[data-mode='city'] body {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  max-width: 1120px;
+  max-width: var(--wiki-max);
   margin: 0 auto;
   padding: 14px 16px 10px;
 }
@@ -198,7 +200,7 @@ html[data-mode='city'] body {
 }
 
 .tabs {
-  max-width: 1120px;
+  max-width: var(--wiki-max);
   margin: 0 auto;
   padding: 0 16px;
   display: flex;
@@ -232,9 +234,19 @@ html[data-mode='city'] body {
   margin-bottom: -1px;
 }
 
-.article {
-  max-width: 1120px;
+.wiki-body {
+  max-width: var(--wiki-max);
   margin: 0 auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: var(--toc-w) minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: start;
+}
+
+.article {
+  min-width: 0;
+  margin: 0;
   background: var(--paper);
   border: 1px solid var(--line-strong);
   border-top: 0;
@@ -409,6 +421,7 @@ html[data-mode='city'] body {
   border-bottom: 1px solid var(--line-strong);
   padding-bottom: 2px;
   scroll-margin-top: 16px;
+  display: flow-root; /* heading rule stops at the infobox instead of running under it */
 }
 
 .article h3 {
@@ -430,11 +443,6 @@ html[data-mode='city'] body {
 .article > .lead,
 .article > .lead-more {
   max-width: none;
-}
-
-/* Career starts below the infobox so the table gets the full width */
-#career {
-  clear: both;
 }
 
 .career-table {
@@ -566,29 +574,105 @@ q {
   gap: 4px 10px;
 }
 
+/* Contents: a sticky left rail on wide screens, a dropdown behind the
+   hamburger button on narrow ones (see the media query below). */
 .toc {
-  display: inline-block;
-  border: 1px solid var(--line-strong);
-  background: var(--panel);
-  padding: 8px 18px 8px 12px;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  padding: 14px 4px 14px 0;
   font-size: 0.9rem;
-  margin: 4px 0 8px;
 }
 
 .toc-title {
   font-weight: 700;
-  text-align: center;
+  padding: 0 10px 6px;
+  border-bottom: 1px solid var(--line);
 }
 
 .toc ol {
-  margin: 4px 0 0;
-  padding-left: 22px;
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
 }
 
 .toc a {
-  display: inline-block;
-  padding: 2px 0;
+  display: block;
+  padding: 5px 8px 5px 10px;
   min-height: 24px;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+}
+
+.toc a[aria-current='true'] {
+  border-left-color: var(--link);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.toc-toggle {
+  display: none;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toc-toggle:hover,
+.toc-toggle[aria-expanded='true'] {
+  background: var(--panel);
+  border-color: var(--line-strong);
+}
+
+.wiki-bar .wordmark {
+  margin-right: auto;
+}
+
+@media (min-width: 1001px) {
+  /* Line the Article and Talk tabs up with the article column. */
+  .tabs {
+    padding-left: calc(16px + var(--toc-w) + 20px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .toc-toggle {
+    display: inline-flex;
+  }
+
+  .wiki-body {
+    display: block;
+  }
+
+  .toc {
+    display: none;
+    position: fixed;
+    z-index: 30;
+    left: 8px;
+    top: 60px;
+    width: min(280px, calc(100vw - 16px));
+    max-height: 70vh;
+    padding: 12px 6px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .toc.open {
+    display: block;
+  }
+}
+
+/* Tables sit beside the infobox instead of dropping below it. */
+.table-wrap {
+  overflow-x: auto;
 }
 
 .project-grid {
@@ -694,7 +778,7 @@ blockquote p {
 }
 
 .wiki-foot {
-  max-width: 1120px;
+  max-width: var(--wiki-max);
   margin: 0 auto;
   padding: 16px;
   font-size: 0.85rem;
@@ -729,6 +813,10 @@ blockquote p {
 }
 
 @media (max-width: 760px) {
+  .wiki-body {
+    padding: 0;
+  }
+
   .article {
     padding: 16px;
     border-left: 0;
@@ -898,10 +986,6 @@ blockquote p {
 
   .portrait {
     max-width: 140px;
-  }
-
-  .toc {
-    align-self: flex-start;
   }
 
   .wiki-bar .wide {
@@ -1581,6 +1665,7 @@ html.party .hud-title {
   .tour-float,
   .tabs,
   .toc,
+  .toc-toggle,
   .city-link,
   .wiki-foot,
   .skip {
@@ -1593,6 +1678,11 @@ html.party .hud-title {
     color: #000;
     border: 0;
     font-size: 11pt;
+  }
+
+  .wiki-body {
+    display: block;
+    padding: 0;
   }
 
   .article {

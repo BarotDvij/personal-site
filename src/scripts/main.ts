@@ -1,4 +1,5 @@
 import { apply, load, resolvedTheme, update, watchSystem, type Mode, type Prefs } from './prefs';
+import './toc';
 import { sfx } from './sfx';
 import type { City } from './city/engine';
 
