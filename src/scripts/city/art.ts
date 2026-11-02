@@ -232,11 +232,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (const [px, ph, gold] of cups) {
         box(ctx, px - 7, GROUND - 24 - ph + 14, 14, ph - 14, shade('#d9d2c4', p), p);
         const cupY = GROUND - 24 - ph;
-        rect(ctx, px - 5, cupY, 10, 7, shade(gold, p));
-        rect(ctx, px - 7, cupY + 1, 2, 3, shade(gold, p));
-        rect(ctx, px + 5, cupY + 1, 2, 3, shade(gold, p));
-        rect(ctx, px - 1, cupY + 7, 2, 4, shade(gold, p));
-        rect(ctx, px - 3, cupY + 11, 6, 2, shade(gold, p));
+        // Trophy parts, drawn once with a dark outline and once filled so they
+        // stay readable against the daytime sky.
+        const parts: [number, number, number, number][] = [
+          [px - 5, cupY, 10, 7], [px - 7, cupY + 1, 2, 3], [px + 5, cupY + 1, 2, 3],
+          [px - 1, cupY + 7, 2, 4], [px - 3, cupY + 11, 6, 2],
+        ];
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
+        const fill = p.night || gold !== '#c9ccd6' ? shade(gold, p) : '#aab0c4';
+        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, fill);
         rect(ctx, px - 4, cupY + 1, 2, 3, '#fff6c8');
       }
       text(ctx, '1', cx - 35, GROUND - 24 - 42 + 18, shade('#3a3530', p));
@@ -261,7 +265,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       windows(ctx, p, r, x + 6, top + 18, w - 12, h - 46);
       for (let i = 0; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#9bd23c', p));
       for (let i = 4; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#f6ffe0', p));
-      rect(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#bfe6ff');
+      box(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#8fd14f', p);
       door(ctx, cx, 10, 14, shade('#24301f', p));
       sign(ctx, label, cx, top + 6, '#9bd23c', '#1d2a10', p);
       break;
