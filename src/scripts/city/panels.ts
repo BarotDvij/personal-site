@@ -73,7 +73,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return {
         kicker: 'Post Office',
         title: 'Send a letter',
-        html: `<p class="lead">Open to co-op roles in forward deployed engineering, technical PM, and product.</p>
+        html: `<p class="lead">Open to ${esc(profile.seeking)} in forward deployed engineering, technical PM, and product.</p>
           <p class="links">${link(`mailto:${l.email}`, l.email)}</p>
           <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>`,
       };
