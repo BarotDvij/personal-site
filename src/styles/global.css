@@ -416,9 +416,10 @@ html[data-mode='city'] body {
   margin: 22px 0 2px;
 }
 
+/* Body text fills the article column, like a wiki page. */
 .article p,
 .article li {
-  max-width: 72ch;
+  max-width: none;
 }
 
 .lead {
