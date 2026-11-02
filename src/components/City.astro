@@ -25,6 +25,13 @@
     </div>
   </header>
 
+  <div class="walk-pad" aria-hidden="true">
+    <button type="button" tabindex="-1" data-walk="ArrowLeft">&#9664;</button>
+    <button type="button" tabindex="-1" data-walk="ArrowUp">Open</button>
+    <button type="button" tabindex="-1" data-walk="ArrowDown">Warp</button>
+    <button type="button" tabindex="-1" data-walk="ArrowRight">&#9654;</button>
+  </div>
+
   <nav class="minimap" aria-label="Districts">
     <div class="minimap-view" aria-hidden="true"></div>
   </nav>
@@ -32,7 +39,7 @@
   <div class="welcome" role="note">
     <p class="welcome-title">Welcome to Dvij City</p>
     <p>Every building is a role or a project I built. The copper pipes underground are data pipelines.</p>
-    <p class="welcome-keys">Scroll, drag, or use arrow keys to explore. Click a building to open it.</p>
+    <p class="welcome-keys">Walk with the arrow keys (Up opens a door, Down enters a warp pipe, Space jumps), or scroll and click any building.</p>
     <button type="button" class="px-btn">Start exploring</button>
   </div>
 
@@ -48,5 +55,35 @@
       <span class="panel-count" aria-live="polite"></span>
       <button type="button" class="px-btn small" data-panel-next aria-label="Next building">Next &gt;</button>
     </div>
+  </dialog>
+
+  <dialog class="arcade-window" aria-labelledby="arcade-title">
+    <div class="arcade-head">
+      <h2 class="arcade-title" id="arcade-title"></h2>
+      <p class="arcade-score"><span data-score>0</span> <span data-best></span></p>
+      <div class="arcade-btns">
+        <button type="button" class="hud-btn" data-arcade-pause>Pause</button>
+        <button type="button" class="hud-btn" data-arcade-restart>Restart</button>
+        <button type="button" class="panel-close" data-arcade-close aria-label="Close game">X</button>
+      </div>
+    </div>
+    <div class="arcade-screen">
+      <canvas class="arcade-canvas"></canvas>
+      <div class="arcade-overlay" hidden></div>
+    </div>
+    <div class="arcade-pad" aria-hidden="true">
+      <div class="dpad">
+        <button type="button" tabindex="-1" data-key="ArrowUp" class="up">&#9650;</button>
+        <button type="button" tabindex="-1" data-key="ArrowLeft" class="left">&#9664;</button>
+        <button type="button" tabindex="-1" data-key="ArrowRight" class="right">&#9654;</button>
+        <button type="button" tabindex="-1" data-key="ArrowDown" class="down">&#9660;</button>
+      </div>
+      <div class="ab">
+        <button type="button" tabindex="-1" data-key="x" class="b">B</button>
+        <button type="button" tabindex="-1" data-key="Space" class="a">A</button>
+      </div>
+    </div>
+    <p class="arcade-help"></p>
+    <p class="arcade-credit"></p>
   </dialog>
 </section>

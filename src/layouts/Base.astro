@@ -2,6 +2,8 @@
 import '@fontsource-variable/inter-tight';
 import '@fontsource/silkscreen/latin-400.css';
 import '../styles/global.css';
+import interUrl from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
+import pixelUrl from '@fontsource/silkscreen/files/silkscreen-latin-400-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -21,6 +23,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Fonts load before first paint so text never reflows (keeps layout shift near zero). -->
+    <link rel="preload" href={interUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={pixelUrl} as="font" type="font/woff2" crossorigin />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />

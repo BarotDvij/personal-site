@@ -2,6 +2,7 @@
   "name": "Dvij Barot",
   "headline": "Builds across product, data, AI and code. Starts with the friction, not the tech.",
   "location": "Waterloo, ON",
+  "seeking": "Summer 2027 internships",
   "links": {
     "email": "d2barot@uwaterloo.ca",
     "linkedin": "https://www.linkedin.com/in/barotdvij",
@@ -83,6 +84,7 @@
         "ai",
         "dev"
       ],
+      "now": "building an agentic product operations application for an enterprise client through Communitech's <a href=\"https://www.communitech.ca/programs/ai-at-work/\">AI@WORK program</a>",
       "summary": "Led an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
       "bullets": [
         "Led product development of a fullstack agentic application automating purchase-order drafts, AI image generation, and e-commerce listings for enterprise client Hauser Industries",
@@ -481,6 +483,99 @@
       "name": "Yatharth Sejpal",
       "url": "https://www.linkedin.com/in/yatharth-sejpal/",
       "note": null
+    }
+  ],
+  "awards": [
+    {
+      "group": "School",
+      "title": "Dustin Picard Memorial Award of Integrity",
+      "issuer": "Huron Heights Secondary School",
+      "date": "Nov 2021",
+      "body": "A graduation award presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity."
+    },
+    {
+      "group": "Business competitions",
+      "title": "DECA Provincials Top 15 Medal",
+      "issuer": "DECA Ontario",
+      "date": "Mar 2021",
+      "body": "Placed in the top 15 highest scores in the Retail Merchandising series."
+    },
+    {
+      "group": "Business competitions",
+      "title": "Top 24 Project in North America",
+      "issuer": "Believe Initiative (BLC)",
+      "date": "Jan 2021",
+      "body": "Selected as one of two representatives from the Huron Area at the Believe Initiative Collective Fair, placing the project among the top 24 in North America."
+    },
+    {
+      "group": "Business competitions",
+      "title": "4 DECA Regional Awards",
+      "issuer": "DECA Ontario",
+      "date": "2017 to 2020",
+      "body": "Top scores in Marketing Communications (2017), the marketing cluster test across 14 series (2018), Retail Merchandising and the marketing cluster test (2019), and top 20 of 237 competitors overall in Retail Merchandising (2020)."
+    },
+    {
+      "group": "Business competitions",
+      "title": "DECA Provincials Top Case Score Medal",
+      "issuer": "DECA Ontario",
+      "date": "Feb 2020",
+      "body": "Top 15 scores in the first Retail Merchandising case competition."
+    },
+    {
+      "group": "Business competitions",
+      "title": "International Youth Success Summit Challenge Winner",
+      "issuer": "JA Worldwide, JA Canada",
+      "date": "Jul 2019",
+      "body": "One of two students chosen to represent JA Waterloo internationally. The team's response to a real company's business challenge was judged the most effective, winning the summit challenge."
+    },
+    {
+      "group": "Junior Achievement",
+      "title": "Company of the Year",
+      "issuer": "JA Waterloo",
+      "date": "May 2019",
+      "body": "Awarded for epitomizing entrepreneurship, innovation, and collaboration while running a financially successful company."
+    },
+    {
+      "group": "Junior Achievement",
+      "title": "Production Company of the Year",
+      "issuer": "JA Waterloo",
+      "date": "May 2019",
+      "body": "Best product overall, judged on quality, creativity, and utility. Led the production team as VP of Production."
+    },
+    {
+      "group": "Junior Achievement",
+      "title": "Salesperson of the Year",
+      "issuer": "JA Waterloo",
+      "date": "May 2019",
+      "body": "Generated the most sales revenue in the JA Waterloo charter."
+    },
+    {
+      "group": "Business competitions",
+      "title": "DECA Provincials Top Test Score Medal",
+      "issuer": "DECA Ontario",
+      "date": "Feb 2019",
+      "body": "Top 15 test scores in the marketing cluster."
+    },
+    {
+      "group": "Junior Achievement",
+      "title": "Product Design Award",
+      "issuer": "JA Waterloo",
+      "date": "May 2018",
+      "body": "Most innovative product in the JA Waterloo charter."
+    },
+    {
+      "group": "Junior Achievement",
+      "title": "VP of Marketing of the Year",
+      "issuer": "JA Waterloo",
+      "date": "May 2018",
+      "body": "Awarded to the single VP of Marketing who best embodied leadership, innovation, and collaboration."
+    },
+    {
+      "group": "School",
+      "title": "Valedictorian and 3 Awards",
+      "issuer": "Rickson Ridge Public School",
+      "date": "Jun 2017",
+      "body": "One of two students voted by teachers and classmates to speak at graduation. Also won the excellence in math, history, and social justice awards."
     }
   ]
 }

@@ -129,6 +129,13 @@ if (notice && floatBtn && 'IntersectionObserver' in window) {
   }).observe(notice);
 }
 
+// ----- arcade (downloaded on first play) -----
+
+document.addEventListener('arcade:launch', async (e) => {
+  const { openGame } = await import('./arcade/shell');
+  void openGame((e as CustomEvent<string>).detail);
+});
+
 // ----- easter egg -----
 
 const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];

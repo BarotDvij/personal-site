@@ -2,6 +2,8 @@
 
 import profile from '../../../content/profile.json';
 import type { Ref } from './world';
+import { GAMES } from '../arcade/catalog';
+import { museumHtml } from './museum';
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -56,6 +58,13 @@ export function panelFor(ref: Ref): PanelContent | null {
             'The copper pipes underground are data pipelines, and the packets are real flows of work into the warehouse.',
             'Teal warp pipes jump to the next district.',
           ])}
+          <h3>Trophy case</h3>
+          <ul class="trophies">${[
+            ...profile.hackathons.map((h) => ({ title: `${h.place}, ${h.event}`, meta: h.project.length < 40 ? h.project : 'Hackathon' })),
+            ...profile.awards.map((a) => ({ title: a.title, meta: `${a.issuer} · ${a.date}` })),
+          ]
+            .map((t) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(t.title)}<br><small>${esc(t.meta)}</small></span></li>`)
+            .join('')}</ul>
           <h3>Approach</h3>
           ${profile.lessons.map((l) => `<p><strong>${esc(l.title)}.</strong> ${esc(l.body)}</p>`).join('')}`,
       };
@@ -65,7 +74,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return {
         kicker: 'Post Office',
         title: 'Send a letter',
-        html: `<p class="lead">Open to co-op roles in forward deployed engineering, technical PM, and product.</p>
+        html: `<p class="lead">Open to ${esc(profile.seeking)} in forward deployed engineering, technical PM, and product.</p>
           <p class="links">${link(`mailto:${l.email}`, l.email)}</p>
           <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>`,
       };
@@ -89,6 +98,17 @@ export function panelFor(ref: Ref): PanelContent | null {
           ${profile.civic.map((c) => `<p><strong>${esc(c.title)}.</strong> ${esc(c.body)}</p>`).join('')}`,
       };
     }
+    case 'arcade': {
+      return {
+        kicker: 'Arcade Hall',
+        title: 'Insert coin',
+        html: `<p class="lead">Browser games I grew up on, rebuilt from scratch in the city's own pixel style. Everything runs offline, and each game only downloads when you start it.</p>
+          <ul class="game-list">${GAMES.map((g) => `<li><button type="button" class="game-btn" data-game="${g.id}">
+            <span class="game-name">${esc(g.title)}</span><span class="game-blurb">${esc(g.blurb)}</span></button></li>`).join('')}</ul>`,
+      };
+    }
+    case 'museum':
+      return { kicker: 'Play District', title: 'Museum of Favourites', html: museumHtml() };
     case 'pipelines': {
       const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
       const rows = profile.experience.flatMap((e) =>
