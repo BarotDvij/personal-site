@@ -487,7 +487,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       // Framed paintings between columns
       const frames = ['#008c00', '#e0302f', '#3b82f6'];
       for (let i = 0; i < 3; i++) {
-        const fx = x + 13 + i * ((w - 32) / 2);
+        // Evenly spaced and centred inside the building body (x + 6 .. x + w - 6).
+        const fx = x + 6 + 4 + 2 + i * ((w - 12 - 8 - 18) / 2);
         box(ctx, fx - 2, top + 34, 18, 16, shade('#c8a24a', p), p);
         rect(ctx, fx, top + 36, 14, 12, shade(frames[i], p));
         rect(ctx, fx + 2, top + 38, 4, 3, '#ffffff');
