@@ -2,6 +2,7 @@
 import profile from '../../content/profile.json';
 import Cite from './Cite.astro';
 import PixelIcon from './PixelIcon.astro';
+import Org from './Org.astro';
 import { STRUCTURES } from '../scripts/city/world';
 
 // Map each role and project to its building so the Wiki can link into the city.
@@ -9,14 +10,6 @@ const buildingFor = (match: (r: NonNullable<(typeof STRUCTURES)[number]['ref']>)
   STRUCTURES.find((s) => s.ref && s.kind !== 'billboard' && match(s.ref))?.id;
 const roleBuilding = (org: string) => buildingFor((r) => r.type === 'role' && r.org === org);
 const projectBuilding = (name: string) => buildingFor((r) => r.type === 'project' && r.name === name);
-
-const lensNames: Record<string, string> = {
-  marketing: 'Marketer',
-  data: 'Analyst',
-  pm: 'PM',
-  ai: 'Engineer',
-  dev: 'Builder',
-};
 
 // Footnotes: every claim that has public proof gets a citation.
 const refs: { id: string; label: string; href: string }[] = [];
@@ -81,13 +74,6 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </div>
     <div class="tab-group">
       <a href="#history">View history</a>
-      <label class="lens-pick">
-        <span>View as</span>
-        <select id="lens-select">
-          <option value="all">Everyone</option>
-          {profile.lenses.map((l) => <option value={l}>{lensNames[l]}</option>)}
-        </select>
-      </label>
     </div>
   </nav>
 
@@ -132,8 +118,8 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <p class="caption">Location in Dvij City. <button type="button" class="linklike" data-set-mode="city">Explore</button></p>
       <table>
         <tbody>
-          <tr><th scope="row">Occupation</th><td>{current.role}, {current.org}</td></tr>
-          <tr><th scope="row">Education</th><td>{profile.education.school}<br /><small>{profile.education.degree}, expected {profile.education.expected}</small></td></tr>
+          <tr><th scope="row">Occupation</th><td>{current.role}, <Org e={current} /></td></tr>
+          <tr><th scope="row">Education</th><td><a href={profile.education.url}>{profile.education.school}</a><br /><small>{profile.education.degree}, expected {profile.education.expected}</small></td></tr>
           <tr><th scope="row">Disciplines</th><td>Product · Data · AI · Software · Marketing</td></tr>
           <tr>
             <th scope="row">Known for</th>
@@ -158,24 +144,15 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </aside>
 
     <p class="lead">
-      <b>Dvij Barot</b> is a Management Engineering student at the University of Waterloo looking for <b>{profile.seeking}</b>. He works across
+      <b>Dvij Barot</b> is a Management Engineering student at the <a href={profile.education.url}>University of Waterloo</a> looking for <b>{profile.seeking}</b>. He works across
       AI engineering and enablement, product management, data engineering, and software development. Barot is
-      currently holding the {current.role} position at {current.org}, <Fragment set:html={current.now} />.
+      currently holding the {current.role} position at <Org e={current} />, <Fragment set:html={current.now} />.
     </p>
     <p class="lead-more">
       Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
       2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
-
-    <div class="highlights" role="list" aria-label="Highlights">
-      {profile.highlights.map((h) => (
-        <div class="stat lensed" role="listitem" data-lenses={h.lenses.join(' ')}>
-          <span class="stat-value">{h.value}</span>
-          <span class="stat-label">{h.label}</span>
-        </div>
-      ))}
-    </div>
 
     <nav class="toc" aria-label="Contents">
       <div class="toc-title">Contents</div>
@@ -184,16 +161,13 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       </ol>
     </nav>
 
-    <p class="lens-note" id="lens-note" hidden aria-live="polite"></p>
-
     <section id="career" aria-labelledby="career-h">
       <h2 id="career-h">Career</h2>
       {profile.experience.map((e) => (
-        <article class="role lensed" data-lenses={e.lenses.join(' ')} id={anchor(e.org)}>
-          <h3>{e.org}</h3>
+        <article class="role" id={anchor(e.org)}>
+          <h3><Org e={e} /></h3>
           <p class="meta"><b>{e.role}</b> · {e.dates} · {e.place}</p>
           <p>{e.summary}</p>
-          <ul>{e.bullets.map((b) => <li>{b}</li>)}</ul>
           {roleBuilding(e.org) && (
             <a class="city-link" href={`#tour/${roleBuilding(e.org)}`} data-city-target={roleBuilding(e.org)}>See it in Dvij City</a>
           )}
@@ -205,7 +179,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <h2 id="projects-h">Projects</h2>
       <div class="project-grid">
         {profile.projects.map((p, i) => (
-          <article class="project lensed" data-lenses={p.lenses.join(' ')}>
+          <article class="project">
             <h3>
               {p.name}
               <Cite n={projectRefs[i]} />
@@ -284,7 +258,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <section id="education" aria-labelledby="edu-h">
       <h2 id="edu-h">Education</h2>
-      <p><b>{profile.education.school}</b>, {profile.education.degree}, expected {profile.education.expected}.</p>
+      <p><b><a href={profile.education.url}>{profile.education.school}</a></b>, {profile.education.degree}, expected {profile.education.expected}.</p>
       <p>Relevant courses: {profile.education.courses.join(', ')}.</p>
       <p>Clubs: {profile.education.clubs.join(', ')}.</p>
     </section>

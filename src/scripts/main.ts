@@ -105,20 +105,6 @@ settings.addEventListener('click', (e) => {
   if (e.target === settings) settings.close();
 });
 
-// ----- wiki lens filter -----
-
-const lensSelect = document.getElementById('lens-select') as HTMLSelectElement | null;
-const lensNote = document.getElementById('lens-note');
-lensSelect?.addEventListener('change', () => {
-  const article = document.getElementById('article')!;
-  const lens = lensSelect.value;
-  article.dataset.lens = lens;
-  if (lensNote) {
-    lensNote.hidden = lens === 'all';
-    lensNote.textContent = lens === 'all' ? '' : `Showing this article through the ${lensSelect.selectedOptions[0].text} lens. Related work is highlighted.`;
-  }
-});
-
 // ----- floating tour button once the notice scrolls away -----
 
 const notice = document.querySelector('.sitenotice');

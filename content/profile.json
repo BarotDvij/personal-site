@@ -30,7 +30,8 @@
       "Wat.AI Engineering Design Team (2024)",
       "Warriors Dance Team (2023–2024)",
       "HSC President (2023–2025)"
-    ]
+    ],
+    "url": "https://uwaterloo.ca/"
   },
   "highlights": [
     {
@@ -77,6 +78,7 @@
     {
       "role": "Technical Product Manager",
       "org": "AltaML Inc.",
+      "url": "https://altaml.com/",
       "dates": "Sep 2026 – Dec 2026",
       "place": "Waterloo, ON",
       "lenses": [
@@ -85,7 +87,7 @@
         "dev"
       ],
       "now": "building an agentic product operations application for an enterprise client through Communitech's <a href=\"https://www.communitech.ca/programs/ai-at-work/\">AI@WORK program</a>",
-      "summary": "Led an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
+      "summary": "Leads product on an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
       "bullets": [
         "Led product development of a fullstack agentic application automating purchase-order drafts, AI image generation, and e-commerce listings for enterprise client Hauser Industries",
         "Co-built it in React, TypeScript, Python, and PostgreSQL on a team of 2, integrating Faire, Brightpearl ERP, and Shopify over GraphQL and REST",
@@ -98,6 +100,7 @@
     {
       "role": "Software Engineer",
       "org": "GenLedge",
+      "url": "https://www.genledge.ai/",
       "dates": "Jul 2026 – Sep 2026",
       "place": "Remote",
       "lenses": [
@@ -119,13 +122,14 @@
     {
       "role": "Product Manager",
       "org": "SevenAfter Technologies",
+      "url": "https://www.linkedin.com/company/142886175/",
       "dates": "May 2026 – Jul 2026",
       "place": "Remote",
       "lenses": [
         "pm",
         "ai"
       ],
-      "summary": "Product for an AI-powered educational game about mental health and bullying.",
+      "summary": "Product management for an AI-powered educational game about mental health and bullying.",
       "bullets": [
         "Ran 2 rounds of playtesting with 8 students on the game prototype",
         "Led focus groups with educators and parents to set topic scope and safety guardrails for AI characters",
@@ -139,13 +143,14 @@
     {
       "role": "AI Engineer",
       "org": "KnowIdea Inc.",
+      "url": "https://www.knowidea.dev/",
       "dates": "Apr 2026 – May 2026",
       "place": "Remote",
       "lenses": [
         "ai",
         "dev"
       ],
-      "summary": "Made an AI report pipeline faster and observable.",
+      "summary": "Made an AI report-generation pipeline faster and observable.",
       "bullets": [
         "Designed a dependency graph and concurrent priority batch scheduler in asyncio, cutting report generation time by 58%",
         "Built telemetry across a multi-stage inference pipeline on Modal, surfacing token usage and timing",
@@ -156,12 +161,13 @@
     {
       "role": "Data Analytics Engineer",
       "org": "Super.com",
+      "url": "https://www.super.com/",
       "dates": "Jan 2026 – Apr 2026",
       "place": "San Francisco, CA · Toronto, ON",
       "lenses": [
         "data"
       ],
-      "summary": "Pipelines, dashboards, and a fraud investigation.",
+      "summary": "Analytics engineering across marketing data pipelines, dashboards, and fraud detection.",
       "bullets": [
         "Extended the LTV:CAC pipeline in dbt and Snowflake with a flat-rate channel sub-pipeline powering 36 downstream tables",
         "Built modular dbt models and unit tests, improving data completeness by 19%",
@@ -174,6 +180,7 @@
     {
       "role": "Project Manager",
       "org": "Go Lime Inc.",
+      "url": "https://golime.com/",
       "dates": "May 2024 – Dec 2024",
       "place": "Toronto, ON",
       "lenses": [
@@ -181,7 +188,7 @@
         "pm",
         "dev"
       ],
-      "summary": "Rebrand, growth ops, and a new booking platform.",
+      "summary": "Led a rebrand, growth operations, and a new booking platform.",
       "bullets": [
         "Owned a $100K budget and led a team of 4 on a rebrand: customer journey, sales funnel, and marketing ops SOP",
         "Ran weekly sprints with standups, demos, and retros, producing 2 video ads and 10 still ads per week",
@@ -195,6 +202,7 @@
     {
       "role": "Program Manager",
       "org": "Ontario Chamber of Commerce",
+      "url": "https://occ.ca/",
       "dates": "May 2023 – Aug 2023",
       "place": "Toronto, ON",
       "lenses": [
@@ -202,7 +210,7 @@
         "pm",
         "data"
       ],
-      "summary": "Digital adoption advisory for small businesses.",
+      "summary": "Advised small businesses on going digital through the Canada Digital Adoption Program.",
       "bullets": [
         "Built digital roadmaps covering web, e-commerce, SEO, and SEM for business owners in the Canada Digital Adoption Program",
         "Designed and ran workshops on digital marketing, web design, SEO, UX research, cybersecurity, and databases",
@@ -214,6 +222,7 @@
     {
       "role": "Business Development Representative",
       "org": "Swap Robotics",
+      "url": "https://www.swaprobotics.com/",
       "dates": "May 2022 – Dec 2022",
       "place": "Kitchener, ON",
       "lenses": [

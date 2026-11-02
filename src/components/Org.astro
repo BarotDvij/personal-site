@@ -1,0 +1,8 @@
+---
+// An organization name, linked to its site when profile.json has one (like a wiki link).
+interface Props {
+  e: { org: string; url?: string | null };
+}
+const { e } = Astro.props;
+---
+{e.url ? <a href={e.url} rel="noopener">{e.org}</a> : e.org}
