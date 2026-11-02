@@ -113,7 +113,7 @@ export function mountCity(root: HTMLElement): City {
     b.type = 'button';
     b.className = `bldg${s.kind === 'warp' ? ' warp' : ''}`;
     b.dataset.sid = s.id;
-    b.setAttribute('aria-label', s.kind === 'warp' ? s.label : `${s.label}. Open details`);
+    b.setAttribute('aria-label', s.kind === 'warp' ? 'Warp pipe. Travel to the next pipe' : `${s.label}. Open details`);
     const tag = document.createElement('span');
     tag.className = 'tag';
     tag.textContent = s.label;
@@ -153,9 +153,14 @@ export function mountCity(root: HTMLElement): City {
   function activate(s: Structure, from: HTMLElement | null) {
     dismissWelcome();
     if (s.ref?.type === 'warp') {
-      sfx.warp();
-      const d = DISTRICTS[s.ref.to];
-      lookAt(d.x0 + 200);
+      // Clicking a pipe hops the character on and sends it forward.
+      standOn(walker, s);
+      walker.facing = 1;
+      if (startWarp(walker, s)) {
+        sfx.warp();
+        setTimeout(() => sfx.warp(), 430);
+      }
+      follow = true;
       return;
     }
     if (s.ref?.type === 'game') {
@@ -403,7 +408,7 @@ export function mountCity(root: HTMLElement): City {
         <tr><td>Walk</td><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd>, hold <kbd>Shift</kbd> to run</td><td>Arrow buttons</td></tr>
         <tr><td>Open a building</td><td><kbd>&uarr;</kbd> or <kbd>W</kbd> in front of it</td><td>Tap or click it</td></tr>
         <tr><td>Jump</td><td><kbd>Space</kbd></td><td>Jump button</td></tr>
-        <tr><td>Warp</td><td>Hop onto a green pipe, then <kbd>&darr;</kbd> or <kbd>S</kbd></td><td>Jump, then Warp</td></tr>
+        <tr><td>Warp</td><td>Hop onto a green pipe, face the way you want to go, then <kbd>&darr;</kbd> or <kbd>S</kbd>. Right goes to the next pipe, left to the previous one.</td><td>Tap a pipe, or Jump then Warp</td></tr>
         <tr><td>Next district</td><td><kbd>Page Up</kbd> <kbd>Page Down</kbd></td><td>Tap the map bar</td></tr>
         <tr><td>Look around</td><td>Scroll</td><td>Drag or swipe</td></tr>
         <tr><td>Guided tour</td><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd> inside any building</td><td>Prev and Next</td></tr>
@@ -587,7 +592,8 @@ export function mountCity(root: HTMLElement): City {
       dismissWelcome();
       standOn(walker, s);
       lookAt(s.x + s.w / 2, true);
-      if (open && s.ref) activate(s, buttonFor(s));
+      // Linking to a pipe stands you on it; it doesn't warp you away.
+      if (open && s.ref && s.kind !== 'warp') activate(s, buttonFor(s));
       else buttonFor(s)?.focus({ preventScroll: true });
     },
     stop() {
