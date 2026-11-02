@@ -9,6 +9,7 @@ import {
 } from './art';
 import { panelFor, highlights } from './panels';
 import { FrameProbe, hintTier, type Tier } from '../quality';
+import { createWalker, drawPrompt, drawWalker, jump, nearby, startWarp, updateWalker } from './walker';
 import { sfx } from '../sfx';
 
 export interface City {
@@ -43,6 +44,12 @@ export function mountCity(root: HTMLElement): City {
   let camX = 0, targetX = 0;
   let raf = 0, last = 0, t = 0, running = false, dirty = true;
   let hovered: Structure | null = null;
+  const walker = createWalker();
+  const walkKeys = new Set<string>();
+  let follow = true;
+  const INTRO = 2800;
+  let intro = 0;
+  let introPlayed = false;
   let district = -1;
 
   // ----- layers -----
@@ -91,6 +98,7 @@ export function mountCity(root: HTMLElement): City {
   const originX = () => (viewW >= WORLD_W ? Math.floor((viewW - WORLD_W) / 2) : -Math.round(camX));
 
   function lookAt(x: number, instant = false) {
+    follow = false;
     targetX = x - viewW / 2;
     clampTarget();
     if (instant || reduced()) camX = targetX;
@@ -237,6 +245,8 @@ export function mountCity(root: HTMLElement): City {
   root.addEventListener('wheel', (e) => {
     if (panel.open) return;
     e.preventDefault();
+    endIntro();
+    follow = false;
     const unit = e.deltaMode === 1 ? 16 : 1;
     const delta = (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * unit;
     targetX += delta / scale;
@@ -247,7 +257,8 @@ export function mountCity(root: HTMLElement): City {
   }, { passive: false });
 
   root.addEventListener('pointerdown', (e) => {
-    if ((e.target as HTMLElement).closest('.hud, .minimap, .welcome, dialog')) return;
+    endIntro();
+    if ((e.target as HTMLElement).closest('.hud, .minimap, .welcome, .walk-pad, dialog')) return;
     dragStart = e.clientX;
     dragCam = camX;
     dragged = false;
@@ -257,6 +268,7 @@ export function mountCity(root: HTMLElement): City {
     const dx = e.clientX - dragStart;
     if (Math.abs(dx) > 6) dragged = true;
     if (dragged) {
+      follow = false;
       targetX = dragCam - dx / scale;
       clampTarget();
       camX = targetX;
@@ -269,29 +281,91 @@ export function mountCity(root: HTMLElement): City {
     if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; }
   }, true);
 
+  const keyName = (e: KeyboardEvent) => (e.key.length === 1 ? e.key.toLowerCase() : e.key);
+
+  function teleport(x: number) {
+    walker.x = x;
+    walker.poof = 300;
+    follow = true;
+  }
+
+  function act(k: string, target: HTMLElement | null) {
+    if (k === 'ArrowUp' || k === 'w') {
+      const s = nearby(walker);
+      if (s && s.ref?.type !== 'warp') activate(s, buttonFor(s));
+      return true;
+    }
+    if (k === 'ArrowDown' || k === 's') {
+      const s = nearby(walker);
+      if (s && startWarp(walker, s)) {
+        sfx.warp();
+        follow = true;
+      }
+      return true;
+    }
+    if (k === ' ' && !target?.closest('button:not(.bldg), a')) {
+      jump(walker);
+      sfx.tick();
+      return true;
+    }
+    return false;
+  }
+
   function onKey(e: KeyboardEvent) {
     if (!running || panel.open || html.dataset.arcade || (e.target as HTMLElement).closest('input, select, textarea, dialog')) return;
-    const step: Record<string, number> = { ArrowRight: 48, ArrowLeft: -48, d: 48, a: -48 };
-    if (e.key in step) {
-      targetX += step[e.key];
-    } else if (e.key === 'PageDown' || e.key === 'PageUp') {
-      const i = districtAt(camX + viewW / 2) + (e.key === 'PageDown' ? 1 : -1);
+    endIntro();
+    const k = keyName(e);
+    // Walking keys belong to the character, so step off any focused building
+    // button first. Otherwise Space would click a building across the city.
+    const active = document.activeElement as HTMLElement | null;
+    if (active?.classList.contains('bldg') && ['ArrowLeft', 'ArrowRight', 'a', 'd', ' ', 'ArrowDown', 's'].includes(k)) {
+      active.blur();
+      root.focus({ preventScroll: true });
+    }
+    if (k === 'ArrowLeft' || k === 'ArrowRight' || k === 'a' || k === 'd' || k === 'Shift') {
+      walkKeys.add(k);
+      if (k !== 'Shift') follow = true;
+    } else if (act(k, e.target as HTMLElement)) {
+      // handled
+    } else if (k === 'PageDown' || k === 'PageUp') {
+      const i = districtAt(walker.x) + (k === 'PageDown' ? 1 : -1);
       const d = DISTRICTS[Math.max(0, Math.min(DISTRICTS.length - 1, i))];
-      lookAt((d.x0 + d.x1) / 2);
+      teleport(d.x0 + 36);
       sfx.warp();
-    } else if (e.key === 'Home') {
-      targetX = 0;
-    } else if (e.key === 'End') {
-      targetX = maxCam();
+    } else if (k === 'Home') {
+      teleport(36);
+    } else if (k === 'End') {
+      teleport(WORLD_W - 60);
     } else {
       return;
     }
     e.preventDefault();
-    clampTarget();
-    if (reduced()) camX = targetX;
     dismissWelcome();
     dirty = true;
   }
+  document.addEventListener('keyup', (e) => walkKeys.delete(keyName(e)));
+  window.addEventListener('blur', () => walkKeys.clear());
+
+  // On-screen walking controls for touch screens.
+  for (const b of root.querySelectorAll<HTMLElement>('[data-walk]')) {
+    const k = b.dataset.walk!;
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      endIntro();
+      dismissWelcome();
+      if (k === 'ArrowLeft' || k === 'ArrowRight') {
+        walkKeys.add(k);
+        follow = true;
+      } else {
+        act(k, null);
+      }
+    });
+    const up = () => walkKeys.delete(k);
+    b.addEventListener('pointerup', up);
+    b.addEventListener('pointerleave', up);
+    b.addEventListener('pointercancel', up);
+  }
+
   document.addEventListener('keydown', onKey);
 
   // ----- welcome -----
@@ -305,7 +379,7 @@ export function mountCity(root: HTMLElement): City {
   welcome.querySelector('button')?.addEventListener('click', () => {
     dismissWelcome();
     sfx.start();
-    overlay.querySelector<HTMLElement>('.bldg')?.focus();
+    root.focus({ preventScroll: true });
   });
 
   // ----- HUD score ticker -----
@@ -316,6 +390,39 @@ export function mountCity(root: HTMLElement): City {
     const h = highlights[scoreIndex % highlights.length];
     scoreEl.innerHTML = `<b>${h.value}</b> <span>${h.label}</span>`;
     scoreIndex++;
+  }
+
+  // ----- fly-over intro -----
+
+  function beginIntro() {
+    if (introPlayed || reduced()) return;
+    introPlayed = true;
+    intro = INTRO;
+    welcome.hidden = true;
+    overlay.style.visibility = 'hidden';
+  }
+
+  function endIntro() {
+    if (!intro) return;
+    intro = 0;
+    overlay.style.visibility = '';
+    if (!welcomed) welcome.hidden = false;
+    dirty = true;
+  }
+
+  function renderIntro() {
+    if (!cityLayer || !skyLayer) return;
+    const k = 1 - intro / INTRO;
+    const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    const z0 = Math.min(1, viewW / (WORLD_W + 40));
+    const z = z0 + (1 - z0) * e;
+    const c = WORLD_W / 2 + (camX + viewW / 2 - WORLD_W / 2) * e;
+    ctx.fillStyle = palette.sky[0];
+    ctx.fillRect(0, 0, viewW, viewH);
+    ctx.drawImage(skyLayer, 0, 0);
+    drawClouds(ctx, clouds, palette, camX, t, viewW, offsetY);
+    const dw = WORLD_W * z, dh = WORLD_H * z;
+    ctx.drawImage(cityLayer, 0, 0, WORLD_W, WORLD_H, Math.round(viewW / 2 - c * z), Math.round(viewH - dh), Math.round(dw), Math.round(dh));
   }
 
   // ----- loop -----
@@ -333,6 +440,8 @@ export function mountCity(root: HTMLElement): City {
     drawProps(ctx, motion ? t : 0, ox, offsetY, palette);
     if (tier === 'high' && motion) drawStreetLife(ctx, t, ox, offsetY, viewW, palette);
     if (motion) drawBeacons(ctx, t, ox, offsetY, palette);
+    drawWalker(ctx, walker, ox, offsetY, palette, motion);
+    drawPrompt(ctx, walker, nearby(walker), ox, offsetY);
     if (hovered) drawHighlight(ctx, hovered, ox, offsetY, motion ? t : 0);
 
     overlay.style.transform = `translate3d(${ox * scale}px, 0, 0)`;
@@ -354,6 +463,23 @@ export function mountCity(root: HTMLElement): City {
     const dt = last ? Math.min(100, now - last) : 16;
     last = now;
     const motion = !reduced();
+
+    if (intro > 0) {
+      t += dt;
+      intro -= dt;
+      if (intro <= 0) endIntro();
+      else {
+        renderIntro();
+        return;
+      }
+    }
+
+    const dir = (walkKeys.has('ArrowRight') || walkKeys.has('d') ? 1 : 0) - (walkKeys.has('ArrowLeft') || walkKeys.has('a') ? 1 : 0);
+    if (updateWalker(walker, dir, walkKeys.has('Shift'), dt)) dirty = true;
+    if (follow) {
+      targetX = walker.x - viewW / 2;
+      clampTarget();
+    }
 
     if (motion) {
       t += dt;
@@ -391,13 +517,16 @@ export function mountCity(root: HTMLElement): City {
       document.addEventListener('visibilitychange', onVisibility);
       showScore();
       scoreTimer = window.setInterval(showScore, 3500);
+      beginIntro();
       last = 0;
       raf = requestAnimationFrame(frame);
     },
     focusBuilding(id: string, open = false) {
       const s = STRUCTURES.find((x) => x.id === id);
       if (!s) return;
+      endIntro();
       dismissWelcome();
+      walker.x = s.x + s.w / 2;
       lookAt(s.x + s.w / 2, true);
       if (open && s.ref) activate(s, buttonFor(s));
       else buttonFor(s)?.focus({ preventScroll: true });

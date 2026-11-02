@@ -1906,3 +1906,32 @@ html.party .hud-title {
 .ab .b {
   background: #3b82f6;
 }
+
+/* ---------- walking controls (touch only) ---------- */
+
+.walk-pad {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%);
+  gap: 8px;
+}
+
+@media (pointer: coarse) {
+  .walk-pad {
+    display: flex;
+  }
+}
+
+.walk-pad button {
+  min-width: 52px;
+  height: 44px;
+  border: 0;
+  font-family: var(--pixel);
+  font-size: 11px;
+  color: #fff;
+  background: rgb(26 22 38 / 0.9);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2a2233;
+  touch-action: none;
+}

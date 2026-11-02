@@ -96,14 +96,14 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 
 ## Character
 
-- [ ] Original pixel sprite with idle and walk animations, day and night shading
-- [ ] Controls: arrow keys or WASD, on-screen D-pad on phones
-- [ ] Camera follows the character, free scrolling still works when idle
-- [ ] Walk up to a door and press a key (or tap) to open that building's panel
-- [ ] Drop into a warp pipe with a warp animation and sound, come out in the next district
+- [x] Original pixel sprite with idle and walk animations, day and night shading
+- [x] Controls: arrow keys or WASD, on-screen D-pad on phones
+- [x] Camera follows the character, free scrolling still works when idle
+- [x] Walk up to a door and press a key (or tap) to open that building's panel
+- [x] Drop into a warp pipe with a warp animation and sound, come out in the next district
 - [ ] Optional: walk the underground pipes as a second layer
-- [ ] Keyboard-only and screen reader paths still work without the character
-- [ ] Character code loads with the city, stays under about 5 KB
+- [x] Keyboard-only and screen reader paths still work without the character
+- [x] Character code loads with the city, stays under about 5 KB
 
 ---
 
@@ -138,7 +138,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 
 ## Launch
 
-- [ ] Fly-over intro camera (zoomed-out skyline swooping to street level)
+- [x] Fly-over intro camera (zoomed-out skyline swooping to street level)
 - [ ] Final Lighthouse, accessibility, and phone pass
 - [ ] Domain live on `dvijbarot.wiki`
 - [ ] Webring widget in the footer

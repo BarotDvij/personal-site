@@ -25,6 +25,13 @@
     </div>
   </header>
 
+  <div class="walk-pad" aria-hidden="true">
+    <button type="button" tabindex="-1" data-walk="ArrowLeft">&#9664;</button>
+    <button type="button" tabindex="-1" data-walk="ArrowUp">Open</button>
+    <button type="button" tabindex="-1" data-walk="ArrowDown">Warp</button>
+    <button type="button" tabindex="-1" data-walk="ArrowRight">&#9654;</button>
+  </div>
+
   <nav class="minimap" aria-label="Districts">
     <div class="minimap-view" aria-hidden="true"></div>
   </nav>
@@ -32,7 +39,7 @@
   <div class="welcome" role="note">
     <p class="welcome-title">Welcome to Dvij City</p>
     <p>Every building is a role or a project I built. The copper pipes underground are data pipelines.</p>
-    <p class="welcome-keys">Scroll, drag, or use arrow keys to explore. Click a building to open it.</p>
+    <p class="welcome-keys">Walk with the arrow keys (Up opens a door, Down enters a warp pipe, Space jumps), or scroll and click any building.</p>
     <button type="button" class="px-btn">Start exploring</button>
   </div>
 
