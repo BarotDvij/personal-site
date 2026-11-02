@@ -1,0 +1,29 @@
+---
+const groups = [
+  { name: 'mode', legend: 'View', options: [['cv', 'Article'], ['city', 'City tour']] },
+  { name: 'theme', legend: 'Theme', options: [['system', 'System'], ['light', 'Day'], ['dark', 'Night']] },
+  { name: 'motion', legend: 'Motion', options: [['system', 'System'], ['full', 'Full'], ['reduced', 'Reduced']] },
+  { name: 'sound', legend: 'Sound effects', options: [['off', 'Off'], ['on', 'On']] },
+];
+---
+
+<dialog class="settings" id="settings" aria-labelledby="settings-title">
+  <form method="dialog">
+    <h2 id="settings-title">Settings</h2>
+    {groups.map((g) => (
+      <fieldset>
+        <legend>{g.legend}</legend>
+        <div class="seg">
+          {g.options.map(([value, label]) => (
+            <label>
+              <input type="radio" name={g.name} value={value} />
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+    <p class="settings-note">Saved on this device only.</p>
+    <button class="done">Done</button>
+  </form>
+</dialog>

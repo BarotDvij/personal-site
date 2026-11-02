@@ -1,0 +1,48 @@
+---
+import '@fontsource-variable/inter-tight';
+import '@fontsource/silkscreen/latin-400.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" data-mode="cv" data-theme="light" data-motion="full" data-sound="off">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f6f6f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1318" media="(prefers-color-scheme: dark)" />
+    <!-- Apply saved preferences before first paint. Mirrors src/scripts/prefs.ts. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement, p = {};
+        try { p = JSON.parse(localStorage.getItem('dvij.prefs') || '{}'); } catch (e) {}
+        var mq = function (q) { return !!(window.matchMedia && matchMedia(q).matches); };
+        d.dataset.theme = p.theme === 'light' || p.theme === 'dark' ? p.theme : (mq('(prefers-color-scheme: dark)') ? 'dark' : 'light');
+        d.dataset.motion = p.motion === 'full' || p.motion === 'reduced' ? p.motion : (mq('(prefers-reduced-motion: reduce)') ? 'reduced' : 'full');
+        d.dataset.mode = location.hash === '#tour' ? 'city' : (p.mode === 'city' ? 'city' : 'cv');
+        d.dataset.sound = p.sound === 'on' ? 'on' : 'off';
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

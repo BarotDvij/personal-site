@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Wiki from '../components/Wiki.astro';
+import City from '../components/City.astro';
+import Settings from '../components/Settings.astro';
+import profile from '../../content/profile.json';
+---
+
+<Base
+  title={`${profile.name} | Product, data, AI, and code`}
+  description="Dvij Barot is a Waterloo Management Engineering student building across product, data, AI, and software. Read the article or explore Dvij City."
+>
+  <Wiki />
+  <City />
+  <Settings />
+  <div class="mode-wipe" aria-hidden="true"></div>
+</Base>
+
+<script>
+  import '../scripts/main';
+</script>
