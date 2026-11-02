@@ -43,6 +43,13 @@ No console or gaming PC growing up, so the gaming was browser games. Planned min
 - Tennis (Pong-like)
 - Tank Trouble
 - Chess
+- Cricket games (mouse-controlled batting)
+- Henry Stickmin series
+- Stickman fighting games
+- Duck Life
+- Pac-Man
+- Snake
+- Minesweeper
 
 ## Build facts worth mentioning
 - Built in one autonomous session from a brief, a content file, and a list of constraints
