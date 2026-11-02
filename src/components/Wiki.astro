@@ -1,5 +1,6 @@
 ---
 import profile from '../../content/profile.json';
+import Cite from './Cite.astro';
 
 const lensNames: Record<string, string> = {
   marketing: 'Marketer',
@@ -98,7 +99,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
             <th scope="row">Known for</th>
             <td>
               <ul>
-                <li>3 hackathon podiums in 7 days<sup><a href={`#ref-${cityscapes}`}>[{cityscapes}]</a></sup></li>
+                <li>3 hackathon podiums in 7 days<Cite n={cityscapes} /></li>
                 <li>Eval-driven agents (68% → 97%)</li>
                 <li>Booking time 6 min → 30 s</li>
               </ul>
@@ -124,7 +125,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </p>
     <p>
       Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
-      2026, Barot's teams placed first, second, and first at three hackathons<sup><a href={`#ref-${cityscapes}`}>[{cityscapes}]</a></sup><sup><a href={`#ref-${urbanMarble}`}>[{urbanMarble}]</a></sup>.
+      2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
 
@@ -165,7 +166,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           <article class="project lensed" data-lenses={p.lenses.join(' ')}>
             <h3>
               {p.name}
-              <sup><a href={`#ref-${projectRefs[i]}`}>[{projectRefs[i]}]</a></sup>
+              <Cite n={projectRefs[i]} />
             </h3>
             {'award' in p && p.award && <p class="award">{p.award}</p>}
             {'status' in p && p.status && <p class="award status">{p.status}</p>}

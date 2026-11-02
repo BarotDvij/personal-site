@@ -257,7 +257,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, x + w / 2 + 1, top + 2, w / 2 - 3, bh, shade('#3b82f6', p));
         centeredText(ctx, 'A', x + w / 4, top + 2 + bh / 2 - 2, '#ffffff');
         centeredText(ctx, 'B', x + (3 * w) / 4, top + 2 + bh / 2 - 2, '#ffffff');
-        centeredText(ctx, 'VS', cx, top + bh + 3 - 9, shade('#2a2233', p));
       } else {
         rect(ctx, x + 2, top + 2, w - 4, bh, shade('#1f2b3d', p));
         s.text?.forEach((t, i) => centeredText(ctx, t, cx, top + 8 + i * 10, i === 0 ? '#9bd23c' : '#ffffff'));
@@ -509,7 +508,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   }
 
   // Layer labels
-  text(ctx, 'DATA LAYER', 26, GROUND + 12, '#f0a868');
+  text(ctx, 'DATA LAYER', 26, GROUND + 44, '#f0a868');
   text(ctx, '22 PIPELINES KEPT RUNNING', 1820, DEEP_Y + 7, '#f0a868');
 }
 
@@ -518,13 +517,11 @@ function drawStreet(ctx: Ctx, p: Palette) {
   rect(ctx, 0, GROUND + 3, WORLD_W, 1, p.curb);
   for (let xx = 0; xx < WORLD_W; xx += 12) rect(ctx, xx, GROUND + 1, 1, 2, p.curb);
 
+  // District name plates sit in the curb so buildings never cover them.
   for (const d of DISTRICTS) {
-    const color = LENS_COLOR[d.lens];
     const label = d.name.toUpperCase().replace("'", '');
-    const sx = d.x0 + 8;
-    rect(ctx, sx, GROUND - 30, 1, 30, p.lamp);
-    box(ctx, sx - 2, GROUND - 40, textWidth(label) + 6, 9, shade(color, p), p);
-    text(ctx, label, sx + 1, GROUND - 38, '#ffffff');
+    box(ctx, d.x0 + 4, GROUND + 6, textWidth(label) + 6, 9, shade(LENS_COLOR[d.lens], p), p);
+    text(ctx, label, d.x0 + 7, GROUND + 8, '#ffffff');
   }
 
   const lampXs = [120, 262, 538, 645, 820, 1072, 1210, 1306, 1420, 1610, 1792, 1905, 2016, 2120, 2222];
@@ -540,6 +537,10 @@ export function buildCityLayer(p: Palette) {
   drawUnderground(ctx, p);
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
+  for (const d of DISTRICTS) {
+    rect(ctx, d.x0 + 3, GROUND - 26, 1, 26, p.lamp);
+    rect(ctx, d.x0 + 4, GROUND - 26, 8, 5, shade(LENS_COLOR[d.lens], p));
+  }
   // Welcome banner
   sign(ctx, 'WELCOME TO DVIJ CITY', 200, 48, '#e8c547', '#2a2233', p);
   return c;

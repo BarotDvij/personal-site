@@ -1,0 +1,9 @@
+---
+interface Props {
+  n: number;
+}
+const { n } = Astro.props;
+const label = `[${n}]`;
+---
+
+<sup class="cite"><a href={`#ref-${n}`} aria-label={`Reference ${n}`}>{label}</a></sup>

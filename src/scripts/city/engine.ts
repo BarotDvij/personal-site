@@ -58,7 +58,9 @@ export function mountCity(root: HTMLElement): City {
 
   function resize() {
     const w = root.clientWidth, h = root.clientHeight;
-    scale = Math.max(1, Math.round(h / WORLD_H));
+    // Whole-number scaling keeps pixels crisp. Narrow screens drop a step so
+    // more of the street fits across.
+    scale = Math.max(1, Math.min(Math.round(h / WORLD_H), Math.floor(w / 160)));
     viewW = Math.ceil(w / scale);
     viewH = Math.ceil(h / scale);
     offsetY = viewH - WORLD_H;
@@ -261,7 +263,7 @@ export function mountCity(root: HTMLElement): City {
     const motion = !reduced();
     if (tier === 'high' || !motion) drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
     ctx.drawImage(cityLayer, ox, offsetY);
-    drawPackets(ctx, paths, motion ? t : 0, tier === 'high' ? 3 : 1, ox, offsetY, viewW);
+    drawPackets(ctx, paths, motion ? t : 0, tier === 'high' ? 4 : 1, ox, offsetY, viewW);
     if (motion) drawBeacons(ctx, t, ox, offsetY, palette);
     if (hovered) drawHighlight(ctx, hovered, ox, offsetY, motion ? t : 0);
 
