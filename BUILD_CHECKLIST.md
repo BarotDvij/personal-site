@@ -64,12 +64,25 @@ Decisions made without asking are logged at the bottom so they are easy to revie
 - [x] Print stylesheet for the Wiki (recruiters print)
 - [x] JSON-LD Person data, sitemap, robots.txt
 - [x] CI: GitHub Actions runs type check and build on every push
-- [ ] Final screenshot pass of everything
+- [x] Final regression pass: screenshots, keyboard walkthrough, deep links, touch swipe. Zero console errors
+- [x] Content integrity tests (6) in CI so editing profile.json can't silently break the city
+- [x] Photo slot (`photo.src` in profile.json) and `public/media/` ready for your media
+- [x] Webring PR drafted in `docs/WEBRING.md` (not submitted)
+- [x] Phone layout: lead paragraph and stats before the infobox, compact header
 
 ## Not doing without you
 - Opening a pull request, merging to `main`, or touching the live domain
 - Submitting the uwaterloo.network webring PR (needs your photo and approval)
 - Writing your headline or personal details in final form (drafts are marked)
+
+## What needs you next
+1. Connect Vercel (vercel.com/new, import the repo) to get a live preview URL for this branch
+2. Review on your phone and laptop, then tell me what to change
+3. Headline: replace the draft in `content/profile.json`
+4. Spice: hobbies, fun facts, taste
+5. Media: square portrait, Go Lime ad footage, CityScapes and Urban Marble screenshots
+6. Confirm the Urban Marble stack (Mapbox or CesiumJS)
+7. When happy: merge `feat/scaffold` into `main`, point dvijbarot.wiki at Vercel, submit the webring PR
 
 ## Decision log
 - Headline is a draft built from your LinkedIn post. Marked `headlineDraft: true` in profile.json.
