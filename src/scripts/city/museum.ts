@@ -53,8 +53,9 @@ export const EXHIBITS: Exhibit[] = [
     colors: { g: '#9aa3ad', k: '#2a2233' },
   },
   {
-    title: 'Cricket batting games',
+    title: 'Top Spinner Cricket',
     note: 'Mouse-controlled batting: time the swing and send it to the boundary.',
+    link: { href: 'https://www.y8.com/games/top_spinner_cricket', label: 'Play it' },
     art: ['.......w', '......w.', '.....ww.', '....ww..', '...ww...', '..ww....', '.w....r.', 'w.....rr'],
     colors: { w: '#d9b878', r: '#e0302f' },
   },

@@ -162,6 +162,27 @@ function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: st
   centeredText(ctx, label, cx, y + 2, ink(bg, fg));
 }
 
+// Ribbon banner: a wide centre panel with two folded tails that have V notches.
+function ribbon(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
+  const tw = textWidth(label), w = tw + 24, h = 21, tail = 18, th = 17, nd = 9;
+  const x = Math.round(cx - w / 2), ty = y + 7, fill = shade(bg, p), dark = shade(mixHex(bg, '#000000', 0.25), p);
+  for (const side of [-1, 1]) {
+    const x0 = side < 0 ? x - tail + 3 : x + w - 3;
+    for (let c = 0; c < tail; c++) {
+      const d = side < 0 ? c : tail - 1 - c;
+      for (let r = 0; r < th; r++) {
+        const notch = Math.max(0, nd - d) >= Math.abs(r - (th - 1) / 2) * (nd / (th / 2)) + 0.5;
+        if (notch) continue;
+        const edge = r === 0 || r === th - 1 || c === 0 || c === tail - 1;
+        rect(ctx, x0 + c, ty + r, 1, 1, edge ? p.outline : dark);
+      }
+    }
+  }
+  box(ctx, x, y, w, h, fill, p);
+  rect(ctx, x + 2, y + 2, w - 4, 1, shade(mixHex(bg, '#ffffff', 0.35), p));
+  centeredText(ctx, label, cx, y + 8, ink(bg, fg));
+}
+
 function tree(ctx: Ctx, x: number, p: Palette, size = 1) {
   const leaf = shade('#3f9a48', p), leafHi = shade('#6cc46a', p), trunk = shade('#6b4428', p);
   const s = size;
@@ -694,7 +715,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       const sp = Math.min(15, Math.floor((w - 28) / label.length));
       const lx0 = x + 10 + Math.round((w - 20 - ((label.length - 1) * sp + 5)) / 2);
       label.split('').forEach((ch, i) => text(ctx, ch, lx0 + i * sp, top + 7, neon[i % neon.length]));
-      for (let i = 0; i < w - 24; i += 4) rect(ctx, x + 12 + i, top + 2, 2, 1, i % 8 ? '#e8c547' : '#ffffff');
+      // At night these bulbs flash, drawn live in drawProps instead.
+      if (!p.night) for (let i = 0; i < w - 24; i += 4) rect(ctx, x + 12 + i, top + 2, 2, 1, i % 8 ? '#e8c547' : '#ffffff');
       // Screens
       for (let i = 0; i < 4; i++) {
         const cell = (w - 20) / 4, sw = Math.min(22, Math.floor(cell) - 2);
@@ -709,7 +731,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 19, GROUND - 44, 6, 5, shade('#e0457b', p));
       box(ctx, x + w / 2 - 14, GROUND - 26, 28, 26, p.night ? '#3a2f6a' : '#5a4a8a', p);
       rect(ctx, x + w / 2, GROUND - 25, 1, 25, p.outline);
-      for (let i = 0; i < w; i += 6) rect(ctx, x + i, top + 16, 3, 2, neon[(i / 6) % neon.length]);
+      if (!p.night) for (let i = 0; i < w; i += 6) rect(ctx, x + i, top + 16, 3, 2, neon[(i / 6) % neon.length]);
       break;
     }
     case 'pond': {
@@ -964,7 +986,7 @@ export function buildCityLayer(p: Palette) {
     }
   }
   // Welcome banner
-  sign(ctx, 'WELCOME TO DVIJ CITY', 200, 48, '#e8c547', '#2a2233', p);
+  ribbon(ctx, 'WELCOME TO DVIJ CITY', 80, 66, '#e8c547', '#2a2233', p);
   return c;
 }
 
@@ -1250,6 +1272,19 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
         stackCell(ctx, bx, land, BLOCK_COLORS[k % BLOCK_COLORS.length], p);
       } else if (Math.floor(t / 120) % 2) {
         rect(ctx, s.x + 12 + originX, land, 19, 3, '#ffffff');
+      }
+    }
+    if (s.kind === 'arcadehall' && p.night) {
+      // Marquee dashes and the bulb strip chase on and off after dark.
+      const neon = ['#e0457b', '#f2a33a', '#e8c547', '#3fb950', '#22b8cf', '#9b6bf2'];
+      const step = Math.floor(t / 350), ax = s.x + originX;
+      for (let i = 0; i < s.w - 24; i += 4) {
+        const on = (i / 4 + step) % 2 === 0;
+        rect(ctx, ax + 12 + i, top + 2, 2, 1, on ? (i % 8 ? '#e8c547' : '#ffffff') : shade('#3a3350', p));
+      }
+      for (let i = 0; i < s.w; i += 6) {
+        const on = (i / 6 + step) % 2 === 0;
+        rect(ctx, ax + i, top + 16, 3, 2, on ? neon[(i / 6) % neon.length] : shade('#2a1f4a', p));
       }
     }
     if (s.kind === 'construction') {
