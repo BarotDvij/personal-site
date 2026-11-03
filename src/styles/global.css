@@ -1066,7 +1066,16 @@ blockquote p {
 }
 
 .hud-score {
-  background: rgb(26 22 38 / 0.84); /* 8% more see-through than the other HUD panels */
+  /* Frosted glass: neutral, mostly clear, with a soft blur behind the text. */
+  background: rgb(12 14 20 / 0.34);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 -3px 0 0 rgb(255 255 255 / 0.55),
+    0 3px 0 0 rgb(255 255 255 / 0.55),
+    -3px 0 0 0 rgb(255 255 255 / 0.55),
+    3px 0 0 0 rgb(255 255 255 / 0.55);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55);
   white-space: nowrap;
   margin: 6px;
   padding: 6px 12px;
@@ -1077,7 +1086,7 @@ blockquote p {
 }
 
 .hud-score b {
-  color: #9bd23c;
+  color: #a8c96a;
   font-weight: 400;
 }
 
