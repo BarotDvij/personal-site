@@ -1066,6 +1066,8 @@ blockquote p {
 }
 
 .hud-score {
+  background: rgb(26 22 38 / 0.84); /* 8% more see-through than the other HUD panels */
+  white-space: nowrap;
   margin: 6px;
   padding: 6px 12px;
   font-size: 12px;

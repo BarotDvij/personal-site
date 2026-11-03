@@ -36,7 +36,7 @@
   "highlights": [
     {
       "value": "3 in 7 days",
-      "label": "hackathon podiums (two 1st, one 2nd)",
+      "label": "hackathon podiums",
       "lenses": [
         "dev",
         "ai"
@@ -44,7 +44,7 @@
     },
     {
       "value": "68% → 97%",
-      "label": "routing accuracy after building an eval harness",
+      "label": "routing accuracy via an eval harness",
       "lenses": [
         "ai",
         "dev"
@@ -52,7 +52,7 @@
     },
     {
       "value": "6 min → 30 s",
-      "label": "booking time on a platform I product-owned",
+      "label": "faster booking, product-owned",
       "lenses": [
         "pm",
         "dev"
@@ -60,7 +60,7 @@
     },
     {
       "value": "$100K",
-      "label": "rebrand budget owned at Go Lime",
+      "label": "rebrand budget at Go Lime",
       "lenses": [
         "marketing",
         "pm"
@@ -68,7 +68,7 @@
     },
     {
       "value": "$50K",
-      "label": "rebate fraud investigated in Snowflake",
+      "label": "rebate fraud investigated",
       "lenses": [
         "data"
       ]
