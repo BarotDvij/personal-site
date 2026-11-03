@@ -1,7 +1,7 @@
 /* ---------- tokens ---------- */
 
 :root {
-  --wiki-max: 3200px;
+  --wiki-max: 2000px;
   --toc-w: 220px;
   --paper: #ffffff;
   --page: #f6f6f4;
@@ -654,6 +654,18 @@ q {
   /* Line the Article and Talk tabs up with the article column. */
   .tabs {
     padding-left: calc(16px + var(--toc-w) + 20px);
+  }
+}
+
+@media (min-width: 1600px) {
+  /* Mirror the contents column with an empty gutter on the right so the
+     article sits centred. Below this width the gutter collapses. */
+  .wiki-body {
+    grid-template-columns: var(--toc-w) minmax(0, 1fr) var(--toc-w);
+  }
+
+  .tabs {
+    padding-right: calc(16px + var(--toc-w) + 20px);
   }
 }
 
