@@ -377,7 +377,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         // exact border of the cell.
         for (let yy = gTop; yy + 10 <= GROUND - 14; yy += 10)
           for (let xx = gx; xx < gx + gw; xx += 4)
-            if (r() < 0.55) rect(ctx, xx, yy, Math.min(4, gx + gw - xx), 10, p.lit);
+            if (r() < 0.33) rect(ctx, xx, yy, Math.min(4, gx + gw - xx), 10, p.lit);
       } else {
         for (let k = 0; k < GROUND - gTop; k += 1) {
           const rx = gx + Math.round(k * 0.35) % (gw + 18) - 6;
@@ -786,7 +786,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   }
 
   // Trunk lines
-  pipe(ctx, 20, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
+  pipe(ctx, 4, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
   pipe(ctx, DEEP_X, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
   for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
