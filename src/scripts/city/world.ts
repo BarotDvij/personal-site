@@ -55,7 +55,7 @@ export type Ref =
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'refinery' | 'hq' | 'mediahq' | 'glass'
+  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'lawn' | 'refinery' | 'hq' | 'mediahq' | 'glass'
   | 'loadtruck' | 'chesstable' | 'patio';
 
 export interface Structure {
@@ -103,7 +103,8 @@ export const STRUCTURES: Structure[] = [
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1780, w: 92, h: 140, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1826 },
   { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1890, w: 72, h: 150, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1926 },
   { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 1980, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN>10 S'] },
-  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2094, w: 110, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2170 },
+  { id: 'mower', label: 'Robot Mower: Lawn Sweeper', kind: 'lawn', x: 2094, w: 40, h: 20, district: 'marketing', ref: { type: 'game', id: 'sweeper' } },
+  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2134, w: 70, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2170 },
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
 
   // Civic Centre

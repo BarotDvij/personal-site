@@ -1,4 +1,4 @@
-// Bug Sweeper: clear the construction lot without digging up a bug.
+// Lawn Sweeper: mow the lawn without digging up a bug.
 
 import type { Api, Game, GameModule } from '../types';
 import { text, textWidth } from '../../pixelfont';
@@ -69,7 +69,7 @@ function create(api: Api): Game {
     if (open.filter((o, j) => o && !bug[j]).length === N * N - BUGS) {
       done = true;
       api.setScore(Math.floor(time / 1000), `${Math.floor(time / 1000)}s`);
-      api.over(`Lot cleared in ${Math.floor(time / 1000)}s.`, true);
+      api.over(`Lawn cleared in ${Math.floor(time / 1000)}s.`, true);
     }
   }
 
@@ -131,16 +131,20 @@ function create(api: Api): Game {
               if (n) text(ctx, String(n), px + 4, py + 3, NUM[n]);
             }
           } else {
-            ctx.fillStyle = '#7b4a2a';
+            const alt = (x + y) % 2 === 0;
+            ctx.fillStyle = alt ? '#7fd13b' : '#72c534';
             ctx.fillRect(px, py, C, C);
-            ctx.fillStyle = '#9a6238';
+            ctx.fillStyle = '#a6ec5f';
             ctx.fillRect(px, py, C - 1, 1);
             ctx.fillRect(px, py, 1, C - 1);
-            ctx.fillStyle = '#4d2f1c';
+            ctx.fillStyle = '#4f9a2a';
             ctx.fillRect(px + C - 1, py, 1, C);
             ctx.fillRect(px, py + C - 1, C, 1);
+            ctx.fillStyle = '#5aae2c';
+            ctx.fillRect(px + 3, py + 7, 1, 2);
+            ctx.fillRect(px + 8, py + 3, 1, 2);
             if (flag[i]) {
-              ctx.fillStyle = '#e8c547';
+              ctx.fillStyle = '#ffffff';
               ctx.fillRect(px + 4, py + 2, 1, 8);
               ctx.fillStyle = '#e0457b';
               ctx.fillRect(px + 5, py + 2, 4, 3);

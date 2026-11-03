@@ -23,8 +23,8 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'sweeper',
-    title: 'Bug Sweeper',
-    blurb: 'Clear the lot without stepping on a bug.',
+    title: 'Lawn Sweeper',
+    blurb: 'Mow the lawn without hitting a bug.',
     credit: 'Inspired by Minesweeper, which I played growing up.',
     help: 'Click to dig. Right-click, or switch to flag mode, to flag a bug.',
     load: () => import('./games/sweeper'),

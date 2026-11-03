@@ -619,16 +619,19 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + w - 5, top + 4, 6, 4, shade('#e0302f', p));
       break;
     }
-    case 'showroom': {
-      // A lawn out front with ground-mounted solar panels (the robot mower is
-      // animated in drawProps), and the showroom itself on the right.
-      const lawn = 40, bx = x + lawn, bw = w - lawn, bcx = bx + bw / 2;
-      for (let i = 0; i < lawn; i += 4) rect(ctx, x + i, GROUND - 3, 4, 3, shade(i % 8 ? '#4fa84f' : '#5fbe5a', p));
-      for (const [px, ph] of [[x + 3, 0], [x + 21, 0]]) {
-        rect(ctx, px + 7, GROUND - 12 - ph, 1, 9, p.lamp);
-        for (let k = 0; k < 6; k++) rect(ctx, px + k * 2, GROUND - 14 - ph + k, 16 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
-        rect(ctx, px, GROUND - 14 - ph, 16, 1, shade('#5d86c9', p));
+    case 'lawn': {
+      // The lawn out front of the showroom, with ground-mounted solar panels.
+      // The robot mower is animated in drawProps and plays Lawn Sweeper.
+      for (let i = 0; i < w; i += 4) rect(ctx, x + i, GROUND - 3, 4, 3, shade(i % 8 ? '#4fa84f' : '#5fbe5a', p));
+      for (const px of [x + 3, x + 21]) {
+        rect(ctx, px + 7, GROUND - 12, 1, 9, p.lamp);
+        for (let k = 0; k < 6; k++) rect(ctx, px + k * 2, GROUND - 14 + k, 16 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
+        rect(ctx, px, GROUND - 14, 16, 1, shade('#5d86c9', p));
       }
+      break;
+    }
+    case 'showroom': {
+      const bx = x, bw = w, bcx = bx + bw / 2;
       box(ctx, bx, top + 12, bw, h - 12, shade('#e8eef2', p), p);
       for (let i = 0; i < 4; i++) {
         const px = bx + 4 + i * ((bw - 8) / 4);
@@ -1294,7 +1297,7 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       rect(ctx, hx - 3, top + 3 + len, 7, 5, shade('#9aa3ad', p));
       rect(ctx, hx - 3, top + 3 + len, 7, 1, shade('#c4ccd4', p));
     }
-    if (s.kind === 'showroom') {
+    if (s.kind === 'lawn') {
       // Robot mower driving back and forth across the lawn.
       const span = 24, period = 6000;
       const phase = (t % period) / period;
