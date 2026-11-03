@@ -309,12 +309,12 @@ html[data-mode='city'] body {
 }
 
 .locator img {
-  width: 208.34%;
+  width: 228.6%;
   max-width: none;
 }
 
 .notice-thumb img {
-  height: 340px;
+  height: 384px;
   object-fit: cover;
   object-position: left top;
 }
@@ -874,7 +874,7 @@ blockquote p {
   }
 
   .notice-thumb img {
-    height: 240px;
+    height: 256px;
   }
 
   .article > .sitenotice,
