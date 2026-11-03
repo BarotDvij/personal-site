@@ -157,12 +157,12 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </aside>
 
     <p class="lead">
-      <b>Dvij Barot</b> is a Management Engineering student at the <a href={profile.education.url}>University of Waterloo</a> looking for <b>{profile.seeking}</b>. He works across
-      AI engineering and enablement, product management, data engineering, and software development. Barot is
+      <b>Dvij Barot</b> is a Management Engineering student at the <a href={profile.education.url}>{profile.education.school}</a> looking for <b>{profile.seeking}</b>. He works across
+      AI engineering and enablement, <a href="https://en.wikipedia.org/wiki/Product_management">product management</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">data engineering</a>, and <a href="https://en.wikipedia.org/wiki/Software_development">software development</a>. Barot is
       currently holding the {current.role} position at <Org e={current} />, <Fragment set:html={current.now} />.
     </p>
     <p class="lead-more">
-      Barot's work spans marketing campaigns, data pipelines, LLM evaluation, and full-stack products. In one week in
+      Barot's work spans <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, LLM evaluation, and full-stack products. In one week in
       2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
@@ -293,7 +293,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </section>
 
     <section id="references" aria-labelledby="refs-h">
-      <h2 id="refs-h">References</h2>
+      <h2 id="references-h">References</h2>
       <ul class="ext">
         {profile.colleagues.map((c) => (
           <li><a href={c.url}>{c.name}</a>{c.note && <span> ({c.note})</span>} on LinkedIn</li>
