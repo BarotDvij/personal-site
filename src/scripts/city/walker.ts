@@ -179,13 +179,16 @@ export function drawWalker(ctx: CanvasRenderingContext2D, w: Walker, ox: number,
 export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structure | undefined, ox: number, oy: number) {
   if (!s || w.warp > 0 || w.rise > 0) return;
   const label =
-    s.kind !== 'warp' ? (s.ref?.type === 'game' ? 'UP: PLAY' : 'UP: OPEN') : onPipe(w) ? (w.facing === 1 ? 'DOWN: WARP >' : '< DOWN: WARP') : w.jump === 0 ? 'SPACE: HOP ON' : '';
+    s.kind !== 'warp' ? (s.ref?.type === 'game' ? 'UP: PLAY' : 'UP: OPEN') : onPipe(w) ? (w.facing === 1 ? 'DOWN: WARP >' : '< DOWN: WARP') : w.jump === 0 ? 'SPACE: JUMP' : '';
   if (!label) return;
   const cx = Math.round(w.x + ox);
   // Letters get 1px extra spacing, and the box gets 3px padding and a white rim
   // so the gold text reads clearly over any background.
   const GAP = 5, PAD = 3;
-  const tw = label.length * GAP - (GAP - 3);
+  // The space after a colon is dropped and the colon itself is advanced a little
+  // further, which tightens the gap between the key and its command.
+  const shown = label.replace(': ', ':');
+  const tw = [...shown].reduce((n, ch) => n + (ch === ':' ? 7 : GAP), 0) - (GAP - 3);
   const width = tw + PAD * 2;
   const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump) - 4;
   const x0 = Math.round(cx - width / 2);
@@ -195,7 +198,11 @@ export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structur
   ctx.fillStyle = '#2a2233';
   ctx.fillRect(x0, y, width, PROMPT_THICK);
   ctx.fillRect(cx - 1, y + PROMPT_THICK, 2, 2);
-  text(ctx, label, x0 + PAD, y + 3, '#e8c547', GAP);
+  let lx = x0 + PAD;
+  for (const ch of shown) {
+    text(ctx, ch, lx, y + 3, '#e8c547');
+    lx += ch === ':' ? 7 : GAP;
+  }
 }
 
 function shadeNight(hex: string) {
