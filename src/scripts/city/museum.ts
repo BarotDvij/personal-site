@@ -149,7 +149,7 @@ export const HISTORY: Wing[] = [
   },
 ];
 
-const esc = (s: string) =>
+export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 function pixelSvg(art: string[], colors: Record<string, string>) {

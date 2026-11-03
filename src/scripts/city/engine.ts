@@ -4,11 +4,11 @@ import {
   WORLD_W, WORLD_H, GROUND, DISTRICTS, LENS_COLOR, STRUCTURES, districtAt, type Structure,
 } from './world';
 import {
-  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
+  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, parallaxPad, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
   drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor } from './panels';
-import { FrameProbe, hintTier, type Tier } from '../quality';
+import { frameProbe, hintTier, type Tier } from '../quality';
 import { PROMPT_TOP, createWalker, drawPrompt, drawWalker, jump, nearby, standOn, startWarp, updateWalker } from './walker';
 import { sfx } from '../sfx';
 
@@ -37,7 +37,7 @@ export function mountCity(root: HTMLElement): City {
   let farLayer: HTMLCanvasElement | null = null;
   let midLayer: HTMLCanvasElement | null = null;
   let tier: Tier = hintTier();
-  const probe = new FrameProbe();
+  const probe = frameProbe();
   const paths = preparePaths();
   const clouds = makeClouds(7);
 
@@ -56,12 +56,17 @@ export function mountCity(root: HTMLElement): City {
 
   // ----- layers -----
 
-  function rebuild() {
-    palette = html.dataset.theme === 'dark' ? PALETTES.night : PALETTES.day;
-    cityLayer = buildCityLayer(palette);
+  // Layers sized to the viewport, rebuilt on resize and theme change.
+  function buildViewLayers() {
     skyLayer = buildSkyLayer(palette, viewW, Math.max(1, offsetY + GROUND));
     farLayer = buildParallaxLayer(palette, 'far', viewW);
     midLayer = buildParallaxLayer(palette, 'mid', viewW);
+  }
+
+  function rebuild() {
+    palette = html.dataset.theme === 'dark' ? PALETTES.night : PALETTES.day;
+    cityLayer = buildCityLayer(palette);
+    buildViewLayers();
     html.dataset.tier = tier;
     dirty = true;
   }
@@ -93,9 +98,7 @@ export function mountCity(root: HTMLElement): City {
       if (tag) tag.style.bottom = `calc(100% + ${Math.max(10, (PROMPT_TOP - s.h) * scale + 10)}px)`;
     }
     root.style.setProperty('--px', `${scale}px`);
-    skyLayer = buildSkyLayer(palette, viewW, Math.max(1, offsetY + GROUND));
-    farLayer = buildParallaxLayer(palette, 'far', viewW);
-    midLayer = buildParallaxLayer(palette, 'mid', viewW);
+    buildViewLayers();
     clampTarget();
     camX = targetX;
     dirty = true;
@@ -244,7 +247,7 @@ export function mountCity(root: HTMLElement): City {
 
   // ----- minimap -----
 
-  DISTRICTS.forEach((d, i) => {
+  for (const d of DISTRICTS) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'minimap-seg';
@@ -256,10 +259,9 @@ export function mountCity(root: HTMLElement): City {
       dismissWelcome();
       sfx.warp();
       lookAt((d.x0 + d.x1) / 2);
-      void i;
     });
     minimap.append(b);
-  });
+  }
 
   // ----- input -----
 
@@ -353,19 +355,19 @@ export function mountCity(root: HTMLElement): City {
     if (k === 'ArrowLeft' || k === 'ArrowRight' || k === 'a' || k === 'd' || k === 'Shift') {
       walkKeys.add(k);
       if (k !== 'Shift') follow = true;
-    } else if (act(k, e.target as HTMLElement)) {
-      // handled
-    } else if (k === 'PageDown' || k === 'PageUp') {
-      const i = districtAt(walker.x) + (k === 'PageDown' ? 1 : -1);
-      const d = DISTRICTS[Math.max(0, Math.min(DISTRICTS.length - 1, i))];
-      teleport(d.x0 + 36);
-      sfx.warp();
-    } else if (k === 'Home') {
-      teleport(36);
-    } else if (k === 'End') {
-      teleport(WORLD_W - 60);
-    } else {
-      return;
+    } else if (!act(k, e.target as HTMLElement)) {
+      if (k === 'PageDown' || k === 'PageUp') {
+        const i = districtAt(walker.x) + (k === 'PageDown' ? 1 : -1);
+        const d = DISTRICTS[Math.max(0, Math.min(DISTRICTS.length - 1, i))];
+        teleport(d.x0 + 36);
+        sfx.warp();
+      } else if (k === 'Home') {
+        teleport(36);
+      } else if (k === 'End') {
+        teleport(WORLD_W - 60);
+      } else {
+        return;
+      }
     }
     e.preventDefault();
     dismissWelcome();
@@ -489,7 +491,7 @@ export function mountCity(root: HTMLElement): City {
     const dw = WORLD_W * z, dh = WORLD_H * z;
     for (const [layer, f] of [[farLayer, PARALLAX.far], [midLayer, PARALLAX.mid]] as const) {
       if (!layer) continue;
-      const pad = Math.ceil(viewW / 2) + 2;
+      const pad = parallaxPad(viewW);
       ctx.drawImage(layer, Math.round(viewW / 2 - (c * f + pad) * z), Math.round(viewH - dh), Math.round(layer.width * z), Math.round(dh));
     }
     ctx.drawImage(cityLayer, 0, 0, WORLD_W, WORLD_H, Math.round(viewW / 2 - c * z), Math.round(viewH - dh), Math.round(dw), Math.round(dh));
@@ -568,7 +570,7 @@ export function mountCity(root: HTMLElement): City {
 
     if (motion) {
       t += dt;
-      const verdict = probe.push(dt);
+      const verdict = probe(dt);
       if (verdict === 'low' && tier !== 'low') {
         tier = 'low';
         html.dataset.tier = 'low';

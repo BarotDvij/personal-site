@@ -11,25 +11,15 @@ export function hintTier(): Tier {
   return 'high';
 }
 
-export class FrameProbe {
-  private samples: number[] = [];
-  private done = false;
-
-  constructor(private size = 90, private budgetMs = 28) {}
-
-  // Returns 'low' once if the 90th percentile frame blows the budget.
-  push(dt: number): Tier | null {
-    if (this.done) return null;
-    this.samples.push(dt);
-    if (this.samples.length < this.size) return null;
-    this.done = true;
-    const sorted = [...this.samples].sort((a, b) => a - b);
-    const p90 = sorted[Math.floor(sorted.length * 0.9)];
-    return p90 > this.budgetMs ? 'low' : null;
-  }
-
-  reset() {
-    this.samples = [];
-    this.done = false;
-  }
+// Collects 90 frame times, then answers once: 'low' if the 90th percentile
+// frame takes longer than 28 ms. Every later call returns null.
+export function frameProbe() {
+  const samples: number[] = [];
+  return (dt: number): Tier | null => {
+    if (samples.length >= 90) return null;
+    samples.push(dt);
+    if (samples.length < 90) return null;
+    samples.sort((a, b) => a - b);
+    return samples[Math.floor(90 * 0.9)] > 28 ? 'low' : null;
+  };
 }

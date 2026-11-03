@@ -3,10 +3,7 @@
 import profile from '../../../content/profile.json';
 import type { Ref } from './world';
 import { GAMES } from '../arcade/catalog';
-import { BUILT, museumHtml } from './museum';
-
-const esc = (s: string) =>
-  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+import { BUILT, esc, museumHtml } from './museum';
 
 const list = (items: string[]) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
 
@@ -140,4 +137,3 @@ export function panelFor(ref: Ref): PanelContent | null {
   }
 }
 
-export const highlights = profile.highlights;

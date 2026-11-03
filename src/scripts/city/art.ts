@@ -3,14 +3,12 @@
 
 import {
   WORLD_W, WORLD_H, GROUND, TRUNK_Y, DEEP_Y, DEEP_X, JUNCTION_X, TANK_BOTTOM, DISTRICTS, LENS_COLOR,
-  STRUCTURES, PIPE_PATHS, type Structure, type PipePath,
+  STRUCTURES, PIPE_PATHS, type Structure,
 } from './world';
 
 type Ctx = CanvasRenderingContext2D;
 
 import { text, textWidth } from '../pixelfont';
-
-export { text, textWidth };
 
 const centeredText = (ctx: Ctx, s: string, cx: number, y: number, color: string) =>
   text(ctx, s, Math.round(cx - textWidth(s) / 2), y, color);
@@ -1073,7 +1071,7 @@ export type ParallaxKind = keyof typeof PARALLAX;
 const CN_TOWER_X = 925; // Downtown AI District
 const WILLIS_TOWER_X = 1470; // City Square
 
-const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
+export const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
 function mixHex(a: string, b: string, t: number) {
   const x = parseInt(a.slice(1), 16), y = parseInt(b.slice(1), 16);
@@ -1251,8 +1249,8 @@ export function drawClouds(ctx: Ctx, clouds: Cloud[], p: Palette, camX: number, 
 
 interface PreparedPath { color: string; segs: { x0: number; y0: number; x1: number; y1: number; len: number }[]; total: number }
 
-export function preparePaths(paths: PipePath[] = PIPE_PATHS): PreparedPath[] {
-  return paths.map((path) => {
+export function preparePaths(): PreparedPath[] {
+  return PIPE_PATHS.map((path) => {
     const segs = [];
     let total = 0;
     for (let i = 1; i < path.points.length; i++) {
