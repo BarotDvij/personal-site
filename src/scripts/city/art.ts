@@ -426,7 +426,10 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 8, top + 10, w - 16, h - 10, shade('#3c4f73', p), p);
       box(ctx, x + 16, top, w - 32, 12, shade('#4b6190', p), p);
       rect(ctx, cx, top - 16, 1, 16, p.lamp);
-      windows(ctx, p, r, x + 13, top + 26, w - 26, h - 50, 3, 4, 2, 3);
+      // Two-line signs (Chamber of Commerce) push the first window row down,
+      // with one extra row left empty for breathing room.
+      const wDrop = (s.text?.length ?? 1) > 1 ? 14 : 0;
+      windows(ctx, p, r, x + 13, top + 26 + wDrop, w - 26, h - 50 - wDrop, 3, 4, 2, 3);
       box(ctx, x, GROUND - 16, w, 16, shade('#2c3a56', p), p);
       door(ctx, cx, 12, 12, shade('#1a2236', p));
       // One sign per text line, in the district's colour (two lines for long names).
@@ -606,7 +609,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let row = 0; row < 2; row++)
         for (let i = 0; i < 5; i++) {
           if (row === 1 && i === 2) continue;
-          const wx = x + 8 + i * ((w - 24) / 4), wy = top + 30 + row * 18;
+          const wx = x + 8 + i * ((w - 24) / 4), wy = top + 36 + row * 16;
           rect(ctx, wx - 1, wy - 1, 10, 10, trim);
           rect(ctx, wx, wy, 8, 8, p.night ? (i % 2 ? p.lit : p.unlit) : p.glass[0]);
           rect(ctx, wx + 4, wy, 1, 8, trim);
