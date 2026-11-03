@@ -146,3 +146,16 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [ ] Domain live on `dvijbarot.wiki`
 - [ ] Webring widget in the footer
 - [ ] Launch post drafted from `docs/STORY.md`
+
+---
+
+## Decision log
+- Headline is a draft built from your LinkedIn post. Marked `headlineDraft: true` in profile.json.
+- Swap Robotics and OCC appear in the Wiki only, not in the City.
+- Urban Marble stack left as-is with a `todo` flag until you confirm Mapbox vs CesiumJS.
+- Wiki copy avoids pronouns and uses "Barot" in encyclopedia style.
+- Warp pipes use the classic greens you chose (#a4cb0e, #008c00), drawn in our own pixel art. Data pipes are copper. No copied sprites, sounds, or fonts.
+- Packet colors follow the lens of the district they come from.
+- Bug fixed: changing theme or sound on a deep-linked city visit used to drop you back to the article. Preference changes now keep the current view.
+- The Pipelines panel pulls bullets from profile.json automatically by keyword (dbt, Snowflake, Airbyte, Glue, ingestion...), excluding CRM "pipeline accuracy" lines.
+- Wiki roles and projects link into the city with "See it in Dvij City". Swap Robotics and OCC have no building, so no link.
