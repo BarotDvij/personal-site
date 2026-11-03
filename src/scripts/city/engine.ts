@@ -429,7 +429,7 @@ export function mountCity(root: HTMLElement): City {
     </table>
     <h3>How the city works</h3>
     <ul>
-      <li>Districts are lenses: the Industrial Zone holds the data work, Downtown is AI, the Commercial District is for play, the Mixed-Use Zone is marketing and sales, the Civic Centre is product and public life, and Expansion is what is being built next.</li>
+      <li>Districts are lenses: the Industrial Zone holds the data work, Downtown is AI, the City Square is for play, the Mixed-Use Zone is marketing and sales, the Civic Centre is product and public life, and Expansion is what is being built next.</li>
       <li>The copper pipes underground are data pipelines. The packets are real flows of work into the warehouse.</li>
       <li>Day, night, sound, and motion live in Settings.</li>
     </ul>`;

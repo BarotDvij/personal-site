@@ -102,7 +102,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       };
     }
     case 'museum':
-      return { kicker: 'Commercial District', title: 'Museum of Favourites', html: museumHtml() };
+      return { kicker: 'City Square', title: 'Museum of Favourites', html: museumHtml() };
     case 'client': {
       return {
         kicker: 'Downtown AI District',

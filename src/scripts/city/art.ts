@@ -1035,7 +1035,7 @@ export type ParallaxKind = keyof typeof PARALLAX;
 
 // World x of each landmark's district centre.
 const CN_TOWER_X = 925; // Downtown AI District
-const WILLIS_TOWER_X = 1470; // Commercial District
+const WILLIS_TOWER_X = 1470; // City Square
 
 const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 

@@ -32,7 +32,7 @@ export const DISTRICTS: District[] = [
   { id: 'plaza', name: 'Welcome Plaza', lens: 'plaza', x0: 0, x1: 200 },
   { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 200, x1: 650 },
   { id: 'ai', name: 'Downtown AI District', lens: 'ai', x0: 650, x1: 1200 },
-  { id: 'commercial', name: 'Commercial District', lens: 'play', x0: 1200, x1: 1740 },
+  { id: 'commercial', name: 'City Square', lens: 'play', x0: 1200, x1: 1740 },
   { id: 'marketing', name: 'Mixed-Use Zone', lens: 'marketing', x0: 1740, x1: 2280 },
   { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 2280, x1: 2914 },
   { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2914, x1: 3230 },
@@ -91,7 +91,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1076, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1162, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
-  // Commercial District
+  // City Square
   { id: 'patio', label: 'Eco Eats Patio: Pipe Muncher', kind: 'patio', x: 1208, w: 30, h: 24, district: 'commercial', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 1240, w: 84, h: 56, district: 'commercial', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 1282 },
   { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1344, w: 100, h: 94, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
