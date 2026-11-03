@@ -106,8 +106,8 @@ export const STRUCTURES: Structure[] = [
   // Civic Centre
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2320, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2422, w: 76, h: 30, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
-  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2512, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2560 },
-  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 2628, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
+  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 2512, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
+  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2644, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2692 },
   { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2754, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
   { id: 'warp-6', label: 'Warp pipe', kind: 'warp', x: 2874, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 6 } },
 
