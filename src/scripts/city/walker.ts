@@ -187,8 +187,9 @@ export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structur
   const GAP = 5, PAD = 3;
   // The space after a colon is dropped and the colon itself is advanced a little
   // further, which tightens the gap between the key and its command.
-  const shown = label.replace(': ', ':');
-  const tw = [...shown].reduce((n, ch) => n + (ch === ':' ? 7 : GAP), 0) - (GAP - 3);
+  const shown = label.replace(': ', ':').replace(' >', '>').replace('< ', '<');
+  const adv = (i: number) => (shown[i] === ':' || shown[i] === '<' || shown[i + 1] === '>' ? 7 : GAP);
+  const tw = [...shown].reduce((n, _, i) => n + adv(i), 0) - (GAP - 3);
   const width = tw + PAD * 2;
   const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump) - 4;
   const x0 = Math.round(cx - width / 2);
@@ -199,9 +200,9 @@ export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structur
   ctx.fillRect(x0, y, width, PROMPT_THICK);
   ctx.fillRect(cx - 1, y + PROMPT_THICK, 2, 2);
   let lx = x0 + PAD;
-  for (const ch of shown) {
-    text(ctx, ch, lx, y + 3, '#e8c547');
-    lx += ch === ':' ? 7 : GAP;
+  for (let i = 0; i < shown.length; i++) {
+    text(ctx, shown[i], lx, y + 3, '#ffffff');
+    lx += adv(i);
   }
 }
 

@@ -156,10 +156,10 @@ function door(ctx: Ctx, cx: number, w = 8, h = 12, color = '#3a2a24', base = GRO
   rect(ctx, cx + w / 2 - 3, base - h / 2, 1, 1, '#e8c547');
 }
 
-function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
+function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette, force = false) {
   const w = textWidth(label) + 6;
   box(ctx, cx - w / 2, y, w, 9, bg, p);
-  centeredText(ctx, label, cx, y + 2, ink(bg, fg));
+  centeredText(ctx, label, cx, y + 2, force ? fg : ink(bg, fg));
 }
 
 // Ribbon banner: a wide centre panel with two folded tails that have V notches.
@@ -478,7 +478,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         box(ctx, dx, GROUND - 24, 20, 24, shade('#4c5563', p), p);
         for (let yy = GROUND - 22; yy < GROUND; yy += 3) rect(ctx, dx + 1, yy, 18, 1, shade('#5d6676', p));
       }
-      sign(ctx, label, cx, top + 20, LENS_COLOR.data, '#2a2233', p);
+      sign(ctx, label, cx, top + 20, '#fe0199', '#ffffff', p, true);
       break;
     }
     case 'library': {
