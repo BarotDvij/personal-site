@@ -109,7 +109,12 @@ function create(api: Api): Game {
         text(ctx, msg, COLS * C / 2 - textWidth(msg) / 2, 47, '#e8c547');
       }
       const label = `PACKETS ${eaten}`;
-      text(ctx, label, COLS * C - textWidth(label) - 3, 2, '#2a1508');
+      // Written top to bottom along the right pipe, clear of the pipe seams.
+      ctx.save();
+      ctx.translate(COLS * C - 2, C + 4);
+      ctx.rotate(Math.PI / 2);
+      text(ctx, label, 0, 0, '#2a1508');
+      ctx.restore();
     },
   };
 }
