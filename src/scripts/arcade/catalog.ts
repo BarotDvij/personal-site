@@ -49,7 +49,7 @@ export const GAMES: GameInfo[] = [
     id: 'blocks',
     title: 'Block Stack',
     blurb: 'Stack, spin, and clear lines.',
-    credit: 'Inspired by Tetris, the game that pulled me into competitive Tetris in high school.',
+    credit: 'Inspired by Tetris, the game that pulled me into competitive Tetris in high school, thanks to my friend Sup3rbob (aka Harris).',
     help: 'Left and right to move, Up or X to rotate, Z to rotate back, Down to soft drop, Space to hard drop, C to hold.',
     load: () => import('./games/blocks'),
   },
