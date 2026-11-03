@@ -13,12 +13,14 @@ const list = (items: string[]) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).
 const link = (href: string, label: string) =>
   `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`;
 
-interface Media { type: 'image' | 'video'; src: string; poster?: string; w: number; h: number; alt: string }
+interface Media { type: 'image' | 'video' | 'doc'; src: string; poster?: string; w: number; h: number; alt: string }
 
 // Campaign work. Nothing downloads until the panel opens: images are lazy,
 // and videos fetch only their poster until someone presses play.
-const gallery = (items: Media[]) => `<h3>Campaign work</h3><div class="media-grid">${items
-  .map((m) => m.type === 'video'
+const gallery = (items: Media[], title = 'Campaign work') => `<h3>${esc(title)}</h3><div class="media-grid">${items
+  .map((m) => m.type === 'doc'
+    ? `<figure><a href="${esc(m.src)}" target="_blank" rel="noopener"><img src="${esc(m.poster ?? '')}" alt="" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"><figcaption>${esc(m.alt)} <span class="ext" aria-label="(PDF, opens in a new tab)">↗</span></figcaption></a></figure>`
+    : m.type === 'video'
     ? `<figure><video controls playsinline preload="none" poster="${esc(m.poster ?? '')}" width="${m.w}" height="${m.h}" aria-label="${esc(m.alt)}"><source src="${esc(m.src)}" type="video/mp4"></video></figure>`
     : `<figure><img src="${esc(m.src)}" alt="${esc(m.alt)}" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"></figure>`)
   .join('')}</div>`;
@@ -37,7 +39,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return {
         kicker: `${e.dates} · ${e.place}`,
         title: `${e.role}, ${e.org}`,
-        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${'media' in e ? gallery(e.media as Media[]) : ''}`,
+        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${'media' in e ? gallery(e.media as Media[], 'mediaTitle' in e ? (e.mediaTitle as string) : undefined) : ''}`,
       };
     }
     case 'project': {

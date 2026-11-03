@@ -1939,6 +1939,24 @@ html.party .hud-title {
   box-shadow: 0 0 0 2px #2a2233;
 }
 
+.panel-body .media-grid a img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top;
+}
+
+.panel-body .media-grid figcaption {
+  padding: 6px 8px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #f5f1e8;
+}
+
+.panel-body .media-grid a {
+  display: block;
+  text-decoration: none;
+}
+
 .panel-body .media-grid img,
 .panel-body .media-grid video {
   display: block;

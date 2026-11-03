@@ -265,7 +265,106 @@
         "Built and UX-tested self-serve learning modules from the most common advising questions",
         "Built a FastAPI prototype on a team of 5 feeding a BigQuery warehouse and Looker Studio KPI dashboard"
       ],
-      "journey": true
+      "journey": true,
+      "mediaTitle": "Toolkits for small business owners",
+      "media": [
+        {
+          "type": "doc",
+          "src": "/media/occ/seo.pdf",
+          "poster": "/media/occ/seo.webp",
+          "w": 240,
+          "h": 320,
+          "alt": "Search Engine Optimization"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/social.pdf",
+          "poster": "/media/occ/social.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Social Media Marketing"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/photo-tips.pdf",
+          "poster": "/media/occ/photo-tips.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Product Photo Best Practices"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/video-tips.pdf",
+          "poster": "/media/occ/video-tips.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Product Video Best Practices"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/shopify.pdf",
+          "poster": "/media/occ/shopify.webp",
+          "w": 240,
+          "h": 310,
+          "alt": "Shopify Toolkit"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/square.pdf",
+          "poster": "/media/occ/square.webp",
+          "w": 240,
+          "h": 310,
+          "alt": "Square Toolkit"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/crm.pdf",
+          "poster": "/media/occ/crm.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "CRM Systems"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/booking.pdf",
+          "poster": "/media/occ/booking.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Appointment and Booking Software"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/ordering.pdf",
+          "poster": "/media/occ/ordering.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Online Ordering Systems"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/payments.pdf",
+          "poster": "/media/occ/payments.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Online Payment Systems"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/productivity.pdf",
+          "poster": "/media/occ/productivity.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "E-Commerce Productivity Software"
+        },
+        {
+          "type": "doc",
+          "src": "/media/occ/cyber.pdf",
+          "poster": "/media/occ/cyber.webp",
+          "w": 240,
+          "h": 600,
+          "alt": "Cyber Security Software"
+        }
+      ]
     },
     {
       "role": "Business Development Representative",
