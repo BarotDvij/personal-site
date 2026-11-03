@@ -13,10 +13,10 @@
 | Bug Sweeper | Minesweeper | Construction lot | Easy |
 | Trap the Cat | Chat Noir | Park | Easy |
 | Rally | Tennis / Pong | Arcade | Easy |
-| Block Stack | Tetris | Arcade | Easy to medium |
-| Pipe Muncher | Pac-Man | Maze through the pipe network | Easy to medium |
+| Block Stack | Tetris | Arcade, plus the data truck by the Data Lake | Easy to medium |
+| Pipe Muncher | Pac-Man | Arcade, plus the Eco Eats patio table | Easy to medium |
 | Duck Flight | Duck Life (one minigame only: flying or climbing) | Park pond | Easy to medium |
-| Chess | Chess | Library or City Hall | Medium (two players on one device first, computer opponent later) |
+| Chess | Chess | Arcade, plus the chess table in CityScapes Park | Medium (two players on one device first, computer opponent later) |
 | Tank Duel | Tank Trouble | Arcade | Medium (offline two players on one keyboard) |
 
 ## Museum of Favourites (linked, not rebuilt)

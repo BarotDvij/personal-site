@@ -1123,6 +1123,7 @@ blockquote p {
 }
 
 .bldg:hover .tag,
+.bldg.near .tag,
 .bldg:focus-visible .tag {
   opacity: 1;
 }

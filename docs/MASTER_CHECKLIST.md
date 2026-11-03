@@ -92,6 +92,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [x] Pipe Muncher (Pac-Man) maze through the pipe network
 - [x] Duck Flight (one Duck Life minigame) at the park pond
 - [x] Chess, two players on one device, then a simple computer opponent
+- [x] Games out in the city: Block Stack data truck by the Data Lake, Chess table in CityScapes Park, Pipe Muncher on the Eco Eats patio. Name tags pop up on hover and when the character walks past
 - [x] Tank Duel (Tank Trouble), two players on one keyboard
 
 ---

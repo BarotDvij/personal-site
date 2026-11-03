@@ -192,6 +192,14 @@ function warpBody(ctx: Ctx, x: number, y: number, w: number, h: number, p: Palet
   if (w > 16) rect(ctx, x + 6 + Math.floor((w - 8) / 3), y, 1, h, hi);
 }
 
+// Block Stack colours, shared by the truck bed and its falling piece.
+const BLOCK_COLORS = ['#22b8cf', '#e8c547', '#9b6bf2', '#3fb950', '#e33b3b', '#3b82f6', '#f2a33a'];
+
+function stackCell(ctx: Ctx, x: number, y: number, color: string, p: Palette) {
+  rect(ctx, x, y, 3, 3, p.outline);
+  rect(ctx, x, y, 2, 2, shade(color, p));
+}
+
 // ---------- buildings ----------
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
@@ -723,6 +731,86 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, cx, GROUND - 30, '#22b8cf', '#ffffff', p);
       break;
     }
+    case 'loadtruck': {
+      // Dump truck parked under the Data Lake, cab facing out, its open bed
+      // half full of Block Stack pieces. A chute drops more in (see drawProps).
+      const steel = shade('#9aa3ad', p), dark = shade('#4a5260', p);
+      // Chute from the bottom of the lake's tank down over the bed.
+      const chuteX = x + 21;
+      rect(ctx, x + w + 3, GROUND - 44, 3, 18, dark);
+      rect(ctx, chuteX, GROUND - 28, x + w + 6 - chuteX, 3, dark);
+      rect(ctx, chuteX, GROUND - 25, 3, 3, dark);
+      rect(ctx, chuteX + 1, GROUND - 27, x + w + 4 - chuteX, 1, steel);
+      // Chassis and wheels
+      rect(ctx, x + 1, GROUND - 6, w - 2, 2, p.outline);
+      for (const wx of [x + 3, x + 14, x + 24]) {
+        rect(ctx, wx, GROUND - 4, 5, 4, p.outline);
+        rect(ctx, wx + 2, GROUND - 3, 1, 1, steel);
+      }
+      // Cab
+      box(ctx, x + 1, GROUND - 15, 9, 9, shade('#3b82f6', p), p);
+      rect(ctx, x + 2, GROUND - 13, 4, 3, p.night ? '#ffd76a' : p.glass[1]);
+      rect(ctx, x + 1, GROUND - 8, 1, 1, shade('#f2c84b', p));
+      // Open bed with stacked pieces: a full bottom row, a row with one gap, and a ragged top.
+      rect(ctx, x + 11, GROUND - 19, 21, 13, p.outline);
+      rect(ctx, x + 12, GROUND - 19, 19, 12, shade('#2a2f3a', p));
+      for (let j = 0; j < 3; j++) {
+        for (let i = 0; i < 6; i++) {
+          if ((j === 1 && i === 3) || (j === 2 && i > 1 && i < 5)) continue;
+          stackCell(ctx, x + 12 + i * 3, GROUND - 10 - j * 3, BLOCK_COLORS[(i * 3 + j * 5) % BLOCK_COLORS.length], p);
+        }
+      }
+      rect(ctx, x + 11, GROUND - 19, 21, 1, steel);
+      break;
+    }
+    case 'chesstable': {
+      // Stone table on the park lawn with two players mid-game.
+      rect(ctx, x, GROUND - 2, w + 4, 2, shade('#4fa84f', p));
+      for (let i = 0; i < w + 4; i += 3) rect(ctx, x + i, GROUND - 3, 1, 1, shade('#7fd17a', p));
+      const stone = shade('#b8b0a0', p), stoneDk = shade('#857d70', p);
+      rect(ctx, cx - 7, GROUND - 9, 14, 2, stone);
+      rect(ctx, cx - 7, GROUND - 7, 14, 1, stoneDk);
+      rect(ctx, cx - 1, GROUND - 6, 3, 6, stoneDk);
+      // Board edge, squares alternating, and a few pieces
+      for (let i = 0; i < 10; i++) rect(ctx, cx - 5 + i, GROUND - 10, 1, 1, i % 2 ? '#f5f1e8' : '#2a2233');
+      for (const [px, ph, light] of [[-4, 3, true], [-1, 2, true], [2, 4, false], [4, 2, false]] as const) {
+        rect(ctx, cx + px, GROUND - 10 - ph, 1, ph, light ? '#f5f1e8' : '#2a2233');
+      }
+      // Stools and players
+      for (const [sx, shirt, skin, face] of [[x + 2, '#e0457b', '#c98e64', 1], [x + w - 6, '#3b82f6', '#f1c7a0', -1]] as const) {
+        rect(ctx, sx, GROUND - 4, 4, 1, stoneDk);
+        rect(ctx, sx + 1, GROUND - 3, 2, 3, stoneDk);
+        rect(ctx, sx + (face > 0 ? 0 : 1), GROUND - 14, 3, 3, shade(skin, p));
+        rect(ctx, sx + (face > 0 ? 0 : 1), GROUND - 11, 3, 6, shade(shirt, p));
+        rect(ctx, sx + (face > 0 ? 3 : -1), GROUND - 9, 1, 1, shade(skin, p));
+        rect(ctx, sx + (face > 0 ? 2 : -1), GROUND - 5, 3, 1, shade('#2a2233', p));
+      }
+      break;
+    }
+    case 'patio': {
+      // Eco Eats patio table under a striped umbrella, with a plate of packets.
+      const wood = shade('#a06a3a', p), woodDk = shade('#6b4428', p);
+      rect(ctx, cx, GROUND - 21, 1, 21, p.lamp);
+      rect(ctx, cx - 7, GROUND - 24, 15, 1, shade('#3fb950', p));
+      for (let i = 0; i < 23; i++) rect(ctx, cx - 11 + i, GROUND - 23, 1, 2, shade(Math.floor(i / 4) % 2 ? '#ffffff' : '#3fb950', p));
+      for (let i = 0; i < 23; i += 4) rect(ctx, cx - 11 + i, GROUND - 21, 2, 1, shade(Math.floor(i / 4) % 2 ? '#ffffff' : '#3fb950', p));
+      rect(ctx, cx - 6, GROUND - 9, 13, 2, wood);
+      rect(ctx, cx - 1, GROUND - 7, 3, 7, woodDk);
+      rect(ctx, cx - 3, GROUND - 10, 7, 1, '#ffffff');
+      rect(ctx, cx - 2, GROUND - 11, 1, 1, shade('#e8c547', p));
+      rect(ctx, cx, GROUND - 11, 1, 1, shade('#e0457b', p));
+      rect(ctx, cx + 2, GROUND - 11, 1, 1, shade('#22b8cf', p));
+      for (const [chx, back] of [[x + 1, x + 1], [x + w - 6, x + w - 2]]) {
+        rect(ctx, chx, GROUND - 5, 5, 1, woodDk);
+        rect(ctx, back, GROUND - 11, 1, 11, woodDk);
+        rect(ctx, chx + (back === chx ? 4 : 0), GROUND - 4, 1, 4, woodDk);
+      }
+      // A diner on the right chair, eating
+      rect(ctx, x + w - 7, GROUND - 15, 3, 3, shade('#8d5a3b', p));
+      rect(ctx, x + w - 7, GROUND - 12, 3, 7, shade('#f2a33a', p));
+      rect(ctx, x + w - 8, GROUND - 10, 1, 1, shade('#8d5a3b', p));
+      break;
+    }
     case 'museum': {
       const stone = shade('#e6dfcf', p), dark = shade('#b9ae96', p);
       for (let i = 0; i < 3; i++) rect(ctx, x + i * 3, GROUND - 3 - i * 3, w - i * 6, 3, dark);
@@ -1150,6 +1238,20 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
 export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
   for (const s of STRUCTURES) {
     const top = GROUND - s.h + offsetY;
+    if (s.kind === 'loadtruck' && t > 0) {
+      // A piece drops from the chute into the gap, the row flashes clear, repeat.
+      const cycle = 2600, f = (t % cycle) / cycle, k = Math.floor(t / cycle);
+      const gy = GROUND + offsetY, bx = s.x + 21 + originX;
+      const land = gy - 13;
+      if (f < 0.55) {
+        const y = gy - 22 + (f / 0.55) * (land - (gy - 22));
+        stackCell(ctx, bx, Math.round(y), BLOCK_COLORS[k % BLOCK_COLORS.length], p);
+      } else if (f < 0.75) {
+        stackCell(ctx, bx, land, BLOCK_COLORS[k % BLOCK_COLORS.length], p);
+      } else if (Math.floor(t / 120) % 2) {
+        rect(ctx, s.x + 12 + originX, land, 19, 3, '#ffffff');
+      }
+    }
     if (s.kind === 'construction') {
       const len = 20 + Math.round(Math.sin(t / 700) * 5);
       const hx = s.x + 24 + originX;

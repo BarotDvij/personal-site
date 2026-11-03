@@ -176,7 +176,7 @@ export function drawWalker(ctx: CanvasRenderingContext2D, w: Walker, ox: number,
 export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structure | undefined, ox: number, oy: number) {
   if (!s || w.warp > 0 || w.rise > 0) return;
   const label =
-    s.kind !== 'warp' ? 'UP: OPEN' : onPipe(w) ? (w.facing === 1 ? 'DOWN: WARP >' : '< DOWN: WARP') : w.jump === 0 ? 'SPACE: HOP ON' : '';
+    s.kind !== 'warp' ? (s.ref?.type === 'game' ? 'UP: PLAY' : 'UP: OPEN') : onPipe(w) ? (w.facing === 1 ? 'DOWN: WARP >' : '< DOWN: WARP') : w.jump === 0 ? 'SPACE: HOP ON' : '';
   if (!label) return;
   const cx = Math.round(w.x + ox);
   const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump);

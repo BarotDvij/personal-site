@@ -55,7 +55,8 @@ export type Ref =
 export type Kind =
   | 'kiosk' | 'monument' | 'post' | 'shop' | 'billboard' | 'hall' | 'studio' | 'park'
   | 'tower' | 'lab' | 'marble' | 'warehouse' | 'library' | 'watertower' | 'arcade'
-  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'refinery' | 'hq' | 'mediahq' | 'glass';
+  | 'grocer' | 'construction' | 'warp' | 'furniture' | 'school' | 'arcadehall' | 'pond' | 'museum' | 'showroom' | 'refinery' | 'hq' | 'mediahq' | 'glass'
+  | 'loadtruck' | 'chesstable' | 'patio';
 
 export interface Structure {
   id: string;
@@ -76,6 +77,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-1', label: 'Warp pipe', kind: 'warp', x: 160, w: 22, h: 26, district: 'plaza', ref: { type: 'warp', to: 1 } },
 
   // Industrial Zone
+  { id: 'truck', label: 'Data Truck: Block Stack', kind: 'loadtruck', x: 206, w: 32, h: 20, district: 'data', ref: { type: 'game', id: 'blocks' } },
   { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 240, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 258 },
   { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 296, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 356 },
   { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 432, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 510 },
@@ -90,6 +92,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1162, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // Commercial District
+  { id: 'patio', label: 'Eco Eats Patio: Pipe Muncher', kind: 'patio', x: 1208, w: 30, h: 24, district: 'commercial', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 1240, w: 84, h: 56, district: 'commercial', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 1282 },
   { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1344, w: 100, h: 94, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
   { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1462, w: 132, h: 98, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
@@ -104,6 +107,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
 
   // Civic Centre
+  { id: 'chess', label: 'Park Chess Table: Chess', kind: 'chesstable', x: 2288, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2320, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2422, w: 76, h: 30, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
   { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 2512, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },

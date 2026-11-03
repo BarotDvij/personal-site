@@ -46,6 +46,7 @@ export function mountCity(root: HTMLElement): City {
   let camX = 0, targetX = 0;
   let raf = 0, last = 0, t = 0, running = false, dirty = true;
   let hovered: Structure | null = null;
+  let nearTag: Structure | null = null;
   const walker = createWalker();
   const walkKeys = new Set<string>();
   let follow = true;
@@ -119,7 +120,7 @@ export function mountCity(root: HTMLElement): City {
     b.type = 'button';
     b.className = `bldg${s.kind === 'warp' ? ' warp' : ''}`;
     b.dataset.sid = s.id;
-    b.setAttribute('aria-label', s.kind === 'warp' ? 'Warp pipe. Travel to the next pipe' : `${s.label}. Open details`);
+    b.setAttribute('aria-label', s.kind === 'warp' ? 'Warp pipe. Travel to the next pipe' : s.ref.type === 'game' ? `${s.label}. Play` : `${s.label}. Open details`);
     const tag = document.createElement('span');
     tag.className = 'tag';
     tag.textContent = s.label;
@@ -519,7 +520,15 @@ export function mountCity(root: HTMLElement): City {
     if (tier === 'high' && motion) drawStreetLife(ctx, t, ox, offsetY, viewW, palette);
     if (motion) drawBeacons(ctx, t, ox, offsetY, palette);
     drawWalker(ctx, walker, ox, offsetY, palette, motion);
-    drawPrompt(ctx, walker, nearby(walker), ox, offsetY);
+    const near = nearby(walker);
+    drawPrompt(ctx, walker, near, ox, offsetY);
+    // Walking past a building pops up its name tag, same as hovering it.
+    const nearShown = near && near.kind !== 'warp' && walker.warp <= 0 ? near : null;
+    if (nearShown !== nearTag) {
+      if (nearTag) buttonFor(nearTag)?.classList.remove('near');
+      if (nearShown) buttonFor(nearShown)?.classList.add('near');
+      nearTag = nearShown;
+    }
     if (hovered) drawHighlight(ctx, hovered, ox, offsetY, motion ? t : 0);
 
     overlay.style.transform = `translate3d(${ox * scale}px, 0, 0)`;
