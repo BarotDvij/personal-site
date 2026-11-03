@@ -669,7 +669,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 0; i < 44; i += 6) rect(ctx, x + hallW - 3 + i, belt + 3, 2, 7, p.lamp);
       for (let k = 0; k < 6; k++) rect(ctx, x + w - 16 + k, belt - 22 + k * 2, 16 - k * 2, 2, shade('#9aa3ad', p));
       rect(ctx, x + w - 12, belt - 10, 8, 10, shade('#9aa3ad', p));
-      sign(ctx, label, x + hallW / 2 + 14, top + 32, '#ff6fb5', '#2a2233', p);
+      sign(ctx, label, x + hallW / 2 + 14, top + 32, '#008878', '#ffffff', p);
       break;
     }
     case 'hq': {
