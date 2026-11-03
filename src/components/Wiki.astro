@@ -23,6 +23,9 @@ const cite = (label: string, href: string) => {
 };
 
 const cityscapes = cite('CityScapes on Devpost', 'https://devpost.com/software/cityscape-b02jei');
+// Cited in order of first appearance on the page (infobox, then the lead).
+const summitProject = profile.projects.find((p) => p.name === 'SUMMIT Financial Learning')!;
+const summit = cite(`${summitProject.name} source`, summitProject.links.code);
 const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/software/urban-marble');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
@@ -162,7 +165,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       currently holding the {current.role} position at <Org e={current} />, <Fragment set:html={current.now} />.
     </p>
     <p class="lead-more">
-      Barot's work spans <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, LLM evaluation, and full-stack products. In one week in
+      Barot's work spans <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, LLM evaluation, and full-stack products<Cite n={summit} />. In one week in
       2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
