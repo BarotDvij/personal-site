@@ -372,17 +372,19 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, gx - 1, gTop - 1, gw + 2, GROUND - gTop + 1, p.outline);
       rect(ctx, gx, gTop, gw, GROUND - gTop, pane);
       if (p.night) {
-        // One 3x5 lit pane per frame cell: the floor lines run every 10px and the
-        // mullions every 4px, so each window sits whole inside its cell.
-        for (let yy = gTop + 3; yy + 5 <= GROUND - 14; yy += 10)
-          for (let xx = gx + 1; xx + 3 <= gx + gw; xx += 4) if (r() < 0.55) rect(ctx, xx, yy, 3, 5, p.lit);
+        // A lit window fills its whole frame cell. The mullions (every 4px) and floor
+        // lines (every 10px) are painted after this, so they trim each pane to the
+        // exact border of the cell.
+        for (let yy = gTop; yy + 10 <= GROUND - 14; yy += 10)
+          for (let xx = gx; xx < gx + gw; xx += 4)
+            if (r() < 0.55) rect(ctx, xx, yy, Math.min(4, gx + gw - xx), 10, p.lit);
       } else {
         for (let k = 0; k < GROUND - gTop; k += 1) {
           const rx = gx + Math.round(k * 0.35) % (gw + 18) - 6;
           if (rx >= gx && rx + 5 <= gx + gw) rect(ctx, rx, gTop + k, 5, 1, paneHi);
         }
       }
-      for (let xx = gx + 4; xx < gx + gw; xx += 4) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#4a6f96', p));
+      for (let xx = gx; xx < gx + gw; xx += 4) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#4a6f96', p));
       for (let yy = gTop + 10; yy < GROUND; yy += 10) rect(ctx, gx, yy, gw, 1, shade('#5d84ad', p));
       box(ctx, x + 14, top, w - 28, 12, p.night ? '#24365e' : shade('#9cc8ee', p), p);
       rect(ctx, cx, top - 16, 1, 16, p.lamp);
