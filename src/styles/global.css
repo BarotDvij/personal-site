@@ -1,7 +1,7 @@
 /* ---------- tokens ---------- */
 
 :root {
-  --wiki-max: 2400px;
+  --wiki-max: 3200px;
   --toc-w: 220px;
   --paper: #ffffff;
   --page: #f6f6f4;
@@ -309,7 +309,7 @@ html[data-mode='city'] body {
 }
 
 .locator img {
-  width: 228.6%;
+  width: 461.4%;
   max-width: none;
 }
 
