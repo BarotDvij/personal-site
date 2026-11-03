@@ -2,7 +2,7 @@
 // warp pipes. Drawn from a tiny pixel grid like everything else in the city.
 
 import { GROUND, STRUCTURES, WORLD_W, type Structure } from './world';
-import { text, textWidth } from '../pixelfont';
+import { text } from '../pixelfont';
 import type { Palette } from './art';
 
 const SPRITE = [
@@ -27,8 +27,8 @@ const COLORS: Record<string, string> = {
 };
 export const HEIGHT = SPRITE.length + 3;
 // The UP: PLAY prompt floats this far above the ground and is this thick.
-export const PROMPT_TOP = HEIGHT + 12;
-export const PROMPT_THICK = 9;
+export const PROMPT_TOP = HEIGHT + 17;
+export const PROMPT_THICK = 11;
 const WARP_TIME = 420;
 const GRAVITY = 0.18;
 const JUMP_SPEED = 3.4; // apex about 32px, enough to clear a 26px warp pipe
@@ -182,13 +182,20 @@ export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structur
     s.kind !== 'warp' ? (s.ref?.type === 'game' ? 'UP: PLAY' : 'UP: OPEN') : onPipe(w) ? (w.facing === 1 ? 'DOWN: WARP >' : '< DOWN: WARP') : w.jump === 0 ? 'SPACE: HOP ON' : '';
   if (!label) return;
   const cx = Math.round(w.x + ox);
-  const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump);
-  const width = textWidth(label) + 6;
-  ctx.fillStyle = '#2a2233';
-  ctx.fillRect(cx - width / 2, y, width, PROMPT_THICK);
+  // Letters get 1px extra spacing, and the box gets 3px padding and a white rim
+  // so the gold text reads clearly over any background.
+  const GAP = 5, PAD = 3;
+  const tw = label.length * GAP - (GAP - 3);
+  const width = tw + PAD * 2;
+  const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump) - 4;
+  const x0 = Math.round(cx - width / 2);
   ctx.fillStyle = '#ffffff';
+  ctx.fillRect(x0 - 1, y - 1, width + 2, PROMPT_THICK + 2);
+  ctx.fillRect(cx - 2, y + PROMPT_THICK, 4, 3);
+  ctx.fillStyle = '#2a2233';
+  ctx.fillRect(x0, y, width, PROMPT_THICK);
   ctx.fillRect(cx - 1, y + PROMPT_THICK, 2, 2);
-  text(ctx, label, cx - width / 2 + 3, y + 2, '#e8c547');
+  text(ctx, label, x0 + PAD, y + 3, '#e8c547', GAP);
 }
 
 function shadeNight(hex: string) {

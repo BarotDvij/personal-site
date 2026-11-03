@@ -22,13 +22,14 @@ const GLYPHS: Record<string, string> = {
 
 export const textWidth = (s: string) => s.length * 4 - 1;
 
-export function text(ctx: Ctx, s: string, x: number, y: number, color: string) {
+// `gap` is the advance between letters (4 by default, 5 adds airier spacing).
+export function text(ctx: Ctx, s: string, x: number, y: number, color: string, gap = 4) {
   ctx.fillStyle = color;
   let cx = Math.round(x);
   for (const ch of s.toUpperCase()) {
     const g = GLYPHS[ch] ?? GLYPHS[' '];
     for (let i = 0; i < 15; i++) if (g[i] === '1') ctx.fillRect(cx + (i % 3), Math.round(y) + Math.floor(i / 3), 1, 1);
-    cx += 4;
+    cx += gap;
   }
 }
 
