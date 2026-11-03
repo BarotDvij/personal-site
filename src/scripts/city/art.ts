@@ -151,9 +151,9 @@ function windows(
   }
 }
 
-function door(ctx: Ctx, cx: number, w = 8, h = 12, color = '#3a2a24') {
-  rect(ctx, cx - w / 2, GROUND - h, w, h, color);
-  rect(ctx, cx + w / 2 - 3, GROUND - h / 2, 1, 1, '#e8c547');
+function door(ctx: Ctx, cx: number, w = 8, h = 12, color = '#3a2a24', base = GROUND) {
+  rect(ctx, cx - w / 2, base - h, w, h, color);
+  rect(ctx, cx + w / 2 - 3, base - h / 2, 1, 1, '#e8c547');
 }
 
 function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
@@ -332,7 +332,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 2, top + 32, w - 4, 3, p.outline);
       rect(ctx, cx, top - 4, 1, 16, p.lamp);
       rect(ctx, cx + 1, top - 4, 9, 5, shade('#f2a33a', p));
-      door(ctx, cx, 12, 18, shade('#5a4030', p));
       sign(ctx, label, cx, top + 44, '#f2a33a', '#2a2233', p);
       break;
     }
@@ -405,8 +404,11 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
       (s.text ?? [label]).forEach((line, i) => sign(ctx, line, cx, top + 14 + i * 10, LENS_COLOR[lens], '#ffffff', p));
       if (s.id === 'occ') {
-        rect(ctx, cx + 1, top - 16, 7, 5, shade('#e8e0d0', p));
-        rect(ctx, cx + 3, top - 15, 3, 3, shade('#c62828', p));
+        const red = shade('#c62828', p);
+        rect(ctx, cx + 1, top - 16, 12, 6, shade('#e8e0d0', p));
+        rect(ctx, cx + 1, top - 16, 3, 6, red); // left bar
+        rect(ctx, cx + 10, top - 16, 3, 6, red); // right bar, same width
+        rect(ctx, cx + 6, top - 14, 2, 2, red); // small centre dot
       }
       break;
     }
@@ -457,7 +459,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 0; i < 10; i++) rect(ctx, x + 6 + i * 4, top + 18 - i * 2, w - 12 - i * 8, 2, body);
       rect(ctx, x + 6, top + 17, w - 12, 2, p.outline);
       for (let i = 0; i < 4; i++) rect(ctx, x + 16 + i * ((w - 38) / 3), top + 30, 5, h - 40, shade('#f4ecd8', p));
-      door(ctx, cx, 10, 14, shade('#5a4030', p));
+      door(ctx, cx, 10, 14, shade('#5a4030', p), GROUND - 9); // top of the steps
       sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
       break;
     }
@@ -737,7 +739,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, fx + 2, top + 38, 4, 3, '#ffffff');
       }
       for (let i = 0; i < 4; i++) rect(ctx, x + 9 + i * ((w - 24) / 3), top + 54, 5, h - 63, shade('#fffaf0', p));
-      door(ctx, cx, 12, 16, shade('#5a4030', p));
+      door(ctx, cx, 12, 16, shade('#5a4030', p), GROUND - 9); // top of the steps
       sign(ctx, label, cx, top + 12, '#22b8cf', '#ffffff', p);
       break;
     }
