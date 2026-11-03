@@ -303,16 +303,6 @@ html[data-mode='city'] body {
   image-rendering: pixelated;
 }
 
-/* The infobox locator shows just the original 960px scene from the wide strip. */
-.locator {
-  overflow: hidden;
-}
-
-.locator img {
-  width: 461.4%;
-  max-width: none;
-}
-
 .notice-thumb img {
   height: 384px;
   object-fit: cover;
