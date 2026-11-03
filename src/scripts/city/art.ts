@@ -372,8 +372,10 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, gx - 1, gTop - 1, gw + 2, GROUND - gTop + 1, p.outline);
       rect(ctx, gx, gTop, gw, GROUND - gTop, pane);
       if (p.night) {
-        for (let yy = gTop + 4; yy < GROUND - 14; yy += 5)
-          for (let xx = gx + 1; xx < gx + gw - 1; xx += 4) if (r() < 0.55) rect(ctx, xx, yy, 3, 3, p.lit);
+        // One 3x5 lit pane per frame cell: the floor lines run every 10px and the
+        // mullions every 4px, so each window sits whole inside its cell.
+        for (let yy = gTop + 3; yy + 5 <= GROUND - 14; yy += 10)
+          for (let xx = gx + 1; xx + 3 <= gx + gw; xx += 4) if (r() < 0.55) rect(ctx, xx, yy, 3, 5, p.lit);
       } else {
         for (let k = 0; k < GROUND - gTop; k += 1) {
           const rx = gx + Math.round(k * 0.35) % (gw + 18) - 6;
