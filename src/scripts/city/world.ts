@@ -108,7 +108,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
 
   // Civic Centre
-  { id: 'chess', label: 'Park Chess Table: Chess', kind: 'chesstable', x: 2288, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
+  { id: 'chess', label: 'Chess in the Park', kind: 'chesstable', x: 2288, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2320, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2422, w: 76, h: 30, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
   { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 2512, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
