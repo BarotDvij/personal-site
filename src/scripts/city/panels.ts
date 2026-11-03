@@ -94,6 +94,7 @@ export function panelFor(ref: Ref): PanelContent | null {
         kicker: 'Arcade Hall',
         title: 'Insert coin',
         html: `<p class="lead">Browser games I grew up on, rebuilt from scratch in the city's own pixel style. Everything runs offline, and each game only downloads when you start it.</p>
+          <p class="game-note">You may have noticed games scattered across the city. They were big inspirations for how I thought about UX, product design, and development growing up.</p>
           <ul class="game-list">${GAMES.map((g) => `<li><button type="button" class="game-btn" data-game="${g.id}">
             <span class="game-name">${esc(g.title)}</span><span class="game-blurb">${esc(g.blurb)}</span></button></li>`).join('')}</ul>`,
       };

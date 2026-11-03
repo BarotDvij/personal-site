@@ -46,6 +46,14 @@ export const GAMES: GameInfo[] = [
     load: () => import('./games/rally'),
   },
   {
+    id: 'tanks',
+    title: 'Tank Duel',
+    blurb: '2 players, one keyboard, bouncing shells.',
+    credit: 'Inspired by Tank Trouble, which I played growing up.',
+    help: 'Green: WASD to drive, Q to fire. Blue: arrow keys to drive, M or / to fire. Best on a keyboard.',
+    load: () => import('./games/tanks'),
+  },
+  {
     id: 'blocks',
     title: 'Block Stack',
     blurb: 'Stack, spin, and clear lines.',
@@ -76,14 +84,6 @@ export const GAMES: GameInfo[] = [
     credit: 'One of my favourite games growing up.',
     help: 'Click a piece, then a square. Press C to switch between two players and the computer.',
     load: () => import('./games/chess'),
-  },
-  {
-    id: 'tanks',
-    title: 'Tank Duel',
-    blurb: '2 players, one keyboard, bouncing shells.',
-    credit: 'Inspired by Tank Trouble, which I played growing up.',
-    help: 'Green: WASD to drive, Q to fire. Blue: arrow keys to drive, M or / to fire. Best on a keyboard.',
-    load: () => import('./games/tanks'),
   },
 ];
 

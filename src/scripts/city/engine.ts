@@ -120,6 +120,7 @@ export function mountCity(root: HTMLElement): City {
     b.type = 'button';
     b.className = `bldg${s.kind === 'warp' ? ' warp' : ''}`;
     b.dataset.sid = s.id;
+    b.dataset.kind = s.kind;
     b.setAttribute('aria-label', s.kind === 'warp' ? 'Warp pipe. Travel to the next pipe' : s.ref.type === 'game' ? `${s.label}. Play` : `${s.label}. Open details`);
     const tag = document.createElement('span');
     tag.className = 'tag';

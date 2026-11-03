@@ -1122,6 +1122,10 @@ blockquote p {
   pointer-events: none;
 }
 
+.bldg[data-kind='loadtruck'] .tag {
+  bottom: calc(100% + 36px);
+}
+
 .bldg:hover .tag,
 .bldg.near .tag,
 .bldg:focus-visible .tag {
@@ -1742,6 +1746,12 @@ html.party .hud-title {
 
 /* ---------- arcade ---------- */
 
+.panel-body .game-note {
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 8px 0 12px;
+}
+
 .panel-body .game-list {
   list-style: none;
   padding: 0;
@@ -1887,6 +1897,8 @@ html.party .hud-title {
 }
 
 .arcade-credit {
+  margin: 0 0 12px;
+  font-size: 16px;
   color: #9fd0ff;
   font-style: italic;
 }

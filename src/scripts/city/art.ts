@@ -714,11 +714,11 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pond': {
       const water = shade('#3b82f6', p), light = shade('#7fb0ff', p);
-      rect(ctx, x + 6, GROUND - 10, w - 12, 10, water);
-      rect(ctx, x + 2, GROUND - 7, w - 4, 7, water);
-      rect(ctx, x + 10, GROUND - 9, 14, 1, light);
-      rect(ctx, x + 40, GROUND - 6, 18, 1, light);
-      for (const [dx, dy] of [[16, -14], [44, -12]]) {
+      rect(ctx, x + 6, GROUND - 6, w - 12, 6, water);
+      rect(ctx, x + 2, GROUND - 4, w - 4, 4, water);
+      rect(ctx, x + 10, GROUND - 5, 14, 1, light);
+      rect(ctx, x + 40, GROUND - 3, 18, 1, light);
+      for (const [dx, dy] of [[16, -10], [44, -8]]) {
         rect(ctx, x + dx, GROUND + dy, 7, 4, shade('#f2c84b', p));
         rect(ctx, x + dx + 5, GROUND + dy - 3, 3, 3, shade('#f2c84b', p));
         rect(ctx, x + dx + 8, GROUND + dy - 2, 2, 1, shade('#f28c28', p));
