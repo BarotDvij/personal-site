@@ -3,7 +3,7 @@
 import profile from '../../../content/profile.json';
 import type { Ref } from './world';
 import { GAMES } from '../arcade/catalog';
-import { museumHtml } from './museum';
+import { BUILT, museumHtml } from './museum';
 
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -53,6 +53,8 @@ export function panelFor(ref: Ref): PanelContent | null {
         html: `<p class="lead">${esc(ed.degree.replace('Bachelor of Applied Science in ', ''))} at the University of Waterloo (expected ${esc(ed.expected)}). Open to ${esc(profile.seeking)} in forward deployed engineering, technical PM, data engineering, and AI engineering.</p>
           <p class="links">${link(`mailto:${l.email}`, l.email)}</p>
           <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>
+          <h3>How this site is built</h3>
+          <dl class="built">${BUILT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
           <h3>Approach</h3>
           ${profile.lessons.map((x) => `<p><strong>${esc(x.title)}.</strong> ${esc(x.body)}</p>`).join('')}`,
       };

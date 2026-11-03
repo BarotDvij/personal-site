@@ -59,12 +59,12 @@ describe('content and city stay in sync', () => {
     }
   });
 
-  it('museum copy has no em dashes or semicolons, and history links go to Wikipedia', () => {
-    const text = [...EXHIBITS.flatMap((e) => [e.title, e.note]), ...HISTORY.flatMap((w) => [w.title, w.intro, ...w.lines.flat()])];
+  it('museum copy has no em dashes or semicolons, and history links use https', () => {
+    const text = [...EXHIBITS.flatMap((e) => [e.title, e.note]), ...HISTORY.flatMap((w) => [w.title, w.intro, w.personal ?? '', ...w.lines.flat()])];
     for (const line of text) {
       expect(/[—;]/.test(line), `museum copy: ${line}`).toBe(false);
     }
-    for (const w of HISTORY) expect(w.link.href.startsWith('https://en.wikipedia.org/wiki/'), w.title).toBe(true);
+    for (const w of HISTORY) for (const l of w.links) expect(l.href.startsWith('https://'), w.title).toBe(true);
   });
 
   it('district plates and signs keep readable text (4.5:1 or better)', () => {

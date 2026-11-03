@@ -2037,11 +2037,29 @@ html.party .hud-title {
   margin-bottom: 16px;
 }
 
-.panel-body .wing dl {
+.panel-body .wing .why,
+.panel-body .wing .intro {
+  margin: 4px 0;
+}
+
+.panel-body .wing .why {
+  font-style: italic;
+}
+
+.panel-body .wing .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+}
+
+.panel-body .wing dl,
+.panel-body dl.built {
   margin: 8px 0;
 }
 
-.panel-body .wing dt {
+.panel-body .wing dt,
+.panel-body dl.built dt {
   font-family: var(--pixel);
   font-size: 11px;
   letter-spacing: 0.04em;
@@ -2049,7 +2067,8 @@ html.party .hud-title {
   margin-top: 6px;
 }
 
-.panel-body .wing dd {
+.panel-body .wing dd,
+.panel-body dl.built dd {
   margin: 0;
 }
 
