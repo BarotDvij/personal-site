@@ -4,7 +4,7 @@ import {
   WORLD_W, WORLD_H, GROUND, DISTRICTS, LENS_COLOR, STRUCTURES, districtAt, type Structure,
 } from './world';
 import {
-  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, preparePaths,
+  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
   drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor, highlights } from './panels';
@@ -517,7 +517,11 @@ export function mountCity(root: HTMLElement): City {
     const motion = !reduced();
     if (tier === 'high' || !motion) drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
     // Far skyline and mid-ground slide slower than the street for depth.
-    if (farLayer) ctx.drawImage(farLayer, parallaxX('far', viewW, ox), offsetY);
+    if (farLayer) {
+      const fx = parallaxX('far', viewW, ox);
+      ctx.drawImage(farLayer, fx, offsetY);
+      if (motion) drawTrain(ctx, t, fx, farLayer.width, offsetY, palette);
+    }
     if (midLayer) ctx.drawImage(midLayer, parallaxX('mid', viewW, ox), offsetY);
     ctx.drawImage(cityLayer, ox, offsetY);
     drawPackets(ctx, paths, motion ? t : 0, tier === 'high' ? 4 : 1, ox, offsetY, viewW);

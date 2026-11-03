@@ -1077,6 +1077,14 @@ function willisTower(ctx: Ctx, cx: number, base: number, h: number, col: string,
   }
 }
 
+// Height of the elevated rail line in the far layer, and its silhouette colour.
+export const RAIL_Y = GROUND - 66;
+function farInk(p: Palette) {
+  const haze = p.sky[p.sky.length - 1];
+  const col = mixHex(haze, p.night ? '#04061a' : '#3d5f8f', p.night ? 0.45 : 0.3);
+  return mixHex(col, p.night ? '#000000' : '#1c3358', 0.4);
+}
+
 export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number) {
   const f = PARALLAX[kind];
   const pad = parallaxPad(viewW);
@@ -1127,6 +1135,12 @@ export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number
     const mark = mixHex(col, p.night ? '#000000' : '#1c3358', 0.4);
     cnTower(ctx, landmarks[0].x, GROUND, 150, mark, p);
     willisTower(ctx, landmarks[1].x, GROUND, 130, mark, p);
+    // Elevated high-speed rail viaduct in front of the far skyline.
+    rect(ctx, 0, RAIL_Y + 6, c.width, 2, mark);
+    for (let px = 12; px < c.width; px += 44) {
+      rect(ctx, px, RAIL_Y + 8, 3, GROUND - RAIL_Y - 8, mark);
+      rect(ctx, px - 2, RAIL_Y + 8, 7, 1, mark);
+    }
   }
   return c;
 }
@@ -1136,6 +1150,43 @@ export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number
 export function parallaxX(kind: ParallaxKind, viewW: number, originX: number) {
   const f = PARALLAX[kind];
   return Math.round((1 - f) * (viewW / 2) + f * originX - parallaxPad(viewW));
+}
+
+// A bullet train silhouette that zooms along the far viaduct every so often,
+// alternating direction each pass. Drawn between the far and mid layers.
+const TRAIN_CARS = 4, CAR_W = 26, NOSE = 12;
+const TRAIN_LEN = TRAIN_CARS * CAR_W + NOSE * 2;
+const TRAIN_SPEED = 0.11; // far-layer pixels per ms
+const TRAIN_REST = 9000; // ms of empty track between passes
+
+export function drawTrain(ctx: Ctx, t: number, layerX: number, layerW: number, offsetY: number, p: Palette) {
+  const run = (layerW + TRAIN_LEN * 2) / TRAIN_SPEED;
+  const period = run + TRAIN_REST;
+  const pass = Math.floor(t / period);
+  const k = t - pass * period;
+  if (k > run) return;
+  const east = pass % 2 === 0;
+  const d = k * TRAIN_SPEED - TRAIN_LEN;
+  const x0 = Math.round(layerX + (east ? d : layerW - d - TRAIN_LEN));
+  const y = Math.round(RAIL_Y + offsetY);
+  const col = farInk(p);
+  // Body sits on the viaduct deck (deck top is RAIL_Y + 6).
+  rect(ctx, x0 + NOSE, y, TRAIN_CARS * CAR_W, 6, col);
+  // Tapered noses at both ends, steps of one pixel row each.
+  for (let i = 0; i < 6; i++) {
+    const w = Math.round(NOSE * (1 - (5 - i) / 7));
+    rect(ctx, x0 + NOSE - w, y + i, w, 1, col);
+    rect(ctx, x0 + NOSE + TRAIN_CARS * CAR_W, y + i, w, 1, col);
+  }
+  // Car gaps and a window strip (lit at night).
+  const strip = p.night ? '#ffd76a' : mixHex(col, '#ffffff', 0.25);
+  rect(ctx, x0 + NOSE + 2, y + 2, TRAIN_CARS * CAR_W - 4, 1, strip);
+  const gap = mixHex(col, '#ffffff', p.night ? 0.05 : 0.15);
+  for (let i = 1; i < TRAIN_CARS; i++) rect(ctx, x0 + NOSE + i * CAR_W, y + 1, 1, 5, gap);
+  // Pantograph spark on the leading car.
+  const lead = east ? x0 + NOSE + TRAIN_CARS * CAR_W - 8 : x0 + NOSE + 6;
+  rect(ctx, lead, y - 2, 3, 1, col);
+  rect(ctx, lead + 1, y - 1, 1, 1, col);
 }
 
 export interface Cloud { x: number; y: number; w: number; speed: number }
