@@ -685,7 +685,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       const winRows = Math.floor((h - 80 + 3) / rowStep);
       for (let j = 4; j < winRows; j += 4) rect(ctx, x + 7, winTop + j * rowStep - 2, w - 14, 1, shade('#f2a33a', p));
       door(ctx, cx, 14, 14, shade('#122230', p));
-      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#2bb5a6', '#2a2233', p);
+      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#15a6bb', '#ffffff', p, true);
       if (s.text?.[1]) sign(ctx, s.text[1], cx, GROUND - 32, '#f2a33a', '#2a2233', p);
       break;
     }
