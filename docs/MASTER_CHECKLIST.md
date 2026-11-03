@@ -65,7 +65,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [ ] "Early life and education" section in the Wiki with DECA and JA wins
 - [ ] Trophy case in the Visitor Center or a second Hall of Fame plaque
 - [ ] Portrait in the infobox
-- [ ] Billboards play Go Lime ads as small compressed loops, loaded only when on screen
+- [x] Billboards play Go Lime ads as small compressed loops, loaded only when on screen (leads billboard reel, Go Lime panel gallery)
 - [ ] Project screenshots in CityScapes and Urban Marble panels
 - [ ] Media budget check: page weight and Lighthouse stay where they are
 

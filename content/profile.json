@@ -197,7 +197,55 @@
         "Co-built a Figma and React Native prototype that shaped the production app on Google Play",
         "Product-owned a Django booking platform, cutting booking time from 6 minutes → 30 seconds"
       ],
-      "journey": true
+      "journey": true,
+      "media": [
+        {
+          "type": "video",
+          "src": "/media/golime/skyline.mp4",
+          "poster": "/media/golime/skyline.webp",
+          "w": 640,
+          "h": 360,
+          "alt": "Go Lime brand ad: the web address types itself out over the Toronto skyline"
+        },
+        {
+          "type": "video",
+          "src": "/media/golime/intro.mp4",
+          "poster": "/media/golime/intro.webp",
+          "w": 360,
+          "h": 640,
+          "alt": "Go Lime intro story ad: Welcome to the Future of Energy-Saving Comfort"
+        },
+        {
+          "type": "video",
+          "src": "/media/golime/solar.mp4",
+          "poster": "/media/golime/solar.webp",
+          "w": 360,
+          "h": 640,
+          "alt": "Go Lime solar story ad: solar panels, EV chargers, and batteries"
+        },
+        {
+          "type": "video",
+          "src": "/media/golime/promo99.mp4",
+          "poster": "/media/golime/promo99.webp",
+          "w": 480,
+          "h": 480,
+          "alt": "Animated $99 tankless water heater and heat pump bundle ad"
+        },
+        {
+          "type": "image",
+          "src": "/media/golime/still-ac.webp",
+          "w": 600,
+          "h": 600,
+          "alt": "Still ad: Beat the Heat, Not Your Wallet, 50% off a new air conditioner"
+        },
+        {
+          "type": "image",
+          "src": "/media/golime/still-wf.webp",
+          "w": 450,
+          "h": 800,
+          "alt": "Still ad: Go Lime whole house water filter"
+        }
+      ]
     },
     {
       "role": "Program Manager",

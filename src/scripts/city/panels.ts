@@ -13,6 +13,16 @@ const list = (items: string[]) => `<ul>${items.map((i) => `<li>${esc(i)}</li>`).
 const link = (href: string, label: string) =>
   `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`;
 
+interface Media { type: 'image' | 'video'; src: string; poster?: string; w: number; h: number; alt: string }
+
+// Campaign work. Nothing downloads until the panel opens: images are lazy,
+// and videos fetch only their poster until someone presses play.
+const gallery = (items: Media[]) => `<h3>Campaign work</h3><div class="media-grid">${items
+  .map((m) => m.type === 'video'
+    ? `<figure><video controls playsinline preload="none" poster="${esc(m.poster ?? '')}" width="${m.w}" height="${m.h}" aria-label="${esc(m.alt)}"><source src="${esc(m.src)}" type="video/mp4"></video></figure>`
+    : `<figure><img src="${esc(m.src)}" alt="${esc(m.alt)}" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"></figure>`)
+  .join('')}</div>`;
+
 export interface PanelContent {
   kicker: string;
   title: string;
@@ -27,7 +37,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return {
         kicker: `${e.dates} · ${e.place}`,
         title: `${e.role}, ${e.org}`,
-        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}`,
+        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${'media' in e ? gallery(e.media as Media[]) : ''}`,
       };
     }
     case 'project': {

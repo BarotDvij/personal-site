@@ -1314,9 +1314,32 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
   }
 }
 
+// A pixelated Go Lime ad (16 frames, 32 colours, about 10 KB) that the leads
+// billboard cuts to every other 8 seconds.
+const REEL = { w: 92, h: 28, frames: 16, fps: 2 };
+let adReel: HTMLImageElement | null = null;
+export function loadAdReel() {
+  if (adReel || typeof Image === 'undefined') return;
+  adReel = new Image();
+  adReel.decoding = 'async';
+  adReel.src = '/media/golime/reel.png';
+}
+
 export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
   for (const s of STRUCTURES) {
     const top = GROUND - s.h + offsetY;
+    if (s.id === 'leads' && t > 0 && adReel?.complete && adReel.naturalWidth) {
+      const reelMs = (REEL.frames / REEL.fps) * 1000;
+      const phase = t % (reelMs * 2);
+      if (phase >= reelMs) {
+        const f = Math.floor(((phase - reelMs) / 1000) * REEL.fps) % REEL.frames;
+        ctx.drawImage(adReel, 0, f * REEL.h, REEL.w, REEL.h, s.x + 2 + originX, top + 2, REEL.w, REEL.h);
+        if (p.night) {
+          ctx.fillStyle = 'rgba(10,12,40,0.25)';
+          ctx.fillRect(s.x + 2 + originX, top + 2, REEL.w, REEL.h);
+        }
+      }
+    }
     if (s.kind === 'loadtruck' && t > 0) {
       // A piece drops from the chute into the gap, the row flashes clear, repeat.
       const cycle = 2600, f = (t % cycle) / cycle, k = Math.floor(t / cycle);

@@ -4,7 +4,7 @@ import {
   WORLD_W, WORLD_H, GROUND, DISTRICTS, LENS_COLOR, STRUCTURES, districtAt, type Structure,
 } from './world';
 import {
-  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
+  PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, drawTrain, loadAdReel, preparePaths,
   drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor } from './panels';
@@ -19,6 +19,7 @@ export interface City {
 }
 
 export function mountCity(root: HTMLElement): City {
+  loadAdReel();
   const canvas = root.querySelector<HTMLCanvasElement>('.city-canvas')!;
   const overlay = root.querySelector<HTMLElement>('.city-overlay')!;
   const districtEl = root.querySelector<HTMLElement>('[data-hud-district]')!;
