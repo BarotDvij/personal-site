@@ -7,7 +7,7 @@ import {
   PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
   drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
-import { panelFor, highlights } from './panels';
+import { panelFor } from './panels';
 import { FrameProbe, hintTier, type Tier } from '../quality';
 import { PROMPT_TOP, createWalker, drawPrompt, drawWalker, jump, nearby, standOn, startWarp, updateWalker } from './walker';
 import { sfx } from '../sfx';
@@ -22,7 +22,6 @@ export function mountCity(root: HTMLElement): City {
   const canvas = root.querySelector<HTMLCanvasElement>('.city-canvas')!;
   const overlay = root.querySelector<HTMLElement>('.city-overlay')!;
   const districtEl = root.querySelector<HTMLElement>('[data-hud-district]')!;
-  const scoreEl = root.querySelector<HTMLElement>('[data-hud-score]')!;
   const minimap = root.querySelector<HTMLElement>('.minimap')!;
   const viewport = root.querySelector<HTMLElement>('.minimap-view')!;
   const welcome = root.querySelector<HTMLElement>('.welcome')!;
@@ -458,16 +457,6 @@ export function mountCity(root: HTMLElement): City {
     }
   });
 
-  // ----- HUD score ticker -----
-
-  let scoreIndex = 0;
-  let scoreTimer = 0;
-  function showScore() {
-    const h = highlights[scoreIndex % highlights.length];
-    scoreEl.innerHTML = `<b>${h.value}</b> <span>${h.label}</span>`;
-    scoreIndex++;
-  }
-
   // ----- fly-over intro -----
 
   function beginIntro() {
@@ -611,8 +600,6 @@ export function mountCity(root: HTMLElement): City {
       ro.observe(root);
       document.addEventListener('prefs:change', onPrefs);
       document.addEventListener('visibilitychange', onVisibility);
-      showScore();
-      scoreTimer = window.setInterval(showScore, 3500);
       beginIntro();
       last = 0;
       raf = requestAnimationFrame(frame);
@@ -632,7 +619,6 @@ export function mountCity(root: HTMLElement): City {
       if (!running) return;
       running = false;
       cancelAnimationFrame(raf);
-      clearInterval(scoreTimer);
       ro.disconnect();
       document.removeEventListener('prefs:change', onPrefs);
       document.removeEventListener('visibilitychange', onVisibility);

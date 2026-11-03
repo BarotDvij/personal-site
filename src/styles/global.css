@@ -1008,7 +1008,6 @@ blockquote p {
 
 .px-panel,
 .hud-left,
-.hud-score,
 .hud-btn,
 .welcome,
 .city-panel {
@@ -1063,35 +1062,6 @@ blockquote p {
   width: 8px;
   height: 8px;
   background: var(--lens, #e8c547);
-}
-
-.hud-score {
-  /* Frosted glass: neutral, mostly clear, with a soft blur behind the text. */
-  background: rgb(12 14 20 / 0.34);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  box-shadow:
-    0 -3px 0 0 rgb(255 255 255 / 0.55),
-    0 3px 0 0 rgb(255 255 255 / 0.55),
-    -3px 0 0 0 rgb(255 255 255 / 0.55),
-    3px 0 0 0 rgb(255 255 255 / 0.55);
-  text-shadow: 0 1px 2px rgb(0 0 0 / 0.55);
-  white-space: nowrap;
-  margin: 6px;
-  padding: 6px 12px;
-  font-size: 12px;
-  line-height: 1.5;
-  max-width: 420px;
-  text-align: center;
-}
-
-.hud-score b {
-  color: #a8c96a;
-  font-weight: 400;
-}
-
-.hud-score span {
-  color: #d8d4e8;
 }
 
 .hud-right {
@@ -1345,13 +1315,6 @@ html[data-sound='off'] .i-waves {
     top: 8px;
     left: 8px;
     right: 8px;
-  }
-
-  .hud-score {
-    order: 3;
-    flex-basis: 100%;
-    max-width: none;
-    font-size: 11px;
   }
 
   .hud .wide {
