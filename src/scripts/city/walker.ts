@@ -25,7 +25,10 @@ const LEGS = [
 const COLORS: Record<string, string> = {
   h: '#2a1a12', s: '#c98e64', e: '#1a1626', g: '#9bd23c', p: '#2f3b5a', k: '#1a1626',
 };
-const HEIGHT = SPRITE.length + 3;
+export const HEIGHT = SPRITE.length + 3;
+// The UP: PLAY prompt floats this far above the ground and is this thick.
+export const PROMPT_TOP = HEIGHT + 12;
+export const PROMPT_THICK = 9;
 const WARP_TIME = 420;
 const GRAVITY = 0.18;
 const JUMP_SPEED = 3.4; // apex about 32px, enough to clear a 26px warp pipe
@@ -182,9 +185,9 @@ export function drawPrompt(ctx: CanvasRenderingContext2D, w: Walker, s: Structur
   const y = GROUND + oy - HEIGHT - 12 - Math.round(w.jump);
   const width = textWidth(label) + 6;
   ctx.fillStyle = '#2a2233';
-  ctx.fillRect(cx - width / 2, y, width, 9);
+  ctx.fillRect(cx - width / 2, y, width, PROMPT_THICK);
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(cx - 1, y + 9, 2, 2);
+  ctx.fillRect(cx - 1, y + PROMPT_THICK, 2, 2);
   text(ctx, label, cx - width / 2 + 3, y + 2, '#e8c547');
 }
 

@@ -1122,10 +1122,6 @@ blockquote p {
   pointer-events: none;
 }
 
-.bldg[data-kind='loadtruck'] .tag {
-  bottom: calc(100% + 36px);
-}
-
 .bldg:hover .tag,
 .bldg.near .tag,
 .bldg:focus-visible .tag {

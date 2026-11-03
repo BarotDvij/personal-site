@@ -9,7 +9,7 @@ import {
 } from './art';
 import { panelFor, highlights } from './panels';
 import { FrameProbe, hintTier, type Tier } from '../quality';
-import { createWalker, drawPrompt, drawWalker, jump, nearby, standOn, startWarp, updateWalker } from './walker';
+import { PROMPT_TOP, createWalker, drawPrompt, drawWalker, jump, nearby, standOn, startWarp, updateWalker } from './walker';
 import { sfx } from '../sfx';
 
 export interface City {
@@ -88,6 +88,10 @@ export function mountCity(root: HTMLElement): City {
       b.style.top = `${(offsetY + GROUND - s.h) * scale}px`;
       b.style.width = `${s.w * scale}px`;
       b.style.height = `${s.h * scale}px`;
+      // Short props (truck, chess table, mower) sit under the walker's UP: PLAY
+      // prompt, so their name tag floats 10px above the top of that prompt.
+      const tag = b.querySelector<HTMLElement>('.tag');
+      if (tag) tag.style.bottom = `calc(100% + ${Math.max(10, (PROMPT_TOP - s.h) * scale + 10)}px)`;
     }
     root.style.setProperty('--px', `${scale}px`);
     skyLayer = buildSkyLayer(palette, viewW, Math.max(1, offsetY + GROUND));
