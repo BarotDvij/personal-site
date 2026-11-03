@@ -586,7 +586,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
       rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
       door(ctx, x + w - 8, 8, 14);
-      sign(ctx, label, cx, top + 12, '#f2a33a', '#2a2233', p);
+      sign(ctx, label, cx, top + 12, '#ffffff', '#000000', p, true);
       break;
     }
     case 'school': {
@@ -645,7 +645,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, wx + 13, wy + 10, 1, 8, p.lamp);
       rect(ctx, wx, wy + 18, ww, 6, shade('#4fa84f', p));
       door(ctx, bx + bw - 8, 8, 14);
-      sign(ctx, label, bcx, top + 16, '#c8336c', '#ffffff', p);
+      sign(ctx, label, bcx, top + 16, '#e92846', '#ffffff', p, true);
       break;
     }
     case 'refinery': {
@@ -739,11 +739,11 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pond': {
       const water = shade('#3b82f6', p), light = shade('#7fb0ff', p);
-      rect(ctx, x + 6, GROUND - 6, w - 12, 6, water);
-      rect(ctx, x + 2, GROUND - 4, w - 4, 4, water);
-      rect(ctx, x + 10, GROUND - 5, 14, 1, light);
-      rect(ctx, x + 40, GROUND - 3, 18, 1, light);
-      for (const [dx, dy] of [[16, -10], [44, -8]]) {
+      rect(ctx, x + 6, GROUND - 4, w - 12, 4, water);
+      rect(ctx, x + 2, GROUND - 3, w - 4, 3, water);
+      rect(ctx, x + 10, GROUND - 3, 14, 1, light);
+      rect(ctx, x + 40, GROUND - 2, 18, 1, light);
+      for (const [dx, dy] of [[16, -8], [44, -6]]) {
         rect(ctx, x + dx, GROUND + dy, 7, 4, shade('#f2c84b', p));
         rect(ctx, x + dx + 5, GROUND + dy - 3, 3, 3, shade('#f2c84b', p));
         rect(ctx, x + dx + 8, GROUND + dy - 2, 2, 1, shade('#f28c28', p));
