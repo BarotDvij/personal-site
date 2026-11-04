@@ -1,5 +1,5 @@
 // Chess with full rules (castling, en passant, promotion, check, mate,
-// stalemate). Two players on one device, or play the city: a small
+// stalemate, threefold repetition). Two players on one device, or play the city: a small
 // alpha-beta search that thinks three moves ahead.
 
 import type { Api, Game, GameModule } from '../types';
@@ -22,13 +22,15 @@ const K_STEPS = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1
 const ROOK = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 const BISHOP = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
 
+// 12x12 sprites. '#' is the body, '+' is a detail tone (eyes, bands, slits)
+// so each piece reads at a glance even at this size.
 const SPRITES: Record<Kind, string[]> = {
-  P: ['..........', '....##....', '...####...', '...####...', '....##....', '...####...', '....##....', '...####...', '..######..', '..######..'],
-  R: ['..#.##.#..', '..######..', '..######..', '...####...', '...####...', '...####...', '...####...', '..######..', '.########.', '.########.'],
-  N: ['....##....', '...####...', '..######..', '.###.###..', '.##..###..', '.....###..', '....####..', '...#####..', '..######..', '.########.'],
-  B: ['.....#....', '....###...', '...##.##..', '...###.#..', '...#####..', '....###...', '....###...', '...#####..', '..#######.', '..#######.'],
-  Q: ['.#..##..#.', '.##.##.##.', '.########.', '..######..', '..######..', '...####...', '...####...', '..######..', '.########.', '.########.'],
-  K: ['....##....', '...####...', '....##....', '..######..', '.########.', '.########.', '..######..', '...####...', '..######..', '.########.'],
+  P: ['............', '............', '.....##.....', '....####....', '....####....', '.....##.....', '....####....', '.....##.....', '....####....', '...++++++...', '..########..', '..########..'],
+  R: ['.##..##..##.', '.##########.', '.##########.', '..########..', '..#+####+#..', '..########..', '..##+##+##..', '..########..', '..########..', '..++++++++..', '.##########.', '.##########.'],
+  N: ['.....#.#....', '....######..', '...########.', '..##+#######', '.##########.', '.####..####.', '.##...#####.', '.....######.', '....#######.', '...++++++++.', '..##########', '..##########'],
+  B: ['.....##.....', '....####....', '....###+....', '...###+##...', '...##+###...', '...######...', '....####....', '.....##.....', '....####....', '...++++++...', '..########..', '..########..'],
+  Q: ['#....##....#', '##..####..##', '.##########.', '.##+####+##.', '..########..', '...######...', '...######...', '....####....', '...######...', '..++++++++..', '.##########.', '.##########.'],
+  K: ['.....##.....', '...######...', '.....##.....', '.##..##..##.', '.##########.', '.####++####.', '..########..', '...######...', '...######...', '..++++++++..', '.##########.', '.##########.'],
 };
 
 const xy = (i: number) => [i % 8, Math.floor(i / 8)];
@@ -169,6 +171,13 @@ function legal(s: State): Move[] {
   });
 }
 
+// Two positions are the same for repetition when the pieces, the side to move,
+// castling rights and any capturable en passant square all match.
+function positionKey(s: State, moves: Move[]): string {
+  const ep = moves.some((m) => m.ep) ? s.ep : -1;
+  return `${s.board.map((p) => p ?? '-').join('')} ${s.turn} ${s.castle} ${ep}`;
+}
+
 function inCheck(s: State) {
   return attacked(s.board, s.board.indexOf(`${s.turn}K`), other(s.turn));
 }
@@ -210,11 +219,14 @@ function search(s: State, depth: number, alpha: number, beta: number): number {
   return best;
 }
 
-function bestMove(s: State): Move {
+// `seen` lets the city score a move that would repeat a position for the
+// third time as a draw, so it steers into repetition only when it is losing.
+function bestMove(s: State, seen: Map<string, number>): Move {
   const moves = legal(s);
   let best = moves[0], bestScore = Infinity;
   for (const m of moves.sort(() => Math.random() - 0.5)) {
-    const v = search(apply(s, m), 2, -Infinity, Infinity);
+    const next = apply(s, m);
+    const v = (seen.get(positionKey(next, legal(next))) ?? 0) >= 2 ? 0 : search(next, 2, -Infinity, Infinity);
     if (v < bestScore) {
       bestScore = v;
       best = m;
@@ -232,9 +244,24 @@ function create(api: Api): Game {
   let vsCity = true;
   let thinking = false;
   let done = false;
+  const seen = new Map<string, number>();
+  let repeated = 0;
+
+  // Called once per move actually played, so toggling modes never double counts.
+  function record() {
+    const key = positionKey(state, legal(state));
+    repeated = (seen.get(key) ?? 0) + 1;
+    seen.set(key, repeated);
+  }
+  record();
 
   function finishTurn() {
     const moves = legal(state);
+    if (moves.length && repeated >= 3) {
+      done = true;
+      api.over('Threefold repetition. A draw.');
+      return;
+    }
     if (!moves.length) {
       done = true;
       if (inCheck(state)) {
@@ -251,9 +278,10 @@ function create(api: Api): Game {
       // Let the board repaint before the search runs.
       setTimeout(() => {
         if (done) return;
-        const m = bestMove(state);
+        const m = bestMove(state, seen);
         state = apply(state, m);
         lastMove = m;
+        record();
         thinking = false;
         api.sound.blip();
         finishTurn();
@@ -264,6 +292,7 @@ function create(api: Api): Game {
   function play(m: Move) {
     state = apply(state, m);
     lastMove = m;
+    record();
     selected = -1;
     options = [];
     api.sound.blip();
@@ -322,17 +351,21 @@ function create(api: Api): Game {
         const p = state.board[i];
         if (p) {
           const sprite = SPRITES[p[1] as Kind];
-          const body = p[0] === 'w' ? '#fff7e6' : '#1a1626';
-          const edge = p[0] === 'w' ? '#2a2233' : '#0a0810';
-          for (const [color, offsets] of [
-            [edge, [[-1, 0], [1, 0], [0, -1], [0, 1]]],
-            [body, [[0, 0]]],
-          ] as const) {
+          const white = p[0] === 'w';
+          const body = white ? '#fff7e6' : '#2b2440';
+          const detail = white ? '#c9a24a' : '#9a8cd0';
+          const edge = white ? '#2a2233' : '#0a0810';
+          const dot = (sx: number, sy: number, ox: number, oy: number) => ctx.fillRect(px + 2 + sx + ox, py + 2 + sy + oy, 1, 1);
+          ctx.fillStyle = edge;
+          for (const [ox, oy] of [[-1, 0], [1, 0], [0, -1], [0, 1]])
+            sprite.forEach((row, sy) => {
+              for (let sx = 0; sx < 12; sx++) if (row[sx] !== '.') dot(sx, sy, ox, oy);
+            });
+          for (const [mark, color] of [['#', body], ['+', detail]] as const) {
             ctx.fillStyle = color;
-            for (const [ox, oy] of offsets)
-              sprite.forEach((row, sy) => {
-                for (let sx = 0; sx < 10; sx++) if (row[sx] === '#') ctx.fillRect(px + 3 + sx + ox, py + 3 + sy + oy, 1, 1);
-              });
+            sprite.forEach((row, sy) => {
+              for (let sx = 0; sx < 12; sx++) if (row[sx] === mark) dot(sx, sy, 0, 0);
+            });
           }
         }
         if (options.some((m) => m.to === i)) {
