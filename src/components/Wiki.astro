@@ -1,4 +1,5 @@
 ---
+import PixelPortrait from './PixelPortrait.astro';
 import profile from '../../content/profile.json';
 import Cite from './Cite.astro';
 import PixelIcon from './PixelIcon.astro';
@@ -118,13 +119,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <aside class="infobox" aria-label="Quick facts">
       <div class="infobox-title">{profile.name}</div>
-      {profile.photo.src ? (
-        <img class="portrait photo" src={profile.photo.src} alt={profile.photo.alt} width="192" height="192" />
-      ) : (
-        <div class="portrait" role="img" aria-label="Portrait coming soon">
-          <span>DB</span>
-        </div>
-      )}
+      <PixelPortrait alt={profile.photo.alt} />
       <p class="caption">Waterloo, Ontario</p>
       <button type="button" class="locator" data-set-mode="city" aria-label="Location in Dvij City. Open the city">
         <img src="/city-locator-night.png" alt="" width="1440" height="512" loading="lazy" />
