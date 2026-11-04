@@ -582,9 +582,12 @@ q {
 .portrait.photo {
   display: block;
   width: 100%;
+  max-width: 192px;
   height: auto;
   object-fit: cover;
   background: none;
+  /* Keep the pixel art crisp: 128 art pixels shown at 192 or 128 CSS px. */
+  image-rendering: pixelated;
 }
 
 .portrait span {
@@ -920,6 +923,10 @@ blockquote p {
 
   .portrait {
     max-width: 140px;
+  }
+
+  .portrait.photo {
+    max-width: 128px;
   }
 
   .wiki-bar .wide {

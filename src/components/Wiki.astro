@@ -119,7 +119,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <aside class="infobox" aria-label="Quick facts">
       <div class="infobox-title">{profile.name}</div>
       {profile.photo.src ? (
-        <img class="portrait photo" src={profile.photo.src} alt={profile.photo.alt} width="200" height="200" />
+        <img class="portrait photo" src={profile.photo.src} alt={profile.photo.alt} width="192" height="192" />
       ) : (
         <div class="portrait" role="img" aria-label="Portrait coming soon">
           <span>DB</span>
