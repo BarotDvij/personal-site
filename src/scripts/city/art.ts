@@ -1411,7 +1411,7 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       const crateX = Math.round(s.x + s.w - 18 - f * 34 + originX);
       rect(ctx, crateX - 1, belt - 9, 19, 9, p.outline);
       rect(ctx, crateX, belt - 8, 17, 7, shade('#c8a24a', p));
-      text(ctx, labels[k], crateX + 9 - Math.floor((labels[k].length * 4 - 1) / 2), belt - 7, '#2a2233');
+      text(ctx, labels[k], crateX + Math.floor((17 - (labels[k].length * 4 - 1)) / 2), belt - 7, '#2a2233'); // centred in the 17px crate
       if (t > 0) {
         for (const [sx, phase] of [[s.x + 10, 0], [s.x + 26, 900]]) {
           for (let i = 0; i < 3; i++) {
