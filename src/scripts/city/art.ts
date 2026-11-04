@@ -1363,32 +1363,91 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
   }
 }
 
-// A pixelated Go Lime ad (16 frames, 32 colours, about 10 KB) that the leads
-// billboard cuts to every other 8 seconds.
-const REEL = { w: 92, h: 28, frames: 16, fps: 2 };
-let adReel: HTMLImageElement | null = null;
-export function loadAdReel() {
-  if (adReel || typeof Image === 'undefined') return;
-  adReel = new Image();
-  adReel.decoding = 'async';
-  adReel.src = '/media/golime/reel.png';
+// Tri-vision flip board on the leads billboard: four Go Lime ads drawn in
+// code, swapped by 23 vertical slats that turn in a wave from left to right.
+const BOARD = { w: 92, h: 28, slat: 4, hold: 4200, flip: 420, stagger: 28 };
+let boardFaces: { night: boolean; faces: HTMLCanvasElement[] } | null = null;
+
+function boardFace(p: Palette, bg: string, lines: [string, string][], icon?: (c: Ctx) => void) {
+  const c = document.createElement('canvas');
+  c.width = BOARD.w;
+  c.height = BOARD.h;
+  const ctx = c.getContext('2d')!;
+  rect(ctx, 0, 0, BOARD.w, BOARD.h, shade(bg, p));
+  icon?.(ctx);
+  const left = icon ? 20 : 0, room = BOARD.w - left;
+  lines.forEach(([str, col], i) => text(ctx, str, left + Math.round((room - textWidth(str)) / 2), 6 + i * 10, col));
+  return c;
+}
+
+function buildBoardFaces(p: Palette) {
+  const white = '#ffffff', lime = '#9bd23c';
+  return [
+    boardFace(p, '#1f2b3d', [['LEADS', lime], ['12 MIN>10 S', white]]),
+    boardFace(p, '#0d4d3c', [['BEAT THE HEAT,', white], ['NOT YOUR WALLET', lime]], (c) => {
+      // Air conditioner: grille box with a fan.
+      rect(c, 4, 7, 13, 14, '#d9dde2');
+      rect(c, 5, 8, 11, 12, '#9aa3ad');
+      for (let y = 9; y < 19; y += 2) rect(c, 6, y, 9, 1, '#d9dde2');
+      rect(c, 4, 21, 13, 1, '#2a2233');
+    }),
+    boardFace(p, '#1e6f2a', [['$99 TANKLESS', white], ['+ HEAT PUMP', '#ffd23f']], (c) => {
+      // Tankless water heater with a red price badge.
+      rect(c, 6, 5, 9, 17, '#f5f1e8');
+      rect(c, 8, 8, 5, 3, '#2a2233');
+      rect(c, 9, 9, 3, 1, lime);
+      rect(c, 8, 22, 1, 2, '#9aa3ad');
+      rect(c, 12, 22, 1, 2, '#9aa3ad');
+      rect(c, 12, 15, 6, 5, '#e0302f');
+      rect(c, 13, 17, 4, 1, white);
+    }),
+    boardFace(p, '#2a6fae', [['CLEAN WATER,', white], ['EVERY TAP', '#d6f0ff']], (c) => {
+      // A water drop.
+      const rows = [[10, 1], [9, 3], [9, 3], [8, 5], [7, 7], [6, 9], [6, 9], [6, 9], [7, 7], [8, 5]];
+      rows.forEach(([x, w], i) => rect(c, x, 8 + i, w, 1, '#9fd0ff'));
+      rect(c, 8, 13, 1, 2, white);
+    }),
+  ];
+}
+
+function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, top: number, p: Palette) {
+  if (typeof document === 'undefined') return;
+  if (!boardFaces || boardFaces.night !== p.night) boardFaces = { night: p.night, faces: buildBoardFaces(p) };
+  const { faces } = boardFaces;
+  const slats = BOARD.w / BOARD.slat;
+  const turn = BOARD.flip + BOARD.stagger * (slats - 1);
+  const each = BOARD.hold + turn;
+  const phase = t % (each * faces.length);
+  const i = Math.floor(phase / each), k = phase - i * each;
+  const cur = faces[i], next = faces[(i + 1) % faces.length];
+  const dx = s.x + 2 + originX, dy = top + 2;
+  if (k < BOARD.hold) {
+    ctx.drawImage(cur, dx, dy);
+    return;
+  }
+  const e = k - BOARD.hold;
+  for (let j = 0; j < slats; j++) {
+    const x0 = j * BOARD.slat;
+    const lin = Math.min(1, Math.max(0, (e - j * BOARD.stagger) / BOARD.flip));
+    const q = lin * lin * (3 - 2 * lin);
+    const wb = Math.round(BOARD.slat * q), wa = BOARD.slat - wb;
+    if (wb) ctx.drawImage(next, x0, 0, BOARD.slat, BOARD.h, dx + x0, dy, wb, BOARD.h);
+    if (wa) ctx.drawImage(cur, x0, 0, BOARD.slat, BOARD.h, dx + x0 + wb, dy, wa, BOARD.h);
+    if (lin > 0 && lin < 1) {
+      // The face turning away darkens, and the slat edge catches a seam.
+      ctx.fillStyle = `rgba(0,0,0,${(0.45 * q).toFixed(2)})`;
+      if (wa) ctx.fillRect(dx + x0 + wb, dy, wa, BOARD.h);
+      ctx.fillStyle = `rgba(0,0,0,${(0.45 * (1 - q)).toFixed(2)})`;
+      if (wb) ctx.fillRect(dx + x0, dy, wb, BOARD.h);
+      rect(ctx, dx + x0 + wb, dy, 1, BOARD.h, 'rgba(0,0,0,0.35)');
+    }
+  }
 }
 
 export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
   for (const s of STRUCTURES) {
     const top = GROUND - s.h + offsetY;
-    if (s.id === 'leads' && t > 0 && adReel?.complete && adReel.naturalWidth) {
-      const reelMs = (REEL.frames / REEL.fps) * 1000;
-      const phase = t % (reelMs * 2);
-      if (phase >= reelMs) {
-        const f = Math.floor(((phase - reelMs) / 1000) * REEL.fps) % REEL.frames;
-        ctx.drawImage(adReel, 0, f * REEL.h, REEL.w, REEL.h, s.x + 2 + originX, top + 2, REEL.w, REEL.h);
-        if (p.night) {
-          ctx.fillStyle = 'rgba(10,12,40,0.25)';
-          ctx.fillRect(s.x + 2 + originX, top + 2, REEL.w, REEL.h);
-        }
-      }
-    }
+    if (s.id === 'leads' && t > 0) drawFlipBoard(ctx, s, t, originX, top, p);
     if (s.kind === 'loadtruck' && t > 0) {
       // A piece drops from the chute into the gap, the row flashes clear, repeat.
       const cycle = 2600, f = (t % cycle) / cycle, k = Math.floor(t / cycle);
