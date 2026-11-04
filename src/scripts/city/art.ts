@@ -1017,10 +1017,21 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
   }
   // Sun or moon
   const sx = Math.max(24, width - 60), sy = 22;
-  rect(ctx, sx, sy, 14, 14, p.sun);
-  rect(ctx, sx - 2, sy + 2, 18, 10, p.sun);
-  rect(ctx, sx + 2, sy - 2, 10, 18, p.sun);
-  if (p.night) rect(ctx, sx + 5, sy + 1, 10, 10, p.sky[0]);
+  if (p.night) {
+    // Waning crescent: a disk with a second, offset disk carved out of its
+    // right side, so the lit sliver hugs the left edge and tapers to two tips.
+    const mx = sx + 8, my = sy + 8;
+    for (let yy = -10; yy <= 10; yy++)
+      for (let xx = -10; xx <= 10; xx++) {
+        const inMoon = xx * xx + yy * yy <= 9.5 * 9.5;
+        const inCut = (xx - 5) ** 2 + (yy + 1) ** 2 <= 8.5 * 8.5;
+        if (inMoon && !inCut) rect(ctx, mx + xx, my + yy, 1, 1, p.sun);
+      }
+  } else {
+    rect(ctx, sx, sy, 14, 14, p.sun);
+    rect(ctx, sx - 2, sy + 2, 18, 10, p.sun);
+    rect(ctx, sx + 2, sy - 2, 10, 18, p.sun);
+  }
   return c;
 }
 
