@@ -1383,7 +1383,7 @@ function boardFace(p: Palette, bg: string, lines: [string, string][], icon?: (c:
 function buildBoardFaces(p: Palette) {
   const white = '#ffffff', lime = '#9bd23c';
   return [
-    boardFace(p, '#1f2b3d', [['LEADS', lime], ['12 MIN>10 S', white]]),
+    boardFace(p, '#1f2b3d', [['LEADS', lime], ['12 MIN > 10 S', white]]),
     boardFace(p, '#0d4d3c', [['BEAT THE HEAT,', white], ['NOT YOUR WALLET', lime]], (c) => {
       // Air conditioner: grille box with a fan.
       rect(c, 4, 7, 13, 14, '#d9dde2');
