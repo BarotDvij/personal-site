@@ -462,7 +462,6 @@ html[data-mode='city'] body {
 .career-table th[scope='row'] {
   background: none;
   font-weight: 600;
-  white-space: nowrap;
 }
 
 .career-table th[scope='row'] small {
@@ -472,7 +471,6 @@ html[data-mode='city'] body {
 }
 
 .career-table .dates {
-  white-space: nowrap;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
@@ -481,6 +479,58 @@ html[data-mode='city'] body {
   display: flex;
   margin-top: 4px;
   font-size: 0.66rem;
+}
+
+/* Fixed proportions so every column shrinks and grows together instead of
+   Description absorbing all the squeeze. The table measures the space it
+   actually has (the contents sidebar and infobox both eat into it), and
+   stacks each role into a card when there isn't room for four columns. */
+.career-table th,
+.career-table td {
+  overflow-wrap: anywhere;
+}
+
+@container (min-width: 560px) {
+  .career-table {
+    table-layout: fixed;
+  }
+
+  .career-table thead th:nth-child(1) {
+    width: 14%;
+  }
+
+  .career-table thead th:nth-child(2) {
+    width: 20%;
+  }
+
+  .career-table thead th:nth-child(3) {
+    width: 20%;
+  }
+}
+
+@container (max-width: 559px) {
+  .wikitable.career-table thead {
+    display: none;
+  }
+
+  .wikitable.career-table tr,
+  .wikitable.career-table td,
+  .wikitable.career-table th[scope='row'] {
+    display: block;
+    border: 0;
+    padding: 2px 10px;
+    white-space: normal;
+  }
+
+  .wikitable.career-table tr {
+    border: 1px solid var(--line-strong);
+    border-top: 0;
+    padding: 8px 0;
+  }
+
+  .wikitable.career-table tr:first-child {
+    border-top: 1px solid var(--line-strong);
+  }
 }
 
 sup {
@@ -690,6 +740,7 @@ q {
 /* Tables sit beside the infobox instead of dropping below it. */
 .table-wrap {
   overflow-x: auto;
+  container-type: inline-size;
 }
 
 .project-grid {
