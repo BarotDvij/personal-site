@@ -1016,19 +1016,6 @@ export function buildCityLayer(p: Palette) {
   drawUnderground(ctx, p);
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
-  for (const d of DISTRICTS) {
-    // Tall flag so it clears the street lamps (which top out at GROUND - 24).
-    // At night the pole and cloth stay bright so they read against the sky.
-    const pole = p.night ? '#c9cde8' : p.lamp;
-    const cloth = p.night ? LENS_COLOR[d.lens] : shade(LENS_COLOR[d.lens], p);
-    rect(ctx, d.x0 + 3, GROUND - 46, 1, 46, pole);
-    rect(ctx, d.x0 + 3, GROUND - 48, 1, 2, p.night ? '#ffffff' : p.lamp);
-    rect(ctx, d.x0 + 4, GROUND - 46, 10, 7, cloth);
-    if (p.night) {
-      rect(ctx, d.x0 + 4, GROUND - 46, 10, 1, '#ffffff');
-      rect(ctx, d.x0 + 4, GROUND - 40, 10, 1, p.outline);
-    }
-  }
   // Welcome banner
   ribbon(ctx, 'WELCOME TO DVIJ CITY', 80, 66, '#e8c547', '#2a2233', p);
   return c;
@@ -1102,10 +1089,11 @@ function cnTower(ctx: Ctx, cx: number, base: number, h: number, col: string, p: 
   rect(ctx, cx - 1, top, 3, h, col);
   rect(ctx, cx, top - 6, 1, 6, col);
   for (let i = 0; i < 14; i++) rect(ctx, cx - 1 - Math.round(i * 0.45), base - 1 - i * 2, 3 + Math.round(i * 0.9), 2, col);
-  rect(ctx, cx - 8, pod, 17, 3, col);
-  rect(ctx, cx - 6, pod + 3, 13, 2, col);
-  rect(ctx, cx - 4, pod - 2, 9, 2, col);
-  rect(ctx, cx - 2, pod - 4, 5, 2, col);
+  // The main pod, about 28% thicker than the first draft (12 rows, was 9).
+  rect(ctx, cx - 8, pod, 17, 4, col);
+  rect(ctx, cx - 6, pod + 4, 13, 3, col);
+  rect(ctx, cx - 4, pod - 3, 9, 3, col);
+  rect(ctx, cx - 2, pod - 5, 5, 2, col);
   if (p.night) rect(ctx, cx - 6, pod + 1, 13, 1, '#ffd76a');
   // The lookout pod on the shaft below, smaller and higher up.
   rect(ctx, cx - 2, top + 8, 5, 2, col);
@@ -1365,7 +1353,7 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
 
 // Tri-vision flip board on the leads billboard: four Go Lime ads drawn in
 // code, swapped by 23 vertical slats that turn in a wave from left to right.
-const BOARD = { w: 92, h: 28, slat: 4, hold: 4200, flip: 420, stagger: 28 };
+const BOARD = { w: 92, h: 28, slat: 4, hold: 3000, flip: 420, stagger: 28 };
 let boardFaces: { night: boolean; faces: HTMLCanvasElement[] } | null = null;
 
 function boardFace(p: Palette, bg: string, lines: [string, string][], icon?: (c: Ctx) => void) {
@@ -1459,7 +1447,7 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       } else if (f < 0.75) {
         stackCell(ctx, bx, land, BLOCK_COLORS[k % BLOCK_COLORS.length], p);
       } else if (Math.floor(t / 120) % 2) {
-        rect(ctx, s.x + 12 + originX, land, 19, 3, '#ffffff');
+        rect(ctx, s.x + 12 + originX, land, 19, 2, '#ffffff');
       }
     }
     if (s.kind === 'arcadehall' && p.night) {
