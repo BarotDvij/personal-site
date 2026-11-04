@@ -123,16 +123,24 @@ function start() {
   api.reduced = html.dataset.motion === 'reduced';
   game = mod.create(api);
   game.render();
+  run();
+}
+
+// The loop stops while paused or after game over, and restarts on resume
+// or replay, so an idle game draws nothing.
+function run() {
+  cancelAnimationFrame(raf);
+  last = 0;
+  acc = 0;
+  fresh.clear();
+  raf = requestAnimationFrame(frame);
 }
 
 function frame(now: number) {
+  if (!game || paused || ended) return;
   raf = requestAnimationFrame(frame);
   const dt = last ? Math.min(100, now - last) : STEP;
   last = now;
-  if (!game || paused || ended) {
-    fresh.clear();
-    return;
-  }
   acc += dt;
   while (acc >= STEP) {
     game.update(STEP);
@@ -148,7 +156,10 @@ function togglePause(force?: boolean) {
   paused = force ?? !paused;
   pauseBtn.textContent = paused ? 'Resume' : 'Pause';
   if (paused) showOverlay('Paused', 'Press P, or tap here, to resume.');
-  else overlay.hidden = true;
+  else {
+    overlay.hidden = true;
+    run();
+  }
 }
 
 // ----- input -----
@@ -268,8 +279,4 @@ export async function openGame(id: string) {
   window.addEventListener('resize', fit);
   sfx.start();
   start();
-  last = 0;
-  acc = 0;
-  cancelAnimationFrame(raf);
-  raf = requestAnimationFrame(frame);
 }
