@@ -643,11 +643,37 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, px + 2, top + 12, 1, 2, p.lamp);
       }
       const wx = bx + 5, wy = GROUND - 30, ww = bw - 20;
+      const steel = shade('#9aa3ad', p), steelDk = shade('#5d6676', p), red = shade('#e92846', p), cyan = p.night ? '#9ff3ff' : '#22b8cf';
       rect(ctx, wx, wy, ww, 24, p.night ? '#e6cf8f' : '#cfe6f5');
-      for (let k = 0; k < 4; k++) rect(ctx, wx + 4 + k * 2, wy + 6 + k, 20 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
-      rect(ctx, wx + 13, wy + 10, 1, 8, p.lamp);
-      rect(ctx, wx, wy + 18, ww, 6, shade('#4fa84f', p));
-      door(ctx, bx + bw - 8, 8, 14);
+      rect(ctx, wx, wy + 2, ww, 1, red); // accent stripe on the back wall
+      rect(ctx, wx + 3, wy, ww - 6, 1, steelDk); // ceiling light rail
+      for (let i = 0; i < 4; i++) rect(ctx, wx + 6 + i * 12, wy + 1, 6, 1, p.night ? '#ffffff' : '#ffffff');
+      rect(ctx, wx, wy + 19, ww, 5, shade('#6b7480', p)); // polished floor
+      rect(ctx, wx, wy + 19, ww, 1, shade('#9aa3ad', p));
+      // Robot arm on a base: two links and a claw
+      rect(ctx, wx + 3, wy + 16, 9, 3, steelDk);
+      rect(ctx, wx + 6, wy + 8, 2, 8, steel);
+      for (let k = 0; k < 6; k++) rect(ctx, wx + 7 + k, wy + 8 - (k >> 1), 1, 2, steel);
+      rect(ctx, wx + 12, wy + 6, 1, 4, steelDk);
+      rect(ctx, wx + 14, wy + 6, 1, 4, steelDk);
+      rect(ctx, wx + 6, wy + 14, 2, 1, red);
+      // Walking robot on a podium, one antenna and a glowing visor
+      rect(ctx, wx + 20, wy + 16, 11, 3, shade('#d8dde3', p));
+      rect(ctx, wx + 22, wy + 9, 7, 7, steel);
+      rect(ctx, wx + 23, wy + 4, 5, 5, steel);
+      rect(ctx, wx + 24, wy + 6, 3, 1, cyan);
+      rect(ctx, wx + 25, wy + 1, 1, 3, steelDk);
+      rect(ctx, wx + 25, wy, 1, 1, red);
+      rect(ctx, wx + 20, wy + 10, 2, 5, steelDk);
+      rect(ctx, wx + 29, wy + 10, 2, 5, steelDk);
+      rect(ctx, wx + 24, wy + 12, 3, 1, red);
+      // Solar panel on a stand, plus a charging pad with a small drone
+      for (let k = 0; k < 4; k++) rect(ctx, wx + 35 + k * 2, wy + 9 + k, 12 - k * 2, 1, shade(k % 2 ? '#2a4f8f' : '#1f3a6b', p));
+      rect(ctx, wx + 40, wy + 13, 1, 6, p.lamp);
+      rect(ctx, wx + 37, wy + 3, 8, 1, steelDk);
+      rect(ctx, wx + 40, wy + 4, 2, 1, cyan);
+      rect(ctx, wx + 38, wy + 5, 6, 1, steel);
+      door(ctx, bx + bw - 8, 8, 14, shade('#4a4f57', p));
       sign(ctx, label, bcx, top + 16, '#e92846', '#ffffff', p, true);
       break;
     }
@@ -845,17 +871,29 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 6, top + 26, w - 12, h - 35, stone, p);
       for (let i = 0; i < 12; i++) rect(ctx, x + 4 + i * 3, top + 24 - i * 2, w - 8 - i * 6, 2, i === 0 ? dark : stone);
       rect(ctx, x + 4, top + 24, w - 8, 2, p.outline);
-      // Framed paintings between columns
-      const frames = ['#008c00', '#e0302f', '#3b82f6'];
+      // Four pillars, with a tall hanging banner centred in each of the three gaps.
+      const pillarX = (i: number) => x + 9 + i * ((w - 24) / 3);
+      for (let i = 0; i < 4; i++) rect(ctx, pillarX(i), top + 54, 5, h - 63, shade('#fffaf0', p));
+      const banners = ['#008c00', '#e0302f', '#3b82f6'];
       for (let i = 0; i < 3; i++) {
-        // Evenly spaced and centred inside the building body (x + 6 .. x + w - 6).
-        const fx = x + 6 + 4 + 2 + i * ((w - 12 - 8 - 18) / 2);
-        box(ctx, fx - 2, top + 34, 18, 16, shade('#c8a24a', p), p);
-        rect(ctx, fx, top + 36, 14, 12, shade(frames[i], p));
-        rect(ctx, fx + 2, top + 38, 4, 3, '#ffffff');
+        const mid = Math.round((pillarX(i) + 5 + pillarX(i + 1)) / 2);
+        const bw2 = 12, bx2 = mid - bw2 / 2, by = top + 32, bh = 40;
+        rect(ctx, bx2 - 2, by - 2, bw2 + 4, 2, shade('#7a5a1a', p)); // rod
+        rect(ctx, bx2 - 1, by, bw2 + 2, bh + 1, p.outline);
+        rect(ctx, bx2, by, bw2, bh - 1, shade(banners[i], p));
+        // Swallow-tail: a V cut from the bottom edge, showing the wall behind.
+        for (let k = 0; k < 5; k++) {
+          const half = k, yy = by + bh - 5 + k;
+          rect(ctx, mid - half, yy, half * 2 + 1, 1, stone);
+          rect(ctx, mid - half - 1, yy, 1, 1, p.outline);
+          rect(ctx, mid + half + 1, yy, 1, 1, p.outline);
+        }
+        rect(ctx, bx2 + 1, by + 1, 1, bh - 6, shade('#ffffff', p)); // sheen
+        rect(ctx, bx2 + 3, by + 4, bw2 - 6, 1, shade('#c8a24a', p)); // gold trim
+        rect(ctx, bx2 + 3, by + bh - 9, bw2 - 6, 1, shade('#c8a24a', p));
+        rect(ctx, mid - 1, by + 10, 3, 3, shade('#c8a24a', p)); // emblem
+        rect(ctx, mid - 2, by + 14, 5, 1, shade('#c8a24a', p));
       }
-      for (let i = 0; i < 4; i++) rect(ctx, x + 9 + i * ((w - 24) / 3), top + 54, 5, h - 63, shade('#fffaf0', p));
-      door(ctx, cx, 12, 16, shade('#5a4030', p), GROUND - 9); // top of the steps
       sign(ctx, label, cx, top + 12, '#22b8cf', '#ffffff', p);
       break;
     }

@@ -1210,6 +1210,29 @@ html[data-sound='off'] .i-waves {
   background: rgb(10 8 20 / 0.55);
 }
 
+/* Roomier popups on desktop: wider column, a little more air around the text. */
+@media (min-width: 900px) {
+  .city-panel {
+    width: min(800px, calc(100% - 80px));
+    max-height: min(84vh, 800px);
+    padding: 24px 34px 26px;
+  }
+
+  .panel-title {
+    font-size: 24px;
+  }
+
+  .panel-body .exhibit,
+  .panel-body .wing {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .panel-body .frame {
+    width: 80px;
+    height: 80px;
+  }
+}
+
 .panel-close-form {
   position: sticky;
   top: 0;
@@ -1230,33 +1253,34 @@ html[data-sound='off'] .i-waves {
 .panel-kicker {
   margin: 0;
   color: var(--lens, #e8c547);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .panel-title {
   font-weight: 400;
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.35;
-  margin: 4px 0 12px;
+  margin: 4px 0 14px;
 }
 
 .panel-body {
   font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.65;
   color: #ece9f6;
 }
 
 .panel-body .lead {
   color: #fff;
+  font-size: 17px;
 }
 
 .panel-body h3 {
   font-family: var(--pixel);
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
   color: #e8c547;
-  margin: 16px 0 4px;
+  margin: 22px 0 6px;
 }
 
 .panel-body ul {
@@ -1264,7 +1288,7 @@ html[data-sound='off'] .i-waves {
 }
 
 .panel-body li {
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
 .panel-body a {
@@ -1289,7 +1313,7 @@ html[data-sound='off'] .i-waves {
 
 .panel-body .stack {
   color: #b8b2cf;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .panel-body .podium {
@@ -1844,7 +1868,7 @@ html.party .hud-title {
   list-style: none;
   padding: 0;
   display: grid;
-  gap: 12px;
+  gap: 18px;
 }
 
 .panel-body .exhibit {
@@ -1868,8 +1892,8 @@ html.party .hud-title {
 }
 
 .panel-body .plaque {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .panel-body .game-btn.inline {
@@ -1884,14 +1908,14 @@ html.party .hud-title {
 .panel-body .wing {
   display: grid;
   grid-template-columns: 64px 1fr;
-  gap: 12px;
+  gap: 16px;
   align-items: start;
-  margin-bottom: 16px;
+  margin-bottom: 26px;
 }
 
 .panel-body .wing .why,
 .panel-body .wing .intro {
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
 .panel-body .wing .why {
@@ -1907,16 +1931,16 @@ html.party .hud-title {
 
 .panel-body .wing dl,
 .panel-body dl.built {
-  margin: 8px 0;
+  margin: 12px 0;
 }
 
 .panel-body .wing dt,
 .panel-body dl.built dt {
   font-family: var(--pixel);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
 .panel-body .wing dd,
