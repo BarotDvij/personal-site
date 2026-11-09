@@ -770,12 +770,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 2, GROUND - 3, w - 4, 3, water);
       rect(ctx, x + 10, GROUND - 3, 14, 1, light);
       rect(ctx, x + 40, GROUND - 2, 18, 1, light);
-      for (const [dx, dy] of [[16, -8], [44, -6]]) {
-        rect(ctx, x + dx, GROUND + dy, 7, 4, shade('#f2c84b', p));
-        rect(ctx, x + dx + 5, GROUND + dy - 3, 3, 3, shade('#f2c84b', p));
-        rect(ctx, x + dx + 8, GROUND + dy - 2, 2, 1, shade('#f28c28', p));
-        rect(ctx, x + dx + 6, GROUND + dy - 2, 1, 1, p.outline);
-      }
+      // The ducks swim in drawProps, so they are not baked in here.
       for (const rx of [x + 2, x + w - 6]) {
         rect(ctx, rx, GROUND - 14, 1, 14, shade('#3f9a48', p));
         rect(ctx, rx + 2, GROUND - 11, 1, 11, shade('#3f9a48', p));
@@ -1485,6 +1480,28 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
       // Freshly cut stripe behind the mower
       ctx.fillStyle = p.night ? 'rgba(160, 230, 140, 0.25)' : 'rgba(200, 255, 170, 0.45)';
       ctx.fillRect(dir > 0 ? Math.round(s.x + 2 + originX) : mx + 12, gy - 3, dir > 0 ? Math.max(0, mx - Math.round(s.x + 2 + originX)) : Math.max(0, Math.round(s.x + 2 + span + 12 + originX) - (mx + 12)), 1);
+    }
+    if (s.kind === 'pond') {
+      // Two ducks swim end to end, 3 seconds each way, turning around at the reeds.
+      const span = s.w - 16, period = 6000, gy = GROUND + offsetY;
+      for (const [startPhase, dy] of [[0, -8], [0.35, -6]]) {
+        const phase = (((t / period) + startPhase) % 1 + 1) % 1;
+        const right = phase < 0.5;
+        const off = Math.round((right ? phase * 2 : (1 - phase) * 2) * span);
+        const dx = s.x + 3 + off + originX, y = gy + dy;
+        const body = shade('#f2c84b', p);
+        if (right) {
+          rect(ctx, dx, y, 7, 4, body);
+          rect(ctx, dx + 5, y - 3, 3, 3, body);
+          rect(ctx, dx + 8, y - 2, 2, 1, shade('#f28c28', p));
+          rect(ctx, dx + 6, y - 2, 1, 1, p.outline);
+        } else {
+          rect(ctx, dx + 3, y, 7, 4, body);
+          rect(ctx, dx + 2, y - 3, 3, 3, body);
+          rect(ctx, dx, y - 2, 2, 1, shade('#f28c28', p));
+          rect(ctx, dx + 3, y - 2, 1, 1, p.outline);
+        }
+      }
     }
     if (s.kind === 'refinery') {
       // File crates ride the conveyor into the refinery; smoke drifts up.
