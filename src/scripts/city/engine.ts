@@ -140,8 +140,10 @@ export function mountCity(root: HTMLElement): City {
     overlay.append(b);
   }
 
-  // Guided tour order: every clickable building except warp pipes.
-  const tourStops = STRUCTURES.filter((s) => s.ref && s.ref.type !== 'warp');
+  // Guided tour order: every building with a detail panel. Warp pipes move
+  // the walker and games open the arcade window, so neither has a panel to
+  // show. Games stay reachable from the tour through the Arcade Hall stop.
+  const tourStops = STRUCTURES.filter((s) => s.ref && s.ref.type !== 'warp' && s.ref.type !== 'game');
   const countEl = panel.querySelector<HTMLElement>('.panel-count')!;
   let current: Structure | null = null;
   const buttonFor = (s: Structure) => overlay.querySelector<HTMLElement>(`[data-sid="${s.id}"]`);
