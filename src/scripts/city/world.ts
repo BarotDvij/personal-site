@@ -85,11 +85,11 @@ export const STRUCTURES: Structure[] = [
 
   // Downtown
   { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 752, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 788 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
-  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1060, w: 96, h: 170, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
-  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 1174, w: 76, h: 152, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1212 },
+  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 164, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
+  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 1174, w: 76, h: 164, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1212 },
   { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1268, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1354, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 

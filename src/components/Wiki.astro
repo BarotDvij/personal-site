@@ -7,7 +7,7 @@ import { STRUCTURES } from '../scripts/city/world';
 
 // Map each role and project to its building so the Wiki can link into the city.
 const buildingFor = (match: (r: NonNullable<(typeof STRUCTURES)[number]['ref']>) => boolean) =>
-  STRUCTURES.find((s) => s.ref && s.kind !== 'billboard' && match(s.ref))?.id;
+  STRUCTURES.find((s) => s.ref && match(s.ref))?.id;
 const roleBuilding = (org: string) => buildingFor((r) => r.type === 'role' && r.org === org);
 const projectBuilding = (name: string) => buildingFor((r) => r.type === 'project' && r.name === name);
 

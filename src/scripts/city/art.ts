@@ -231,15 +231,12 @@ function trophy(ctx: Ctx, px: number, cupY: number, metal: string, p: Palette) {
   rect(ctx, px - 3, cupY + 1, 2, 3, '#fff6c8');
 }
 
-// Go Lime's billboard: 'roof' puts a wide board on a truss above the tower,
-// 'facade' wraps a tall LED wall over the upper face.
-export const GOLIME_BILLBOARD: 'roof' | 'facade' = 'roof';
-
-function boardRect(s: Structure) {
+// Go Lime's LED face: where it sits on the tower, in world pixels. Each LED
+// cell is 2x2, so the ads are painted at half resolution.
+const LED = 2;
+function ledRect(s: Structure) {
   const top = GROUND - s.h;
-  return GOLIME_BILLBOARD === 'facade'
-    ? { x: s.x + 14, y: top + 16, w: 68, h: 92 }
-    : { x: s.x + 2, y: top + 8, w: 92, h: 28 };
+  return { x: s.x + 8, y: top + 20, w: s.w - 16, h: GROUND - 24 - (top + 20) };
 }
 
 // ---------- buildings ----------
@@ -904,65 +901,33 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'mediahq': {
-      // Go Lime HQ: a dark-glass downtown tower with lime fins and a digital billboard.
-      const facade = GOLIME_BILLBOARD === 'facade';
-      const bodyTop = facade ? top + 8 : top + 46, bx = x + 6, bw = w - 12;
-      const pane = p.night ? '#16261c' : shade('#3f6b55', p);
-      box(ctx, bx, bodyTop, bw, GROUND - bodyTop, pane, p);
-      // Curtain wall: mullions every 6px, floor lines every 8px, lit offices at night.
-      const gTop = bodyTop + 2;
-      if (p.night) {
-        for (let yy = gTop; yy + 8 <= GROUND - 22; yy += 8)
-          for (let xx = bx + 3; xx < bx + bw - 3; xx += 6) if (r() < 0.3) rect(ctx, xx, yy, 6, 8, p.lit);
-      } else {
-        for (let k = 0; k < GROUND - gTop - 22; k++) {
-          const rx = bx + 3 + (Math.round(k * 0.4) % (bw + 12)) - 8;
-          if (rx >= bx + 3 && rx + 4 <= bx + bw - 3) rect(ctx, rx, gTop + k, 4, 1, '#5f9479');
+      // Go Lime HQ: a tower whose whole face is an LED screen, with a small
+      // name sign on the roof. drawProps plays the ads on the screen.
+      const bodyTop = top + 16, bx = x + 4, bw = w - 8;
+      // Name sign on two short posts, lit from below at night.
+      const sw = 40, sx = cx - sw / 2;
+      for (const px of [sx + 8, sx + sw - 10]) rect(ctx, px, top + 12, 2, 4, shade('#5b5560', p));
+      box(ctx, sx, top, sw, 13, shade('#14181c', p), p);
+      centeredText(ctx, label, cx, top + 4, '#9bd23c');
+      for (const lx of [sx + 3, sx + sw - 5]) {
+        rect(ctx, lx, top + 13, 2, 1, p.night ? '#fff6c8' : '#9aa3ad');
+        if (p.night) {
+          ctx.fillStyle = 'rgba(255, 240, 180, 0.18)';
+          ctx.fillRect(lx - 2, top + 2, 6, 11);
         }
       }
-      for (let xx = bx + 3; xx < bx + bw - 2; xx += 6) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#24392d', p));
-      for (let yy = gTop + 8; yy < GROUND - 20; yy += 8) rect(ctx, bx + 1, yy, bw - 2, 1, shade('#24392d', p));
-      // Lime corner fins run the full height.
+      // Tower shell, lime edge strips, and the dark frame around the screen.
+      box(ctx, bx, bodyTop, bw, GROUND - bodyTop, shade('#1d2a22', p), p);
       rect(ctx, bx + 1, bodyTop + 1, 2, GROUND - bodyTop - 1, shade('#9bd23c', p));
       rect(ctx, bx + bw - 3, bodyTop + 1, 2, GROUND - bodyTop - 1, shade('#9bd23c', p));
-      if (facade) {
-        // A tall LED wall wraps the upper face. drawProps plays the ads on it.
-        const b = boardRect(s);
-        rect(ctx, cx, top - 0, 1, 8, p.lamp);
-        box(ctx, b.x - 2, b.y - 2, b.w + 4, b.h + 4, shade('#14181c', p), p);
-        rect(ctx, b.x, b.y, b.w, b.h, shade('#1f2b3d', p));
-        for (const lx of [b.x + 6, b.x + b.w / 2, b.x + b.w - 7]) rect(ctx, lx, b.y + b.h + 2, 2, 2, '#fff6c8');
-      } else {
-        // Rooftop billboard on a steel truss, lit by gooseneck lamps.
-        const b = boardRect(s), steel = shade('#5b5560', p);
-        box(ctx, b.x - 2, b.y - 2, b.w + 4, b.h + 4, shade('#14181c', p), p);
-        rect(ctx, b.x, b.y, b.w, b.h, shade('#1f2b3d', p));
-        for (const lx of [b.x + 10, b.x + 34, b.x + 58, b.x + 82]) {
-          rect(ctx, lx, top, 1, 6, steel);
-          rect(ctx, lx - 3, top, 3, 1, steel);
-          rect(ctx, lx - 5, top, 3, 2, shade('#2a2a33', p));
-          rect(ctx, lx - 5, top + 2, 3, 1, '#fff6c8');
-        }
-        const ty = b.y + b.h + 2, tb = bodyTop;
-        rect(ctx, x + 2, ty, w - 4, 2, steel); // catwalk
-        for (let i = 4; i < w - 4; i += 4) rect(ctx, x + i, ty - 1, 1, 1, steel);
-        for (const px of [x + 14, x + w - 16]) {
-          rect(ctx, px, ty + 2, 2, tb - ty - 2, steel);
-        }
-        for (let k = 0; k < tb - ty - 2; k++) {
-          const f = k / (tb - ty - 2);
-          rect(ctx, x + 16 + Math.round(f * (w - 32)), ty + 2 + k, 1, 1, steel);
-          rect(ctx, x + w - 17 - Math.round(f * (w - 32)), ty + 2 + k, 1, 1, steel);
-        }
-        rect(ctx, bx, bodyTop - 1, bw, 2, shade('#2a2a33', p));
-      }
-      // Lobby: stone podium, glass doors, the Go Lime sign on the canopy.
+      const L = ledRect(s);
+      box(ctx, L.x - 1, L.y - 1, L.w + 2, L.h + 2, '#0b0f0c', p);
+      // Lobby: stone base with glass doors.
       box(ctx, x, GROUND - 20, w, 20, shade('#d9d2c4', p), p);
       rect(ctx, x + 1, GROUND - 20, w - 2, 2, shade('#9bd23c', p));
-      box(ctx, cx - 12, GROUND - 16, 24, 16, p.night ? '#e6cf8f' : '#cfe6f5', p);
+      box(ctx, cx - 10, GROUND - 16, 20, 16, p.night ? '#e6cf8f' : '#cfe6f5', p);
       rect(ctx, cx, GROUND - 15, 1, 15, shade('#3a4a3a', p));
-      for (const wx of [x + 6, x + w - 22]) box(ctx, wx, GROUND - 14, 16, 9, p.night ? '#e6cf8f' : '#cfe6f5', p);
-      sign(ctx, label, cx, GROUND - 31, '#9bd23c', '#1d2a10', p, true);
+      for (const wx of [x + 5, x + w - 19]) box(ctx, wx, GROUND - 14, 14, 9, p.night ? '#e6cf8f' : '#cfe6f5', p);
       break;
     }
     case 'warp': {
@@ -1420,49 +1385,52 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
   }
 }
 
-// Tri-vision flip board on the Go Lime billboard: four ads drawn in code,
-// swapped by vertical slats that turn in a wave from left to right. The same
-// ads come in a wide layout (rooftop board) and a tall one (LED facade).
-const BOARD = { slat: 4, hold: 3000, flip: 420, stagger: 28 };
-let boardFaces: { key: string; faces: HTMLCanvasElement[] } | null = null;
+// Go Lime LED wall: four ads shown on a grid of 2x2 LED cells. Each change
+// is a radial pixel dissolve that spreads out from the centre, with a bright
+// ring of cells at its edge, like a screen refreshing.
+const ADS = { hold: 3000, change: 700 };
+interface LedFace { big: HTMLCanvasElement }
+let led: { key: string; faces: LedFace[]; order: Float32Array; cols: number; rows: number } | null = null;
 
 type Icon = (c: Ctx) => void;
-interface Ad { bg: string; wide: [string, string][]; tall: [string, string][]; icon?: Icon }
+interface Ad { bg: string; tall: [string, string][]; icon?: Icon }
 
-function boardFace(p: Palette, ad: Ad, w: number, h: number) {
-  const c = document.createElement('canvas');
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext('2d')!;
-  rect(ctx, 0, 0, w, h, shade(ad.bg, p));
-  if (h <= 32) {
-    ad.icon?.(ctx);
-    const left = ad.icon ? 20 : 0, room = w - left;
-    ad.wide.forEach(([str, col], i) => text(ctx, str, left + Math.round((room - textWidth(str)) / 2), 6 + i * 10, col));
-  } else {
-    // Tall: the icon sits centred near the top at double size, text stacks below.
-    let y0 = 14;
-    if (ad.icon) {
-      const ic = document.createElement('canvas');
-      ic.width = 22;
-      ic.height = 26;
-      ad.icon(ic.getContext('2d')!);
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(ic, 0, 0, 22, 26, Math.round(w / 2 - 22), 6, 44, 52);
-      y0 = 60;
-    }
-    const gap = ad.icon ? 9 : 14;
-    ad.tall.forEach(([str, col], i) => text(ctx, str, Math.round((w - textWidth(str)) / 2), y0 + i * gap, col));
+// Paint one ad at cell resolution, then enlarge it x2 with faint grid lines
+// between the cells so the face reads as LEDs. LEDs glow, so no night shading.
+function ledFace(ad: Ad, cols: number, rows: number) {
+  const small = document.createElement('canvas');
+  small.width = cols;
+  small.height = rows;
+  const c = small.getContext('2d')!;
+  rect(c, 0, 0, cols, rows, ad.bg);
+  let y0 = Math.round(rows / 2 - (ad.tall.length * 9 - 4) / 2);
+  if (ad.icon) {
+    c.save();
+    c.translate(Math.round(cols / 2 - 11), 2);
+    ad.icon(c);
+    c.restore();
+    y0 = 32;
   }
-  return c;
+  const gap = ad.icon ? 7 : 9;
+  ad.tall.forEach(([str, col], i) => text(c, str, Math.round((cols - textWidth(str)) / 2), y0 + i * gap, col));
+  const big = document.createElement('canvas');
+  big.width = cols * LED;
+  big.height = rows * LED;
+  const b = big.getContext('2d')!;
+  b.imageSmoothingEnabled = false;
+  b.drawImage(small, 0, 0, big.width, big.height);
+  b.fillStyle = 'rgba(0,0,0,0.25)';
+  for (let i = 1; i < cols; i++) b.fillRect(i * LED - 1, 0, 1, big.height);
+  for (let j = 1; j < rows; j++) b.fillRect(0, j * LED - 1, big.width, 1);
+  return { big };
 }
 
 function buildAds(): Ad[] {
   const white = '#ffffff', lime = '#9bd23c';
   return [
-    { bg: '#1f2b3d', wide: [['LEADS', lime], ['12 MIN > 10 S', white]], tall: [['GO LIME', lime], ['LEAD', white], ['REPORTS', white], ['12 MIN', white], ['> 10 S', lime]] },
+    { bg: '#1f2b3d', tall: [['LEAD', lime], ['REPORTS', lime], ['12 MIN', white], ['> 10 S', lime]] },
     {
-      bg: '#0d4d3c', wide: [['BEAT THE HEAT,', white], ['NOT YOUR WALLET', lime]], tall: [['BEAT THE', white], ['HEAT,', white], ['NOT YOUR', lime], ['WALLET', lime]],
+      bg: '#0d4d3c', tall: [['BEAT THE', white], ['HEAT,', white], ['NOT YOUR', lime], ['WALLET', lime]],
       icon: (c) => {
         // Air conditioner: grille box with a fan.
         rect(c, 4, 7, 13, 14, '#d9dde2');
@@ -1472,7 +1440,7 @@ function buildAds(): Ad[] {
       },
     },
     {
-      bg: '#1e6f2a', wide: [['$99 TANKLESS', white], ['+ HEAT PUMP', '#ffd23f']], tall: [['$99', '#ffd23f'], ['TANKLESS', white], ['+ HEAT', white], ['PUMP', white]],
+      bg: '#1e6f2a', tall: [['$99', '#ffd23f'], ['TANKLESS', white], ['+ HEAT', white], ['PUMP', white]],
       icon: (c) => {
         // Tankless water heater with a red price badge.
         rect(c, 6, 5, 9, 17, '#f5f1e8');
@@ -1485,7 +1453,7 @@ function buildAds(): Ad[] {
       },
     },
     {
-      bg: '#2a6fae', wide: [['CLEAN WATER,', white], ['EVERY TAP', '#d6f0ff']], tall: [['CLEAN', white], ['WATER,', white], ['EVERY', '#d6f0ff'], ['TAP', '#d6f0ff']],
+      bg: '#2a6fae', tall: [['CLEAN', white], ['WATER,', white], ['EVERY', '#d6f0ff'], ['TAP', '#d6f0ff']],
       icon: (c) => {
         // A water drop.
         const rows = [[10, 1], [9, 3], [9, 3], [8, 5], [7, 7], [6, 9], [6, 9], [6, 9], [7, 7], [8, 5]];
@@ -1496,38 +1464,37 @@ function buildAds(): Ad[] {
   ];
 }
 
-function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, offsetY: number, p: Palette) {
+function drawLedWall(ctx: Ctx, s: Structure, t: number, originX: number, offsetY: number) {
   if (typeof document === 'undefined') return;
-  const b = boardRect(s);
-  const key = `${p.night}-${b.w}x${b.h}`;
-  if (!boardFaces || boardFaces.key !== key) boardFaces = { key, faces: buildAds().map((ad) => boardFace(p, ad, b.w, b.h)) };
-  const { faces } = boardFaces;
-  const slats = b.w / BOARD.slat;
-  const turn = BOARD.flip + BOARD.stagger * (slats - 1);
-  const each = BOARD.hold + turn;
-  const phase = t % (each * faces.length);
-  const i = Math.floor(phase / each), k = phase - i * each;
-  const cur = faces[i], next = faces[(i + 1) % faces.length];
-  const dx = b.x + originX, dy = b.y + offsetY;
-  if (k < BOARD.hold) {
-    ctx.drawImage(cur, dx, dy);
-    return;
+  const L = ledRect(s);
+  const cols = Math.floor(L.w / LED), rows = Math.floor(L.h / LED);
+  const key = `${cols}x${rows}`;
+  if (!led || led.key !== key) {
+    // Each cell's turn comes from its distance to the centre, plus jitter
+    // so the ring's edge is ragged and pixel-y rather than a clean circle.
+    const r = rng(1108), order = new Float32Array(cols * rows);
+    const mx = (cols - 1) / 2, my = (rows - 1) / 2, max = Math.hypot(mx, my);
+    for (let j = 0; j < rows; j++)
+      for (let i = 0; i < cols; i++) order[j * cols + i] = (Math.hypot(i - mx, j - my) / max) * 0.85 + r() * 0.15;
+    led = { key, cols, rows, order, faces: buildAds().map((ad) => ledFace(ad, cols, rows)) };
   }
-  const e = k - BOARD.hold;
-  for (let j = 0; j < slats; j++) {
-    const x0 = j * BOARD.slat;
-    const lin = Math.min(1, Math.max(0, (e - j * BOARD.stagger) / BOARD.flip));
-    const q = lin * lin * (3 - 2 * lin);
-    const wb = Math.round(BOARD.slat * q), wa = BOARD.slat - wb;
-    if (wb) ctx.drawImage(next, x0, 0, BOARD.slat, b.h, dx + x0, dy, wb, b.h);
-    if (wa) ctx.drawImage(cur, x0, 0, BOARD.slat, b.h, dx + x0 + wb, dy, wa, b.h);
-    if (lin > 0 && lin < 1) {
-      // The face turning away darkens, and the slat edge catches a seam.
-      ctx.fillStyle = `rgba(0,0,0,${(0.45 * q).toFixed(2)})`;
-      if (wa) ctx.fillRect(dx + x0 + wb, dy, wa, b.h);
-      ctx.fillStyle = `rgba(0,0,0,${(0.45 * (1 - q)).toFixed(2)})`;
-      if (wb) ctx.fillRect(dx + x0, dy, wb, b.h);
-      rect(ctx, dx + x0 + wb, dy, 1, b.h, 'rgba(0,0,0,0.35)');
+  const { faces, order } = led;
+  const each = ADS.hold + ADS.change;
+  const phase = Math.max(0, t) % (each * faces.length);
+  const n = Math.floor(phase / each), k = phase - n * each;
+  const cur = faces[n].big, next = faces[(n + 1) % faces.length].big;
+  const dx = L.x + originX, dy = L.y + offsetY;
+  ctx.drawImage(cur, dx, dy);
+  if (k < ADS.hold) return;
+  const q = ((k - ADS.hold) / ADS.change) * 1.1;
+  const flash = Math.floor(t / 60) % 2 ? '#ffffff' : '#c8f27a';
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < cols; i++) {
+      const o = order[j * cols + i];
+      if (o >= q) continue;
+      const px = i * LED, py = j * LED;
+      if (q - o < 0.06) rect(ctx, dx + px, dy + py, LED - 1, LED - 1, flash);
+      else ctx.drawImage(next, px, py, LED, LED, dx + px, dy + py, LED, LED);
     }
   }
 }
@@ -1535,7 +1502,7 @@ function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, offse
 export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
   for (const s of STRUCTURES) {
     const top = GROUND - s.h + offsetY;
-    if (s.kind === 'mediahq') drawFlipBoard(ctx, s, t, originX, offsetY, p);
+    if (s.kind === 'mediahq') drawLedWall(ctx, s, t, originX, offsetY);
     if (s.kind === 'loadtruck' && t > 0) {
       // A piece drops from the chute into the gap, the row flashes clear, repeat.
       const cycle = 2600, f = (t % cycle) / cycle, k = Math.floor(t / cycle);
