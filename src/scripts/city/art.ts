@@ -286,10 +286,12 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
   }
   for (let xx = x; xx < x + w; xx += CELL_W) rect(ctx, xx, gTop, 1, GROUND - gTop, g.mullion);
   for (let row = 1; row < rows; row++) rect(ctx, x, gTop + row * CELL_H, w, 1, g.floor);
-  // Door: one window wide and two floors tall, in the last column.
-  const dh = CELL_H * 2, doorX = x + (cols - 1) * CELL_W;
-  rect(ctx, doorX, GROUND - dh, CELL_W, dh, p.outline);
-  rect(ctx, doorX + 1, GROUND - dh + 1, CELL_W - 1, dh - 1, p.night ? '#e6cf8f' : '#cfe6f5');
+  // Ground floor: the bottom two floors are a plain, slightly darker band with a
+  // door in the middle, so the tall window columns stop above the lobby.
+  const bandH = CELL_H * 2;
+  rect(ctx, x, GROUND - bandH, w, bandH, mixHex(pane, '#000000', 0.22));
+  rect(ctx, x, GROUND - bandH, w, 1, g.floor);
+  door(ctx, cx, 10, 13, p.night ? '#e6cf8f' : '#cfe6f5');
   // Crown with the title sign(s) inside, and the antenna above it.
   box(ctx, cx - g.crownW / 2, top, g.crownW, gTop - top, g.crown, p);
   rect(ctx, cx, top - antennaLen(s), 1, antennaLen(s), p.lamp);
@@ -644,11 +646,11 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'hq': {
       // AltaML x Communitech: the same glass curtain wall as KnowIdea in AltaML's blues,
-      // with both names up in the crown. Lines are a darker shade of the glass, so they stay subtle.
+      // with both names up in the crown. Pane lines are a lighter shade of the glass so they read.
       const paneDay = '#2f5f7a', paneNight = '#16303f';
       glassTower(ctx, s, p, r, {
         pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'],
-        mullion: shade(mixHex(paneDay, '#000000', 0.3), p), floor: shade(mixHex(paneDay, '#000000', 0.3), p),
+        mullion: shade(mixHex(paneDay, '#ffffff', 0.32), p), floor: shade(mixHex(paneDay, '#ffffff', 0.32), p),
         crown: shade('#244a60', p), crownW: 60, crownH: 25,
         signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }, ...(s.text?.[1] ? [{ text: s.text[1], bg: '#f2a33a', fg: '#2a2233' }] : [])],
       });
@@ -786,7 +788,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pyramid': {
       // Hall of Fame: a glass pyramid on a stone plinth, the podium trophies inside.
-      const plinthTop = GROUND - 15, ph = plinthTop - top, hw = w / 2 - 6;
+      const plinthTop = GROUND - 19, ph = plinthTop - top, hw = w / 2 - 6;
       const glass = p.night ? '#6a5a3a' : '#cfeaf6';
       const frame = shade('#5d6676', p);
       for (let ry = 0; ry < ph; ry++) {
@@ -822,7 +824,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       // Spotlights at the apex
       rect(ctx, cx - 1, top + 2, 3, 1, '#fff6c8');
-      sign(ctx, label, cx, GROUND - 12, '#e8c547', '#2a2233', p, true);
+      sign(ctx, label, cx, GROUND - 13, '#e8c547', '#2a2233', p, true);
       break;
     }
     case 'parksign': {
@@ -1487,13 +1489,16 @@ function ledFace(ad: Ad, cols: number, rows: number) {
   let y0 = Math.round(rows / 2 - (ad.tall.length * 9 - 4) / 2);
   if (ad.icon) {
     c.save();
-    c.translate(Math.round(cols / 2 - 11), 2);
+    c.translate(Math.round(cols / 2 - 11), 0);
     ad.icon(c);
     c.restore();
-    y0 = 32;
+    y0 = 26;
   }
-  const gap = ad.icon ? 7 : 9;
-  ad.tall.forEach(([str, col], i) => text(c, str, Math.round((cols - textWidth(str)) / 2), y0 + i * gap, col));
+  const gap = ad.icon ? 6 : 9;
+  // An ad with a line too wide for the screen (with a 3-cell margin each side)
+  // uses the half-size font, drawn straight onto the enlarged canvas below.
+  const compact = ad.tall.some(([str]) => textWidth(str) > cols - 6);
+  if (!compact) ad.tall.forEach(([str, col], i) => text(c, str, Math.round((cols - textWidth(str)) / 2), y0 + i * gap, col));
   const big = document.createElement('canvas');
   big.width = cols * LED;
   big.height = rows * LED;
@@ -1503,6 +1508,7 @@ function ledFace(ad: Ad, cols: number, rows: number) {
   b.fillStyle = 'rgba(0,0,0,0.25)';
   for (let i = 1; i < cols; i++) b.fillRect(i * LED - 1, 0, 1, big.height);
   for (let j = 1; j < rows; j++) b.fillRect(0, j * LED - 1, big.width, 1);
+  if (compact) ad.tall.forEach(([str, col], i) => text(b, str, Math.round((big.width - textWidth(str)) / 2), y0 * LED + 2 + i * 10, col));
   return { big };
 }
 

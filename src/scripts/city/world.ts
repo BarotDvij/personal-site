@@ -2,8 +2,8 @@
 // resolution and scaled up by whole numbers so the pixel art stays crisp.
 
 export const WORLD_W = 2924;
-export const WORLD_H = 270;
-export const GROUND = 176; // y of the street surface
+export const WORLD_H = 274;
+export const GROUND = 190; // y of the street surface
 export const TRUNK_Y = GROUND + 58; // main underground pipeline
 export const DEEP_Y = GROUND + 78; // second, deeper pipeline
 
@@ -88,15 +88,15 @@ export const STRUCTURES: Structure[] = [
   { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 868 },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
-  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 164, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
-  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 1174, w: 76, h: 172, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1212 },
+  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
+  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 1174, w: 76, h: 186, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1212 },
   { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1268, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1354, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // City Square
   { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1410, w: 75, h: 70, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
-  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1502, w: 119, h: 88, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
-  { id: 'halloffame', label: 'Hall of Fame: hackathons and awards', kind: 'pyramid', x: 1640, w: 140, h: 81, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
+  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1502, w: 119, h: 92, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
+  { id: 'halloffame', label: 'Hall of Fame: hackathons and awards', kind: 'pyramid', x: 1640, w: 140, h: 85, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
   { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1798, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
   // Civic Centre
