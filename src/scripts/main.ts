@@ -118,6 +118,18 @@ if (notice && floatBtn && 'IntersectionObserver' in window) {
 
 // ----- arcade (downloaded on first play) -----
 
+// A page left open across a deploy still points at the old hashed chunks,
+// which are gone, so a game would never load. Reload once to pick up the
+// new build instead of failing silently.
+window.addEventListener('vite:preloadError', (e) => {
+  try {
+    if (sessionStorage.getItem('chunk-reload')) return;
+    sessionStorage.setItem('chunk-reload', '1');
+  } catch { return; }
+  e.preventDefault();
+  location.reload();
+});
+
 document.addEventListener('arcade:launch', async (e) => {
   const { openGame } = await import('./arcade/shell');
   void openGame((e as CustomEvent<string>).detail);

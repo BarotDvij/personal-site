@@ -283,7 +283,13 @@ export function mountCity(root: HTMLElement): City {
     dirty = true;
   }, { passive: false });
 
+  // The building buttons are hidden during the fly-over intro, so a press
+  // that ends the intro starts on the canvas. The browser then sends the
+  // click to the common parent instead of the button now under the pointer,
+  // and the first click after page load would do nothing.
+  let introCut = false;
   root.addEventListener('pointerdown', (e) => {
+    introCut = intro > 0;
     endIntro();
     if ((e.target as HTMLElement).closest('.hud, .minimap, .welcome, .walk-pad, dialog')) return;
     dragStart = e.clientX;
@@ -305,7 +311,12 @@ export function mountCity(root: HTMLElement): City {
   });
   window.addEventListener('pointerup', () => { dragStart = -1; });
   root.addEventListener('click', (e) => {
-    if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; }
+    const cut = introCut;
+    introCut = false;
+    if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; return; }
+    if (cut && !(e.target as HTMLElement).closest('.bldg')) {
+      document.elementFromPoint(e.clientX, e.clientY)?.closest<HTMLElement>('.bldg')?.click();
+    }
   }, true);
 
   const keyName = (e: KeyboardEvent) => (e.key.length === 1 ? e.key.toLowerCase() : e.key);
