@@ -80,12 +80,12 @@ export const STRUCTURES: Structure[] = [
   { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 296, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 356 },
   { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 432, w: 117, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 510 },
   { id: 'mower', label: 'Lawn Sweeper GAME', kind: 'lawn', x: 566, w: 40, h: 14, district: 'data', ref: { type: 'game', id: 'sweeper' } },
-  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 606, w: 70, h: 62, district: 'data', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 642 },
+  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 606, w: 70, h: 62, district: 'data', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'] },
   { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 694, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
 
   // Downtown
   { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 752, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 788 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 868 },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 164, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },

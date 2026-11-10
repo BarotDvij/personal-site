@@ -508,7 +508,7 @@ export function mountCity(root: HTMLElement): City {
     ctx.fillRect(0, 0, viewW, viewH);
     ctx.drawImage(skyLayer, 0, 0);
     const motion = !reduced();
-    if (tier === 'high' || !motion) drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
+    drawClouds(ctx, clouds, palette, camX, motion ? t : 0, viewW, offsetY);
     // Far skyline and mid-ground slide slower than the street for depth.
     if (farLayer) {
       const fx = parallaxX('far', viewW, ox);
