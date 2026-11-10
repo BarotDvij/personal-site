@@ -28,6 +28,9 @@ export interface PanelContent {
   html: string;
 }
 
+// Hauser's showroom sits between the AltaML towers, so its note rides along in that panel.
+const HAUSER_NOTE = `<h3>Hauser Industries</h3><p>Hauser Industries, a furniture company, was our enterprise client through Communitech's AI@WORK program. Its showroom is the shop between the towers.</p>`;
+
 export function panelFor(ref: Ref): PanelContent | null {
   switch (ref.type) {
     case 'role': {
@@ -36,7 +39,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return {
         kicker: `${e.dates} · ${e.place}`,
         title: `${e.role}, ${e.org}`,
-        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${'media' in e ? gallery(e.media as Media[], 'mediaTitle' in e ? (e.mediaTitle as string) : undefined) : ''}`,
+        html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${ref.org === 'AltaML Inc.' ? HAUSER_NOTE : ''}${'media' in e ? gallery(e.media as Media[], 'mediaTitle' in e ? (e.mediaTitle as string) : undefined) : ''}`,
       };
     }
     case 'project': {
@@ -104,14 +107,6 @@ export function panelFor(ref: Ref): PanelContent | null {
     }
     case 'museum':
       return { kicker: 'City Square', title: 'Museum of Favourites', html: museumHtml() };
-    case 'client': {
-      return {
-        kicker: 'Downtown',
-        title: 'Hauser Industries',
-        html: `<p class="lead">Hauser Industries, a furniture company, was our enterprise client through Communitech's AI@WORK program.</p>
-          <p><button type="button" class="game-btn inline" data-goto="altaml">See the project at AltaML x Communitech</button></p>`,
-      };
-    }
     case 'pipelines': {
       const pattern = /pipeline|dbt|snowflake|airbyte|bigquery|glue|ingestion|warehouse|fivetran|airflow/i;
       const rows = profile.experience.flatMap((e) =>

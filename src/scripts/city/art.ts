@@ -245,57 +245,101 @@ function ledRect(s: Structure) {
 
 // ---------- buildings ----------
 
-// Antenna length for the glass towers, trimmed so a tall tower never pokes past the canvas top.
-const antennaLen = (s: Structure) => Math.max(2, Math.min(16, GROUND - s.h - 2));
-
-// Glass curtain-wall tower shared by KnowIdea and AltaML: windows fill the whole
-// face from the street to the crown, mullions every 4px, floors every 7px, a
-// diagonal sky reflection by day and lit floors at night. The title signs sit in
-// the crown, and the last window of the ground row is the door.
+// Glass curtain-wall towers shared by KnowIdea and AltaML. A tower is a row of
+// bays of different heights (a core with lower shoulders), all on one grid:
+// mullions every 4px, floors every 7px, a diagonal sky reflection by day. At night
+// whole runs of windows light up together, like offices, with the ground row
+// always lit as the lobby. Title signs sit on the glass, near the top of a bay.
 interface GlassStyle {
   pane: [string, string]; // day, night
   paneHi: [string, string];
   mullion: string;
   floor: string;
-  crown: string;
-  crownW: number;
-  crownH: number;
-  signs: { text: string; bg: string; fg: string }[];
+}
+interface Bay {
+  x: number; // offset from the structure's left edge, a multiple of 4
+  w: number;
+  rows: number; // floors
+  cap?: number; // height of a pitched roof above the bay
+  ant?: boolean;
+  signs?: { text: string; bg: string; fg: string }[];
 }
 
-function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: GlassStyle) {
-  const CELL_W = 4, CELL_H = 7;
-  const x = s.x, w = s.w, top = GROUND - s.h, cx = x + w / 2;
-  const rows = Math.floor((GROUND - top - g.crownH) / CELL_H), cols = Math.ceil(w / CELL_W);
-  const gTop = GROUND - rows * CELL_H;
-  const pane = p.night ? g.pane[1] : shade(g.pane[0], p);
-  const paneHi = p.night ? g.paneHi[1] : g.paneHi[0];
-  rect(ctx, x - 1, gTop - 1, w + 2, GROUND - gTop + 1, p.outline);
-  rect(ctx, x, gTop, w, GROUND - gTop, pane);
-  if (p.night) {
-    // A lit window fills its whole frame cell. The mullions and floor lines are
-    // painted after this, so they trim each pane to the exact border of the cell.
-    for (let row = 0; row < rows; row++)
-      for (let c = 0; c < cols; c++)
-        if (r() < 0.33) rect(ctx, x + c * CELL_W, gTop + row * CELL_H, Math.min(CELL_W, w - c * CELL_W), CELL_H, p.lit);
-  } else {
-    for (let k = 0; k < GROUND - gTop; k += 1) {
-      const rx = x + Math.round(k * 0.35) % (w + 18) - 6;
-      if (rx >= x && rx + 5 <= x + w) rect(ctx, rx, gTop + k, 5, 1, paneHi);
+const CELL_W = 4, CELL_H = 7;
+
+// Which window cells are lit at night: runs of 2 to 5 along a floor, about a fifth overall.
+function litCells(r: () => number, cols: number, rows: number) {
+  const lit = new Set<number>();
+  for (let row = 0; row < rows; row++) {
+    if (row === 0) { for (let c = 0; c < cols; c++) lit.add(c); continue; }
+    for (let c = 0; c < cols; c++) {
+      if (r() < 0.06) {
+        const len = 2 + Math.floor(r() * 4);
+        for (let k = 0; k < len && c + k < cols; k++) lit.add(row * cols + c + k);
+        c += len;
+      }
     }
   }
-  for (let xx = x; xx < x + w; xx += CELL_W) rect(ctx, xx, gTop, 1, GROUND - gTop, g.mullion);
-  for (let row = 1; row < rows; row++) rect(ctx, x, gTop + row * CELL_H, w, 1, g.floor);
-  // Ground floor: the bottom two floors are a plain, slightly darker band with a
-  // door in the middle, so the tall window columns stop above the lobby.
-  const bandH = CELL_H * 2;
-  rect(ctx, x, GROUND - bandH, w, bandH, mixHex(pane, '#000000', 0.22));
-  rect(ctx, x, GROUND - bandH, w, 1, g.floor);
-  door(ctx, cx, 10, 13, p.night ? '#e6cf8f' : '#cfe6f5');
-  // Crown with the title sign(s) inside, and the antenna above it.
-  box(ctx, cx - g.crownW / 2, top, g.crownW, gTop - top, g.crown, p);
-  rect(ctx, cx, top - antennaLen(s), 1, antennaLen(s), p.lamp);
-  g.signs.forEach((sg, i) => sign(ctx, sg.text, cx, top + 2 + i * 11, sg.bg, sg.fg, p, true));
+  return lit;
+}
+
+function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: GlassStyle, bays: Bay[]) {
+  const pane = p.night ? g.pane[1] : shade(g.pane[0], p);
+  const paneHi = p.night ? g.paneHi[1] : g.paneHi[0];
+  const litColor = mixHex(p.lit, g.pane[1], 0.25);
+  const cols = Math.ceil(s.w / CELL_W), maxRows = Math.max(...bays.map((b) => b.rows));
+  const lit = p.night ? litCells(r, cols, maxRows) : new Set<number>();
+  for (const bay of bays) {
+    const bx = s.x + bay.x, top = GROUND - bay.rows * CELL_H, h = bay.rows * CELL_H;
+    const cap = bay.cap ?? 0, mid = bx + bay.w / 2;
+    // Pitched roof: stacked rows that narrow towards a flat peak, outlined on both sides.
+    for (let k = 0; k < cap; k++) {
+      const inset = Math.round((k * (bay.w / 2 - 3)) / cap), y = top - 1 - k;
+      rect(ctx, bx + inset - 1, y, bay.w - 2 * inset + 2, 1, p.outline);
+    }
+    rect(ctx, bx - 1, top - 1, bay.w + 2, h + 1, p.outline);
+    for (let k = 0; k < cap; k++) {
+      const inset = Math.round((k * (bay.w / 2 - 3)) / cap);
+      rect(ctx, bx + inset, top - 1 - k, bay.w - 2 * inset, 1, pane);
+    }
+    rect(ctx, bx, top, bay.w, h, pane);
+    if (p.night) {
+      // A lit window fills its whole cell. The mullions and floor lines are painted
+      // after this, so they trim each pane to the exact border of the cell.
+      for (let row = 0; row < bay.rows; row++)
+        for (let c = bay.x / CELL_W; c < (bay.x + bay.w) / CELL_W; c++)
+          if (lit.has((bay.rows - 1 - row) * cols + c)) rect(ctx, s.x + c * CELL_W, top + row * CELL_H, CELL_W, CELL_H, litColor);
+    } else {
+      for (let k = 0; k < h; k++) {
+        const rx = bx + Math.round(k * 0.35) % (bay.w + 18) - 6;
+        if (rx >= bx && rx + 5 <= bx + bay.w) rect(ctx, rx, top + k, 5, 1, paneHi);
+      }
+    }
+    for (let xx = bx; xx < bx + bay.w; xx += CELL_W) rect(ctx, xx, top, 1, h, g.mullion);
+    for (let row = 1; row < bay.rows; row++) rect(ctx, bx, top + row * CELL_H, bay.w, 1, g.floor);
+    if (bay.ant) rect(ctx, mid, top - cap - 12, 1, 12, p.lamp);
+    bay.signs?.forEach((sg, i) => sign(ctx, sg.text, mid, top + 4 + i * 11, sg.bg, sg.fg, p, true));
+  }
+}
+
+// Hauser Furniture showroom: awning, a display window with a sofa and lamp, and a door.
+function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette) {
+  const top = GROUND - h, cx = x + w / 2;
+  box(ctx, x, top + 10, w, h - 10, shade('#efe3cf', p), p);
+  rect(ctx, x - 2, top + 8, w + 4, 3, p.outline);
+  for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#f2a33a', p));
+  for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#fff4e0', p));
+  const wx = x + 5, wy = GROUND - 30, ww = w - 22;
+  // Shop windows glow warm at night so the furniture reads against them.
+  rect(ctx, wx, wy, ww, 26, p.night ? '#e6cf8f' : '#cfe6f5');
+  rect(ctx, wx + 4, wy + 14, ww - 10, 6, shade('#7a4a8c', p));
+  rect(ctx, wx + 3, wy + 10, 3, 10, shade('#7a4a8c', p));
+  rect(ctx, wx + ww - 9, wy + 10, 3, 10, shade('#7a4a8c', p));
+  rect(ctx, wx + 6, wy + 12, ww - 16, 3, shade('#9b6bb0', p));
+  rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
+  rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
+  door(ctx, x + w - 8, 8, 14);
+  sign(ctx, label, cx, top + 12, '#ffffff', '#000000', p, true);
 }
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
@@ -371,11 +415,14 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'glass':
+      // A tall core with a lower wing on each side. The name is stacked so it fits the core.
       glassTower(ctx, s, p, r, {
         pane: ['#7fb6e6', '#1c2a4a'], paneHi: ['#b9dcf8', '#2a3c66'], mullion: shade('#4a6f96', p), floor: shade('#5d84ad', p),
-        crown: p.night ? '#24365e' : shade('#9cc8ee', p), crownW: 44, crownH: 14,
-        signs: [{ text: label, bg: '#7c4ddb', fg: '#ffffff' }],
-      });
+      }, [
+        { x: 0, w: 12, rows: 14 },
+        { x: 12, w: 24, rows: Math.floor(s.h / CELL_H), ant: true, signs: [{ text: 'KNOW', bg: '#7c4ddb', fg: '#ffffff' }, { text: 'IDEA', bg: '#7c4ddb', fg: '#ffffff' }] },
+        { x: 36, w: 12, rows: 14 },
+      ]);
       break;
     case 'tower': {
       // No crown cap: the body runs straight up to the roofline.
@@ -516,25 +563,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       sign(ctx, label, x + 44, GROUND - 56, '#3fb950', '#ffffff', p);
       break;
     }
-    case 'furniture': {
-      box(ctx, x, top + 10, w, h - 10, shade('#efe3cf', p), p);
-      rect(ctx, x - 2, top + 8, w + 4, 3, p.outline);
-      for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#f2a33a', p));
-      for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#fff4e0', p));
-      // Display window with a sofa and a floor lamp
-      const wx = x + 5, wy = GROUND - 30, ww = w - 22;
-      // Shop windows glow warm at night so the furniture reads against them.
-      rect(ctx, wx, wy, ww, 26, p.night ? '#e6cf8f' : '#cfe6f5');
-      rect(ctx, wx + 4, wy + 14, ww - 10, 6, shade('#7a4a8c', p));
-      rect(ctx, wx + 3, wy + 10, 3, 10, shade('#7a4a8c', p));
-      rect(ctx, wx + ww - 9, wy + 10, 3, 10, shade('#7a4a8c', p));
-      rect(ctx, wx + 6, wy + 12, ww - 16, 3, shade('#9b6bb0', p));
-      rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
-      rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
-      door(ctx, x + w - 8, 8, 14);
-      sign(ctx, label, cx, top + 12, '#ffffff', '#000000', p, true);
-      break;
-    }
     case 'school': {
       const brick = shade('#b5533c', p), trim = shade('#f1e3c6', p);
       box(ctx, x, top + 20, w, h - 20, brick, p);
@@ -645,15 +673,20 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'hq': {
-      // AltaML x Communitech: the same glass curtain wall as KnowIdea in AltaML's blues,
-      // with both names up in the crown. Pane lines are a lighter shade of the glass so they read.
-      const paneDay = '#2f5f7a', paneNight = '#16303f';
+      // AltaML x Communitech: twin glass towers with pitched tops, stepping down to a
+      // shared podium that holds the Hauser Furniture showroom. Pane lines are a lighter
+      // shade of the glass so they read.
+      const paneDay = '#2f5f7a', paneNight = '#16303f', lines = shade(mixHex(paneDay, '#ffffff', 0.32), p);
+      const core = Math.floor((s.h - 8) / CELL_H);
       glassTower(ctx, s, p, r, {
-        pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'],
-        mullion: shade(mixHex(paneDay, '#ffffff', 0.32), p), floor: shade(mixHex(paneDay, '#ffffff', 0.32), p),
-        crown: shade('#244a60', p), crownW: 60, crownH: 25,
-        signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }, ...(s.text?.[1] ? [{ text: s.text[1], bg: '#f2a33a', fg: '#2a2233' }] : [])],
-      });
+        pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'], mullion: lines, floor: lines,
+      }, [
+        { x: 0, w: 32, rows: core, cap: 8, signs: [{ text: 'CT', bg: '#f2a33a', fg: '#2a2233' }] },
+        { x: 32, w: 20, rows: 16 },
+        { x: s.w - 52, w: 20, rows: 16 },
+        { x: s.w - 32, w: 32, rows: core, cap: 8, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
+      ]);
+      furnitureShop(ctx, x + 52, s.w - 104, 66, 'HAUSER', p);
       break;
     }
     case 'arcadehall': {
@@ -1373,7 +1406,8 @@ export function drawBeacons(ctx: Ctx, t: number, originX: number, offsetY: numbe
   const tops: [number, number][] = [];
   for (const s of STRUCTURES) {
     if (s.kind === 'tower') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
-    if (s.kind === 'glass' || s.kind === 'hq') tops.push([s.x + s.w / 2, GROUND - s.h - antennaLen(s) - 1]);
+    if (s.kind === 'glass') tops.push([s.x + s.w / 2, GROUND - s.h - 13]);
+    if (s.kind === 'hq') tops.push([s.x + 16, GROUND - s.h - 2], [s.x + s.w - 16, GROUND - s.h - 2]);
     if (s.kind === 'marble') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 7]);
     if (s.kind === 'lab') tops.push([s.x + s.w / 2 - 1, GROUND - s.h + 1]);
   }
