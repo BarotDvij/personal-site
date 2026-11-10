@@ -87,7 +87,7 @@
         "dev"
       ],
       "now": "building an agentic product operations application for an enterprise client through Communitech's <a href=\"https://www.communitech.ca/programs/ai-at-work/\">AI@WORK program</a>",
-      "summary": "Leads product on an agentic product operations app for Hauser Industries through Communitech's AI@WORK program.",
+      "summary": "Leads 0 -> 1 product development on an agentic product ops app for enterprise client Hauser Industries through Communitech's AI@WORK program.",
       "bullets": [
         "Led product development of a fullstack agentic application automating purchase-order drafts, AI image generation, and e-commerce listings for enterprise client Hauser Industries",
         "Co-built it in React, TypeScript, Python, and PostgreSQL on a team of 2, integrating Faire, Brightpearl ERP, and Shopify over GraphQL and REST",

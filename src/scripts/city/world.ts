@@ -88,7 +88,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
-  { id: 'altaml', label: 'AltaML x Communitech and Hauser Furniture', kind: 'hq', x: 1174, w: 160, h: 183, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1254 },
+  { id: 'altaml', label: 'AltaML x Communitech for Hauser Industries', kind: 'hq', x: 1174, w: 160, h: 183, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1254 },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1354, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // City Square

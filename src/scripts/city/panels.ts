@@ -29,7 +29,7 @@ export interface PanelContent {
 }
 
 // Hauser's showroom sits between the AltaML towers, so its note rides along in that panel.
-const HAUSER_NOTE = `<h3>Hauser Industries</h3><p>Hauser Industries, a furniture company, was our enterprise client through Communitech's AI@WORK program. Its showroom is the shop between the towers.</p>`;
+const HAUSER_NOTE = `<h3>Hauser Industries</h3><p>Hauser Industries is a furniture enterprise that serves as a wholesaler for retail furniture and a manufacturer for corporate and government furniture contracts.</p>`;
 
 export function panelFor(ref: Ref): PanelContent | null {
   switch (ref.type) {
