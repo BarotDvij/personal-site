@@ -28,14 +28,18 @@ export interface District {
   x1: number;
 }
 
+// Laid out like a real city seen from the side: the skyline rises from the
+// transit plaza through the civic centre and mid-rise mixed use to a downtown
+// core of towers, then steps back down through shops to industry and new
+// development on the edge of town.
 export const DISTRICTS: District[] = [
   { id: 'plaza', name: 'Welcome Plaza', lens: 'plaza', x0: 0, x1: 200 },
-  { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 200, x1: 650 },
-  { id: 'ai', name: 'Downtown AI District', lens: 'ai', x0: 650, x1: 1200 },
-  { id: 'commercial', name: 'Commercial District', lens: 'play', x0: 1200, x1: 1740 },
-  { id: 'marketing', name: 'Mixed-Use Zone', lens: 'marketing', x0: 1740, x1: 2280 },
-  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 2280, x1: 2914 },
-  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2914, x1: 3230 },
+  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 200, x1: 840 },
+  { id: 'marketing', name: 'Mixed-Use Zone', lens: 'marketing', x0: 840, x1: 1336 },
+  { id: 'ai', name: 'Downtown AI District', lens: 'ai', x0: 1336, x1: 1856 },
+  { id: 'commercial', name: 'Commercial District', lens: 'play', x0: 1856, x1: 2406 },
+  { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 2406, x1: 2872 },
+  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2872, x1: 3230 },
 ];
 
 export type Ref =
@@ -72,59 +76,63 @@ export interface Structure {
 }
 
 export const STRUCTURES: Structure[] = [
-  // Welcome Plaza
+  // Welcome Plaza: where visitors arrive.
   { id: 'post', label: 'Post Office: about and contact', kind: 'post', x: 44, w: 72, h: 56, district: 'plaza', ref: { type: 'contact' }, text: ['POST'] },
   { id: 'warp-1', label: 'Warp pipe', kind: 'warp', x: 160, w: 22, h: 26, district: 'plaza', ref: { type: 'warp', to: 1 } },
 
-  // Industrial Zone
-  { id: 'truck', label: 'Data Truck: Block Stack', kind: 'loadtruck', x: 206, w: 32, h: 20, district: 'data', ref: { type: 'game', id: 'blocks' } },
-  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 240, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 258 },
-  { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 296, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 356 },
-  { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 432, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 510 },
-  { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 610, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
+  // Civic Centre: the school sits on the residential edge, the civic green
+  // in the middle, and City Hall and the Library face the business district.
+  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 214, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
+  { id: 'chess', label: 'Park Chess Table: Chess', kind: 'chesstable', x: 328, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
+  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 360, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
+  { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 462, w: 76, h: 30, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
+  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 556, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
+  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 688, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 736 },
+  { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 800, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 2 } },
 
-  // Downtown AI District
-  { id: 'podium', label: 'Podium: hackathon wins', kind: 'monument', x: 690, w: 112, h: 66, district: 'ai', ref: { type: 'hackathons' }, text: ['PODIUM'] },
-  { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 822, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 858 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 914, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
-  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 982, w: 76, h: 152, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1020 },
-  { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1076, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
-  { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1162, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
+  // Mixed-Use Zone: mid-rise frame around the core, stepping up toward it.
+  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 852, w: 110, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 928 },
+  { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 980, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN>10 S'] },
+  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1094, w: 92, h: 140, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1140 },
+  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1204, w: 72, h: 150, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1240 },
+  { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1294, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 3 } },
 
-  // Commercial District
-  { id: 'patio', label: 'Eco Eats Patio: Pipe Muncher', kind: 'patio', x: 1208, w: 30, h: 24, district: 'commercial', ref: { type: 'game', id: 'muncher' } },
-  { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 1240, w: 84, h: 56, district: 'commercial', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 1282 },
-  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1344, w: 100, h: 94, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
-  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1462, w: 132, h: 98, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
-  { id: 'halloffame', label: 'Hall of Fame: trophy case', kind: 'kiosk', x: 1612, w: 76, h: 52, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
-  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1708, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
+  // Downtown AI District: the core. A square opens onto the towers, the
+  // first-place tower is the city's peak, and AltaML's client trades next door.
+  { id: 'podium', label: 'Podium: hackathon wins', kind: 'monument', x: 1350, w: 112, h: 66, district: 'ai', ref: { type: 'hackathons' }, text: ['PODIUM'] },
+  { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 1480, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 1516 },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 1570, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
+  { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 1636, w: 76, h: 152, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1674 },
+  { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1730, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
+  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1816, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 4 } },
 
-  // Mixed-Use Zone
-  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1780, w: 92, h: 140, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1826 },
-  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1890, w: 72, h: 150, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1926 },
-  { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 1980, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN>10 S'] },
-  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2094, w: 110, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2170 },
-  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
+  // Commercial District: culture and entertainment by the core, everyday
+  // shopping out toward the industrial edge.
+  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1870, w: 132, h: 98, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
+  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 2020, w: 100, h: 94, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
+  { id: 'halloffame', label: 'Hall of Fame: trophy case', kind: 'kiosk', x: 2138, w: 76, h: 52, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
+  { id: 'patio', label: 'Eco Eats Patio: Pipe Muncher', kind: 'patio', x: 2232, w: 30, h: 24, district: 'commercial', ref: { type: 'game', id: 'muncher' } },
+  { id: 'ecoeats', label: 'Eco Eats Grocer', kind: 'grocer', x: 2264, w: 84, h: 56, district: 'commercial', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 2306 },
+  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2366, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 5 } },
 
-  // Civic Centre
-  { id: 'chess', label: 'Park Chess Table: Chess', kind: 'chesstable', x: 2288, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
-  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2320, w: 88, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
-  { id: 'pond', label: 'Duck Pond: Duck Flight', kind: 'pond', x: 2422, w: 76, h: 30, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
-  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 2512, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
-  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2644, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2692 },
-  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2754, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
-  { id: 'warp-6', label: 'Warp pipe', kind: 'warp', x: 2874, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 6 } },
+  // Industrial Zone: on the outskirts, where every pipeline drains into the
+  // warehouse and the lake sits at the edge of town.
+  { id: 'truck', label: 'Data Truck: Block Stack', kind: 'loadtruck', x: 2412, w: 32, h: 20, district: 'data', ref: { type: 'game', id: 'blocks' } },
+  { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 2460, w: 156, h: 66, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 2538 },
+  { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 2636, w: 120, h: 82, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 2696 },
+  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 2776, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 2794 },
+  { id: 'warp-6', label: 'Warp pipe', kind: 'warp', x: 2832, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 6 } },
 
-  // Expansion
-  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2954, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
-  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 3056, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
+  // Expansion: new development on greenfield land past the industrial park.
+  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2920, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
+  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 3030, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
   { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 3190, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
 ];
 
 
 
 // The warehouse junction every pipeline flows into.
-export const JUNCTION_X = 510;
+export const JUNCTION_X = STRUCTURES.find((s) => s.id === 'super')!.riser!;
 // Where the deep line to the Data Lake drops out of the warehouse tank: the
 // side of the tank that faces the lake.
 const LAKE_RISER = STRUCTURES.find((s) => s.id === 'lake')!.riser!;

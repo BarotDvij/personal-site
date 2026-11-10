@@ -939,7 +939,8 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[2410, 1], [2424, 2], [2456, 1], [2472, 2], [2500, 1]] as const) tree(ctx, tx, p, size);
+  const pond = STRUCTURES.find((x) => x.id === 'pond')!;
+  for (const [dx, size] of [[-12, 1], [2, 2], [34, 1], [50, 2], [78, 1]] as const) tree(ctx, pond.x + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -1005,9 +1006,19 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
 export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
 export type ParallaxKind = keyof typeof PARALLAX;
 
-// World x of each landmark's district centre.
-const CN_TOWER_X = 925; // Downtown AI District
-const WILLIS_TOWER_X = 1470; // Commercial District
+// World x of each landmark: the CN Tower rises behind the city's tallest
+// tower, and the Willis Tower behind the mid-rise ring next to the core.
+const centreOf = (id: string) => {
+  const s = STRUCTURES.find((x) => x.id === id)!;
+  return s.x + s.w / 2;
+};
+const CN_TOWER_X = centreOf('marble'); // Downtown AI District
+const WILLIS_TOWER_X = centreOf('leads'); // Mixed-Use Zone
+
+// Real skylines peak over downtown and thin out toward the edges. Background
+// buildings shrink with distance from the core, but never below 45% height.
+const CORE_X = CN_TOWER_X;
+const skylineScale = (worldX: number) => 0.45 + 0.55 * Math.exp(-(((worldX - CORE_X) / 1000) ** 2));
 
 const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
@@ -1081,7 +1092,7 @@ export function buildParallaxLayer(p: Palette, kind: ParallaxKind, viewW: number
   let x = -4;
   while (x < c.width) {
     const w = minW + Math.floor(r() * (maxW - minW));
-    const h = minH + Math.floor(r() * (maxH - minH));
+    const h = Math.round((minH + Math.floor(r() * (maxH - minH))) * skylineScale((x + w / 2 - pad) / f));
     const gap = far ? Math.floor(r() * 3) : 2 + Math.floor(r() * 6);
     const blocked = landmarks.some((l) => x + w > l.x - l.clear && x < l.x + l.clear);
     if (!blocked) {
