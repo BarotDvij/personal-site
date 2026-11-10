@@ -365,7 +365,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, cx - 6, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, cx + 5, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, x + w - 44, GROUND - 22, 1, 22, p.lamp);
-      sign(ctx, label, cx + 6, GROUND - 42, '#3fb950', '#ffffff', p);
+      sign(ctx, label, cx, GROUND - 43, '#3fb950', '#ffffff', p);
       rect(ctx, x + w - 44, GROUND - 25, 7, 5, shade('#f2c84b', p));
       text(ctx, '1', x + w - 42, GROUND - 25, '#2a2233');
       break;
@@ -434,7 +434,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, x + i + 14, top, 1, 14, p.outline);
       }
       for (let i = 0; i < 4; i++) {
-        const dx = x + 10 + i * ((w - 32) / 3);
+        const dx = x + 6 + i * ((w - 32) / 3);
         box(ctx, dx, GROUND - 24, 20, 24, shade('#4c5563', p), p);
         for (let yy = GROUND - 22; yy < GROUND; yy += 3) rect(ctx, dx + 1, yy, 18, 1, shade('#5d6676', p));
       }
@@ -447,7 +447,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 8, top + 18, w - 16, h - 27, body, p);
       for (let i = 0; i < 10; i++) rect(ctx, x + 6 + i * 4, top + 18 - i * 2, w - 12 - i * 8, 2, body);
       rect(ctx, x + 6, top + 17, w - 12, 2, p.outline);
-      for (let i = 0; i < 4; i++) rect(ctx, x + 16 + i * ((w - 38) / 3), top + 30, 5, h - 40, shade('#f4ecd8', p));
+      for (let i = 0; i < 4; i++) rect(ctx, x + 16 + i * ((w - 38) / 3), top + 19, 5, h - 29, shade('#f4ecd8', p));
       door(ctx, cx, 10, 14, shade('#5a4030', p), GROUND - 9); // top of the steps
       sign(ctx, label, cx, top + 20, '#2f6fd6', '#ffffff', p);
       break;
@@ -955,7 +955,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, L.x - 1, L.y - 1, L.w + 2, L.h + 2, '#0b0f0c', p);
       // Lobby: stone base with glass doors.
       box(ctx, x, GROUND - 20, w, 20, shade('#d9d2c4', p), p);
-      rect(ctx, x + 1, GROUND - 20, w - 2, 2, shade('#9bd23c', p));
       box(ctx, cx - 10, GROUND - 16, 20, 16, p.night ? '#e6cf8f' : '#cfe6f5', p);
       rect(ctx, cx, GROUND - 15, 1, 15, shade('#3a4a3a', p));
       for (const wx of [x + 5, x + w - 19]) box(ctx, wx, GROUND - 14, 14, 9, p.night ? '#e6cf8f' : '#cfe6f5', p);

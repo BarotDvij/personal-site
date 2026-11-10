@@ -84,7 +84,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 694, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
 
   // Downtown
-  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 758, w: 60, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 788 },
+  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 764, w: 48, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 788 },
   { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 868 },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
@@ -100,7 +100,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1798, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
   // Civic Centre
-  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1856, w: 72, h: 160, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1892 },
+  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1856, w: 72, h: 167, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1892 },
   { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 1946, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
   { id: 'parksign', label: 'Urban Park', kind: 'parksign', x: 2072, w: 28, h: 26, district: 'civic', text: ['URBAN', 'PARK'] },
   { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2104, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
