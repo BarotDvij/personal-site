@@ -346,7 +346,7 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
 const SHOP_MIX = 0;
 function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette, pane: string) {
   const top = GROUND - h, cx = x + w / 2;
-  const base = shade('#efe3cf', p), body = mixHex(base, pane, SHOP_MIX);
+  const base = shade('#efe3cf', p), body = mixHex(mixHex(base, pane, SHOP_MIX), '#000000', 0.33); // 33% darker, day and night
   box(ctx, x, top, w, h, body, p);
   const wx = x + 5, wy = GROUND - 30, ww = w - 22;
   // Shop windows glow warm at night so the furniture reads against them.
