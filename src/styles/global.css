@@ -304,7 +304,7 @@ html[data-mode='city'] body {
 }
 
 .notice-thumb img {
-  height: 351px;
+  height: 399px;
   object-fit: cover;
   object-position: left top;
 }
@@ -934,7 +934,7 @@ blockquote p {
   }
 
   .notice-thumb img {
-    height: 234px;
+    height: 266px;
   }
 
   .article > .sitenotice,

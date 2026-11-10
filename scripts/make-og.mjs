@@ -1,10 +1,11 @@
-// Regenerates public/og.png (the link-preview image) from the live city.
+// Regenerates public/og.webp (the link-preview image) from the live city.
 //
 //   npm run dev            (in one terminal)
 //   node scripts/make-og.mjs [url]
 //
 // It loads the site in city mode, grabs the pixel canvas, scales it 2x with no
-// smoothing, and draws the name card on top in the Silkscreen font.
+// smoothing, and draws the name card on top in the Silkscreen font. The result
+// is saved as lossless WebP (pixel art compresses far better than PNG).
 // Needs Playwright (preinstalled in the cloud environment, or `npm i -D playwright`).
 
 import { createRequire } from 'node:module';
@@ -19,8 +20,15 @@ try {
   ({ chromium } = require('/opt/node-tools/node_modules/playwright'));
 }
 
+let sharp;
+try {
+  sharp = require('sharp');
+} catch {
+  sharp = require('/opt/node-tools/node_modules/sharp');
+}
+
 const url = process.argv[2] || 'http://localhost:4321/';
-const out = fileURLToPath(new URL('../public/og.png', import.meta.url));
+const out = fileURLToPath(new URL('../public/og.webp', import.meta.url));
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
@@ -74,6 +82,7 @@ const dataUrl = await page.evaluate(() => {
   return { png: c.toDataURL('image/png'), card: { x, y, w, h } };
 });
 
-writeFileSync(out, Buffer.from(dataUrl.png.split(',')[1], 'base64'));
+const png = Buffer.from(dataUrl.png.split(',')[1], 'base64');
+writeFileSync(out, await sharp(png).webp({ lossless: true, effort: 6 }).toBuffer());
 console.log(`wrote ${out}  card=${JSON.stringify(dataUrl.card)}`);
 await browser.close();
