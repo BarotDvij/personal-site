@@ -86,7 +86,7 @@ export const STRUCTURES: Structure[] = [
   // Downtown AI District
   { id: 'podium', label: 'Podium: hackathon wins', kind: 'monument', x: 690, w: 112, h: 66, district: 'ai', ref: { type: 'hackathons' }, text: ['PODIUM'] },
   { id: 'knowidea', label: 'KnowIdea Research Tower', kind: 'glass', x: 822, w: 72, h: 146, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 858 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 914, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'] },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 914, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 938 },
   { id: 'altaml', label: 'AltaML x Communitech', kind: 'hq', x: 982, w: 76, h: 152, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1020 },
   { id: 'hauser', label: 'Hauser Furniture: our enterprise client', kind: 'furniture', x: 1076, w: 68, h: 66, district: 'ai', ref: { type: 'client' }, text: ['HAUSER'] },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1162, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
@@ -104,7 +104,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1890, w: 72, h: 150, district: 'marketing', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1926 },
   { id: 'leads', label: 'Lead reporting billboard', kind: 'billboard', x: 1980, w: 96, h: 58, district: 'marketing', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['LEADS', '12 MIN > 10 S'] },
   { id: 'mower', label: 'Robot Mower: Lawn Sweeper', kind: 'lawn', x: 2094, w: 40, h: 14, district: 'marketing', ref: { type: 'game', id: 'sweeper' } },
-  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2134, w: 70, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'], riser: 2170 },
+  { id: 'swap', label: 'Swap Robotics Showroom', kind: 'showroom', x: 2134, w: 70, h: 62, district: 'marketing', ref: { type: 'role', org: 'Swap Robotics' }, text: ['SWAP ROBOTICS'] },
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2240, w: 22, h: 26, district: 'marketing', ref: { type: 'warp', to: 5 } },
 
   // Civic Centre
