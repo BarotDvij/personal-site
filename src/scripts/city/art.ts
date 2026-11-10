@@ -196,8 +196,12 @@ function lamp(ctx: Ctx, x: number, p: Palette) {
   rect(ctx, x - 1, GROUND - 24, 4, 2, p.lamp);
   rect(ctx, x, GROUND - 22, 2, 1, p.night ? '#ffe9a3' : '#d8d2b0');
   if (p.night) {
+    // A triangular cone of light, narrow at the bulb and widening to the ground.
     ctx.fillStyle = 'rgba(255, 220, 140, 0.16)';
-    ctx.fillRect(x - 5, GROUND - 21, 12, 21);
+    for (let k = 0; k < 21; k++) {
+      const half = 1 + Math.round((k * 5) / 20);
+      ctx.fillRect(x + 1 - half, GROUND - 21 + k, half * 2, 1);
+    }
   }
 }
 
@@ -240,6 +244,57 @@ function ledRect(s: Structure) {
 }
 
 // ---------- buildings ----------
+
+// Antenna length for the glass towers, trimmed so a tall tower never pokes past the canvas top.
+const antennaLen = (s: Structure) => Math.max(2, Math.min(16, GROUND - s.h - 2));
+
+// Glass curtain-wall tower shared by KnowIdea and AltaML: windows fill the whole
+// face from the street to the crown, mullions every 4px, floors every 7px, a
+// diagonal sky reflection by day and lit floors at night. The title signs sit in
+// the crown, and the last window of the ground row is the door.
+interface GlassStyle {
+  pane: [string, string]; // day, night
+  paneHi: [string, string];
+  mullion: string;
+  floor: string;
+  crown: string;
+  crownW: number;
+  crownH: number;
+  signs: { text: string; bg: string; fg: string }[];
+}
+
+function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: GlassStyle) {
+  const CELL_W = 4, CELL_H = 7;
+  const x = s.x, w = s.w, top = GROUND - s.h, cx = x + w / 2;
+  const rows = Math.floor((GROUND - top - g.crownH) / CELL_H), cols = Math.ceil(w / CELL_W);
+  const gTop = GROUND - rows * CELL_H;
+  const pane = p.night ? g.pane[1] : shade(g.pane[0], p);
+  const paneHi = p.night ? g.paneHi[1] : g.paneHi[0];
+  rect(ctx, x - 1, gTop - 1, w + 2, GROUND - gTop + 1, p.outline);
+  rect(ctx, x, gTop, w, GROUND - gTop, pane);
+  if (p.night) {
+    // A lit window fills its whole frame cell. The mullions and floor lines are
+    // painted after this, so they trim each pane to the exact border of the cell.
+    for (let row = 0; row < rows; row++)
+      for (let c = 0; c < cols; c++)
+        if (r() < 0.33) rect(ctx, x + c * CELL_W, gTop + row * CELL_H, Math.min(CELL_W, w - c * CELL_W), CELL_H, p.lit);
+  } else {
+    for (let k = 0; k < GROUND - gTop; k += 1) {
+      const rx = x + Math.round(k * 0.35) % (w + 18) - 6;
+      if (rx >= x && rx + 5 <= x + w) rect(ctx, rx, gTop + k, 5, 1, paneHi);
+    }
+  }
+  for (let xx = x; xx < x + w; xx += CELL_W) rect(ctx, xx, gTop, 1, GROUND - gTop, g.mullion);
+  for (let row = 1; row < rows; row++) rect(ctx, x, gTop + row * CELL_H, w, 1, g.floor);
+  // Door: one window wide and two floors tall, in the last column.
+  const dh = CELL_H * 2, doorX = x + (cols - 1) * CELL_W;
+  rect(ctx, doorX, GROUND - dh, CELL_W, dh, p.outline);
+  rect(ctx, doorX + 1, GROUND - dh + 1, CELL_W - 1, dh - 1, p.night ? '#e6cf8f' : '#cfe6f5');
+  // Crown with the title sign(s) inside, and the antenna above it.
+  box(ctx, cx - g.crownW / 2, top, g.crownW, gTop - top, g.crown, p);
+  rect(ctx, cx, top - antennaLen(s), 1, antennaLen(s), p.lamp);
+  g.signs.forEach((sg, i) => sign(ctx, sg.text, cx, top + 2 + i * 11, sg.bg, sg.fg, p, true));
+}
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
   const r = rng(s.x * 31 + s.w);
@@ -308,54 +363,33 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, cx - 6, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, cx + 5, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, x + w - 44, GROUND - 22, 1, 22, p.lamp);
-      sign(ctx, label, cx + 6, GROUND - 34, '#3fb950', '#ffffff', p);
+      sign(ctx, label, cx + 6, GROUND - 42, '#3fb950', '#ffffff', p);
       rect(ctx, x + w - 44, GROUND - 25, 7, 5, shade('#f2c84b', p));
       text(ctx, '1', x + w - 42, GROUND - 25, '#2a2233');
       break;
     }
-    case 'glass': {
-      // All-glass curtain wall: mullions, a diagonal sky reflection, lit floors at night.
-      const gx = x + 6, gw = w - 12, gTop = top + 10;
-      const pane = p.night ? '#1c2a4a' : shade('#7fb6e6', p);
-      const paneHi = p.night ? '#2a3c66' : '#b9dcf8';
-      rect(ctx, gx - 1, gTop - 1, gw + 2, GROUND - gTop + 1, p.outline);
-      rect(ctx, gx, gTop, gw, GROUND - gTop, pane);
-      if (p.night) {
-        // A lit window fills its whole frame cell. The mullions (every 4px) and floor
-        // lines (every 10px) are painted after this, so they trim each pane to the
-        // exact border of the cell.
-        for (let yy = gTop; yy + 10 <= GROUND - 14; yy += 10)
-          for (let xx = gx; xx < gx + gw; xx += 4)
-            if (r() < 0.33) rect(ctx, xx, yy, Math.min(4, gx + gw - xx), 10, p.lit);
-      } else {
-        for (let k = 0; k < GROUND - gTop; k += 1) {
-          const rx = gx + Math.round(k * 0.35) % (gw + 18) - 6;
-          if (rx >= gx && rx + 5 <= gx + gw) rect(ctx, rx, gTop + k, 5, 1, paneHi);
-        }
-      }
-      for (let xx = gx; xx < gx + gw; xx += 4) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#4a6f96', p));
-      for (let yy = gTop + 10; yy < GROUND; yy += 10) rect(ctx, gx, yy, gw, 1, shade('#5d84ad', p));
-      box(ctx, x + 14, top, w - 28, 12, p.night ? '#24365e' : shade('#9cc8ee', p), p);
-      rect(ctx, cx, top - 16, 1, 16, p.lamp);
-      box(ctx, x, GROUND - 14, w, 14, shade('#2c3a56', p), p);
-      rect(ctx, cx - 7, GROUND - 12, 14, 12, p.night ? '#e6cf8f' : '#cfe6f5');
-      rect(ctx, cx, GROUND - 12, 1, 12, p.outline);
-      sign(ctx, label, cx, top + 18, '#7c4ddb', '#ffffff', p);
+    case 'glass':
+      glassTower(ctx, s, p, r, {
+        pane: ['#7fb6e6', '#1c2a4a'], paneHi: ['#b9dcf8', '#2a3c66'], mullion: shade('#4a6f96', p), floor: shade('#5d84ad', p),
+        crown: p.night ? '#24365e' : shade('#9cc8ee', p), crownW: 44, crownH: 14,
+        signs: [{ text: label, bg: '#7c4ddb', fg: '#ffffff' }],
+      });
       break;
-    }
     case 'tower': {
-      box(ctx, x + 8, top + 10, w - 16, h - 10, shade('#3c4f73', p), p);
-      box(ctx, x + 16, top, w - 32, 12, shade('#4b6190', p), p);
+      // No crown cap: the body runs straight up to the roofline.
+      box(ctx, x + 8, top, w - 16, h, shade('#3c4f73', p), p);
       rect(ctx, cx, top - 16, 1, 16, p.lamp);
-      // Two-line signs (Chamber of Commerce) push the first window row down,
-      // with one extra row left empty for breathing room.
-      const wDrop = (s.text?.length ?? 1) > 1 ? 14 : 0;
-      windows(ctx, p, r, x + 13, top + 26 + wDrop, w - 26, h - 50 - wDrop, 3, 4, 2, 3);
+      // One sign per text line, in the district's colour (two lines for long names),
+      // high up under the roof. Windows start a little below the last sign and run down
+      // to one window's width above the stone base.
+      const lines = s.text ?? [label];
+      const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
+      lines.forEach((line, i) => sign(ctx, line, cx, top + 3 + i * 10, LENS_COLOR[lens], '#ffffff', p));
+      const winFirst = top + 12 + (lines.length - 1) * 10 + 5, winLast = GROUND - 16 - 3;
+      const winRows = Math.floor((winLast - winFirst + 3) / 7);
+      windows(ctx, p, r, x + 13, winLast - (winRows * 7 - 3), w - 26, winRows * 7 - 3, 3, 4, 2, 3);
       box(ctx, x, GROUND - 16, w, 16, shade('#2c3a56', p), p);
       door(ctx, cx, 12, 12, shade('#1a2236', p));
-      // One sign per text line, in the district's colour (two lines for long names).
-      const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
-      (s.text ?? [label]).forEach((line, i) => sign(ctx, line, cx, top + 14 + i * 10, LENS_COLOR[lens], '#ffffff', p));
       if (s.id === 'occ') {
         const red = shade('#c62828', p);
         rect(ctx, cx + 1, top - 16, 12, 6, shade('#e8e0d0', p));
@@ -609,20 +643,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'hq': {
-      // AltaML x Communitech: a tall glass tower, crown sign up top, partner sign below.
-      const body = shade('#2f5f7a', p), crown = shade('#244a60', p);
-      box(ctx, x, GROUND - 18, w, 18, shade('#1f3a4a', p), p);
-      box(ctx, x + 6, top + 18, w - 12, h - 36, body, p);
-      box(ctx, x + 14, top + 4, w - 28, 16, crown, p);
-      rect(ctx, cx, top - 12, 1, 16, p.lamp);
-      windows(ctx, p, r, x + 11, top + 34, w - 22, h - 80, 4, 4, 3, 3);
-      // Floor bands run through the gap between window rows, never across a window.
-      const winTop = top + 34, rowStep = 4 + 3;
-      const winRows = Math.floor((h - 80 + 3) / rowStep);
-      for (let j = 4; j < winRows; j += 4) rect(ctx, x + 7, winTop + j * rowStep - 2, w - 14, 1, shade('#f2a33a', p));
-      door(ctx, cx, 14, 14, shade('#122230', p));
-      sign(ctx, s.text?.[0] ?? label, cx, top + 8, '#15a6bb', '#ffffff', p, true);
-      if (s.text?.[1]) sign(ctx, s.text[1], cx, GROUND - 32, '#f2a33a', '#2a2233', p);
+      // AltaML x Communitech: the same glass curtain wall as KnowIdea in AltaML's blues,
+      // with both names up in the crown. Lines are a darker shade of the glass, so they stay subtle.
+      const paneDay = '#2f5f7a', paneNight = '#16303f';
+      glassTower(ctx, s, p, r, {
+        pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'],
+        mullion: shade(mixHex(paneDay, '#000000', 0.3), p), floor: shade(mixHex(paneDay, '#000000', 0.3), p),
+        crown: shade('#244a60', p), crownW: 60, crownH: 25,
+        signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }, ...(s.text?.[1] ? [{ text: s.text[1], bg: '#f2a33a', fg: '#2a2233' }] : [])],
+      });
       break;
     }
     case 'arcadehall': {
@@ -664,7 +693,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, rx, GROUND - 14, 1, 14, shade('#3f9a48', p));
         rect(ctx, rx + 2, GROUND - 11, 1, 11, shade('#3f9a48', p));
       }
-      sign(ctx, label, cx, GROUND - 30, '#22b8cf', '#ffffff', p);
+      sign(ctx, label, cx, GROUND - h, '#22b8cf', '#ffffff', p);
       break;
     }
     case 'loadtruck': {
@@ -757,7 +786,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pyramid': {
       // Hall of Fame: a glass pyramid on a stone plinth, the podium trophies inside.
-      const plinthTop = GROUND - 38, ph = plinthTop - top, hw = w / 2 - 6;
+      const plinthTop = GROUND - 15, ph = plinthTop - top, hw = w / 2 - 6;
       const glass = p.night ? '#6a5a3a' : '#cfeaf6';
       const frame = shade('#5d6676', p);
       for (let ry = 0; ry < ph; ry++) {
@@ -774,14 +803,14 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       // A soft sheen down the left face
       for (let k = 6; k < ph - 4; k++) rect(ctx, cx - Math.round((k / ph) * hw) + 3, top + k, 2, 1, p.night ? '#9a8458' : '#ffffff');
       // Plinth: light slab over a dark base, with the plaque in the middle.
-      box(ctx, x + 2, plinthTop, w - 4, 7, shade('#8a8f9c', p), p);
+      box(ctx, x + 2, plinthTop, w - 4, 4, shade('#8a8f9c', p), p);
       rect(ctx, x + 3, plinthTop + 1, w - 6, 1, shade('#b4b9c4', p));
-      box(ctx, x, plinthTop + 6, w, GROUND - plinthTop - 6, shade('#5f6470', p), p);
+      box(ctx, x, plinthTop + 3, w, GROUND - plinthTop - 3, shade('#5f6470', p), p);
       for (let i = 6; i < w - 6; i += 4) rect(ctx, x + i, GROUND - 4, 2, 1, shade('#4a4f5a', p));
       // Glass doors either side of the plaque
       for (const dx of [x + 10, x + w - 26]) {
-        box(ctx, dx, GROUND - 22, 16, 22, p.night ? '#e6cf8f' : '#cfe6f5', p);
-        rect(ctx, dx + 7, GROUND - 21, 1, 21, frame);
+        box(ctx, dx, GROUND - 11, 16, 11, p.night ? '#e6cf8f' : '#cfe6f5', p);
+        rect(ctx, dx + 7, GROUND - 10, 1, 10, frame);
       }
       // Pedestals 1 / 2 / 1 with gold, silver and gold cups, inside the glass.
       const peds: [number, number, string, string][] = [[cx - 22, 16, '#f2c84b', '1'], [cx, 10, '#c9ccd6', '2'], [cx + 22, 16, '#f2c84b', '1']];
@@ -793,7 +822,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       // Spotlights at the apex
       rect(ctx, cx - 1, top + 2, 3, 1, '#fff6c8');
-      sign(ctx, label, cx, GROUND - 23, '#e8c547', '#2a2233', p, true);
+      sign(ctx, label, cx, GROUND - 12, '#e8c547', '#2a2233', p, true);
       break;
     }
     case 'parksign': {
@@ -989,7 +1018,7 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   pipe(ctx, DEEP_X, TANK_BOTTOM, DEEP_X, DEEP_Y, p, 7);
 
   // Warehouse junction tank
-  const tx = JUNCTION_X - 26, ty = GROUND + 14;
+  const tx = JUNCTION_X - 36, ty = GROUND + 14;
   box(ctx, tx, ty, 72, 30, shade('#5f6b7a', p), p);
   rect(ctx, tx + 1, ty + 1, 70, 2, shade('#8f9bab', p));
   centeredText(ctx, 'WAREHOUSE', tx + 36, ty + 8, '#ffffff');
@@ -1006,7 +1035,21 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   // Layer labels
   text(ctx, 'DATA LAYER', 26, GROUND + 44, '#f0a868');
   // 22 safeguarded at Super.com, plus GenLedge's 2 data and 2 CI/CD pipelines.
-  text(ctx, '26 PIPELINES KEPT RUNNING', JUNCTION_X - 140, TRUNK_Y + 7, '#f0a868');
+  // Centred in the gap between the GenLedge riser and the deep line.
+  const pipelinesLabel = '26 PIPELINES KEPT RUNNING';
+  const gapL = STRUCTURES.find((x) => x.id === 'genledge')!.riser! + 4, gapR = DEEP_X - 3.5;
+  text(ctx, pipelinesLabel, Math.round((gapL + gapR) / 2 - textWidth(pipelinesLabel) / 2), TRUNK_Y + 7, '#f0a868');
+}
+
+// Horizontal spans of everything vertical underground that a curb plate could run into.
+function pipeSpans(): [number, number][] {
+  const spans: [number, number][] = [];
+  for (const s of STRUCTURES) {
+    if (s.kind === 'warp') spans.push([s.x + 2, s.x + s.w - 2]);
+    else if (s.riser && s.id !== 'super') spans.push([s.riser - 4, s.riser + 4]);
+  }
+  spans.push([JUNCTION_X - 4, JUNCTION_X + 4], [DEEP_X - 4, DEEP_X + 4]);
+  return spans;
 }
 
 function drawStreet(ctx: Ctx, p: Palette) {
@@ -1018,9 +1061,11 @@ function drawStreet(ctx: Ctx, p: Palette) {
   for (const d of DISTRICTS) {
     const label = d.name.toUpperCase().replace("'", '');
     const plate = shade(LENS_COLOR[d.lens], p);
-    // Long names would run under the pipes beside them, so these two stack on two lines.
-    const stacked = d.id === 'commercial' || d.id === 'data';
-    const lines = stacked ? [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)] : [label];
+    // A name that would run under a pipe beside it stacks on two lines instead.
+    const split = [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)];
+    const oneLineW = textWidth(label) + 6;
+    const stacked = label.includes(' ') && pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3);
+    const lines = stacked ? split : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
     box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
     lines.forEach((l, i) => text(ctx, l, d.x0 + 7, GROUND + 8 + i * 8, ink(plate)));
@@ -1039,7 +1084,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
   });
   // The civic green: extra trees behind the duck pond and around the park.
   const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
-  for (const [dx, size] of [[-12, 1], [2, 2], [34, 1], [50, 2], [78, 1]] as const) tree(ctx, pond + dx, p, size);
+  for (const [dx, size] of [[-12, 1], [2, 2], [31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -1051,7 +1096,7 @@ export function buildCityLayer(p: Palette) {
   drawStreet(ctx, p);
   for (const s of STRUCTURES) drawStructure(ctx, s, p);
   // Welcome banner
-  ribbon(ctx, 'WELCOME TO DVIJ CITY', 80, 66, '#e8c547', '#2a2233', p);
+  ribbon(ctx, BANNER.label, BANNER.cx, BANNER.y, '#e8c547', '#2a2233', p);
   return c;
 }
 
@@ -1326,12 +1371,48 @@ export function drawBeacons(ctx: Ctx, t: number, originX: number, offsetY: numbe
   if (!on) return;
   const tops: [number, number][] = [];
   for (const s of STRUCTURES) {
-    if (s.kind === 'tower' || s.kind === 'glass') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
-    if (s.kind === 'hq') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 13]);
+    if (s.kind === 'tower') tops.push([s.x + s.w / 2, GROUND - s.h - 17]);
+    if (s.kind === 'glass' || s.kind === 'hq') tops.push([s.x + s.w / 2, GROUND - s.h - antennaLen(s) - 1]);
     if (s.kind === 'marble') tops.push([s.x + s.w / 2 - 1, GROUND - s.h - 7]);
     if (s.kind === 'lab') tops.push([s.x + s.w / 2 - 1, GROUND - s.h + 1]);
   }
   for (const [x, y] of tops) rect(ctx, x + originX - 1, y + offsetY, 3, 2, p.night ? '#ff5a5a' : '#e33b3b');
+}
+
+// Welcome ribbon geometry, shared by the baked banner and its live shine.
+const BANNER = { label: 'WELCOME TO DVIJ CITY', cx: 80, y: 66, h: 21 };
+const bannerRect = () => {
+  const w = textWidth(BANNER.label) + 24;
+  return { x: Math.round(BANNER.cx - w / 2), y: BANNER.y, w, h: BANNER.h };
+};
+
+// A slanted glint sweeps across the welcome banner every few seconds, then a small star twinkles.
+export function drawBannerShine(ctx: Ctx, t: number, originX: number, offsetY: number) {
+  const { x, y, w, h } = bannerRect();
+  const period = 4200, sweep = 1100;
+  const k = t % period;
+  const bx = x + originX, by = y + offsetY;
+  if (k < sweep) {
+    // Clip to the panel so the glint never spills past its edge.
+    const lead = Math.round((k / sweep) * (w + h + 8)) - 4;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bx + 1, by + 1, w - 2, h - 2);
+    ctx.clip();
+    for (let row = 1; row < h - 1; row++) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.fillRect(bx + lead - row, by + row, 3, 1);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.fillRect(bx + lead - row - 2, by + row, 2, 1);
+    }
+    ctx.restore();
+  } else if (k < sweep + 500) {
+    const f = Math.floor((k - sweep) / 125) % 2;
+    const sx = bx + w - 10, sy = by + 3;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(sx, sy + 1 - f, 1, 3 + 2 * f);
+    ctx.fillRect(sx - 1 - f, sy + 2, 3 + 2 * f, 1);
+  }
 }
 
 export function drawHighlight(ctx: Ctx, s: Structure, originX: number, offsetY: number, t: number) {

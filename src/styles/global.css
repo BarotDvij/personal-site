@@ -1045,7 +1045,7 @@ blockquote p {
 .bldg .tag {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 15px);
   transform: translateX(-50%);
   white-space: nowrap;
   font-family: var(--pixel);

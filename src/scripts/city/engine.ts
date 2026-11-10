@@ -5,7 +5,7 @@ import {
 } from './world';
 import {
   PALETTES, buildCityLayer, buildSkyLayer, buildParallaxLayer, parallaxX, parallaxPad, PARALLAX, makeClouds, drawClouds, drawTrain, preparePaths,
-  drawPackets, drawBeacons, drawHighlight, drawStreetLife, drawProps, type Palette,
+  drawPackets, drawBeacons, drawBannerShine, drawHighlight, drawStreetLife, drawProps, type Palette,
 } from './art';
 import { panelFor } from './panels';
 import { frameProbe, hintTier, type Tier } from '../quality';
@@ -95,7 +95,7 @@ export function mountCity(root: HTMLElement): City {
       // Short props (truck, chess table, mower) sit under the walker's UP: PLAY
       // prompt, so their name tag floats 10px above the top of that prompt.
       const tag = b.querySelector<HTMLElement>('.tag');
-      if (tag) tag.style.bottom = `calc(100% + ${Math.max(10, (PROMPT_TOP - s.h) * scale + 10)}px)`;
+      if (tag) tag.style.bottom = `calc(100% + ${Math.max(15, (PROMPT_TOP - s.h) * scale + 15)}px)`;
     }
     root.style.setProperty('--px', `${scale}px`);
     buildViewLayers();
@@ -521,6 +521,7 @@ export function mountCity(root: HTMLElement): City {
     drawProps(ctx, motion ? t : 0, ox, offsetY, palette);
     if (tier === 'high' && motion) drawStreetLife(ctx, t, ox, offsetY, viewW, palette);
     if (motion) drawBeacons(ctx, t, ox, offsetY, palette);
+    if (motion) drawBannerShine(ctx, t, ox, offsetY);
     drawWalker(ctx, walker, ox, offsetY, palette, motion);
     const near = nearby(walker);
     drawPrompt(ctx, walker, near, ox, offsetY);
