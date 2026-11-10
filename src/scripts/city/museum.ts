@@ -129,7 +129,7 @@ export const HISTORY: Wing[] = [
       ['Engineering', 'Transit is systems design. Lines, transfers, and frequency decide whether a city connects or splits apart.'],
       ['Product', 'Walkable streets are designed around the person on foot, with homes, shops, and work close together so a short walk covers a lot of daily life.'],
       ['Product management', 'Strong Towns argues for small, incremental changes a town can afford to maintain, instead of giant projects it can\'t.'],
-      ['In this city', 'You explore on foot, the warp pipes run like a transit line between districts, and the Mixed-Use Zone puts offices, a billboard, and a showroom on one block.'],
+      ['In this city', 'You explore on foot, the warp pipes run like a transit line between districts, and Downtown mixes glass towers, a digital billboard, and a corner restaurant on one street.'],
     ],
     links: [
       { href: 'https://www.youtube.com/@CityBeautiful', label: 'City Beautiful' },

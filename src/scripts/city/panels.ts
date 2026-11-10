@@ -69,27 +69,19 @@ export function panelFor(ref: Ref): PanelContent | null {
       };
     }
     case 'trophies': {
-      const items = [
-        ...profile.awards.map((a) => ({ title: a.title, meta: `${a.issuer} · ${a.date}` })),
-        ...profile.hackathons.map((h) => ({ title: `${h.place}, ${h.event}`, meta: 'link' in h ? h.project : 'Hackathon' })),
-      ];
+      // Hackathons first, with their Devpost links, then the remaining awards.
+      const hacks = profile.hackathons
+        .map((h) => `<li><span class="place${h.place === '2nd' ? ' silver' : ''}">${esc(h.place)}</span> <strong>${esc(h.event)}</strong><br>${
+          'link' in h && h.link ? link(h.link as string, h.project) : esc(h.project)
+        }</li>`)
+        .join('');
+      const awards = profile.awards
+        .map((a) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(a.title)}<br><small>${esc(`${a.issuer} · ${a.date}`)}</small></span></li>`)
+        .join('');
       return {
         kicker: 'Hall of Fame',
         title: 'Trophy case',
-        html: `<ul class="trophies">${items
-          .map((t) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(t.title)}<br><small>${esc(t.meta)}</small></span></li>`)
-          .join('')}</ul>`,
-      };
-    }
-    case 'hackathons': {
-      return {
-        kicker: 'Podium',
-        title: '3 podiums in 7 days',
-        html: `<ul class="podium">${profile.hackathons
-          .map((h) => `<li><span class="place">${esc(h.place)}</span> <strong>${esc(h.event)}</strong><br>${
-            'link' in h && h.link ? link(h.link as string, h.project) : esc(h.project)
-          }</li>`)
-          .join('')}</ul>`,
+        html: `<h3>Hackathons</h3><ul class="podium">${hacks}</ul><h3>Awards</h3><ul class="trophies">${awards}</ul>`,
       };
     }
     case 'civic': {
@@ -114,7 +106,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       return { kicker: 'City Square', title: 'Museum of Favourites', html: museumHtml() };
     case 'client': {
       return {
-        kicker: 'Downtown AI District',
+        kicker: 'Downtown',
         title: 'Hauser Industries',
         html: `<p class="lead">Hauser Industries, a furniture company, was our enterprise client through Communitech's AI@WORK program.</p>
           <p><button type="button" class="game-btn inline" data-goto="altaml">See the project at AltaML x Communitech</button></p>`,

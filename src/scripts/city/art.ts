@@ -219,6 +219,29 @@ function stackCell(ctx: Ctx, x: number, y: number, color: string, p: Palette) {
   rect(ctx, x, y, 2, 2, shade(color, p));
 }
 
+// A trophy cup, outlined so it reads against glass or sky. Silver stays bright by day.
+function trophy(ctx: Ctx, px: number, cupY: number, metal: string, p: Palette) {
+  const parts: [number, number, number, number][] = [
+    [px - 4, cupY, 9, 6], [px - 6, cupY + 1, 2, 3], [px + 5, cupY + 1, 2, 3],
+    [px - 1, cupY + 6, 3, 3], [px - 3, cupY + 9, 7, 2],
+  ];
+  for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
+  const fill = p.night || metal !== '#c9ccd6' ? shade(metal, p) : '#aab0c4';
+  for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, fill);
+  rect(ctx, px - 3, cupY + 1, 2, 3, '#fff6c8');
+}
+
+// Go Lime's billboard: 'roof' puts a wide board on a truss above the tower,
+// 'facade' wraps a tall LED wall over the upper face.
+export const GOLIME_BILLBOARD: 'roof' | 'facade' = 'roof';
+
+function boardRect(s: Structure) {
+  const top = GROUND - s.h;
+  return GOLIME_BILLBOARD === 'facade'
+    ? { x: s.x + 14, y: top + 16, w: 68, h: 92 }
+    : { x: s.x + 2, y: top + 8, w: 92, h: 28 };
+}
+
 // ---------- buildings ----------
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
@@ -227,86 +250,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
   const label = s.text?.[0] ?? '';
 
   switch (s.kind) {
-    case 'kiosk': {
-      // Hall of Fame: a glass-walled gallery with trophies on lit pedestals.
-      const steel = shade('#5d6676', p);
-      const glass = p.night ? '#3a4f7c' : '#cdeaf7';
-      const glassHi = p.night ? '#5a73a3' : '#f2fbff';
-      const gy = top + 9, gh = h - 9;
-      // Flat roof slab
-      box(ctx, x - 2, top + 3, w + 4, 6, shade('#3a4558', p), p);
-      rect(ctx, x - 1, top + 4, w + 2, 1, shade('#6d7a90', p));
-      // Glass walls with steel mullions and a transom
-      box(ctx, x, gy, w, gh, glass, p);
-      for (const sx of [x + 6, x + 34]) {
-        for (let k = 0; k < 11; k++) {
-          rect(ctx, sx + k, gy + 24 - k, 2, 1, glassHi);
-          rect(ctx, sx + 6 + k, gy + 24 - k, 1, 1, glassHi);
-        }
-      }
-      for (let i = 0; i <= 4; i++) rect(ctx, x + 1 + Math.round((i * (w - 4)) / 4), gy + 1, 1, gh - 2, steel);
-      rect(ctx, x + 1, gy + 12, w - 2, 1, steel);
-      // Gallery floor and spotlights
-      rect(ctx, x + 1, GROUND - 3, w - 2, 3, shade('#8a8f9c', p));
-      for (const lx of [x + 9, x + 21, x + 33, x + 45]) {
-        rect(ctx, lx - 1, gy + 1, 3, 2, '#fff6c8');
-        rect(ctx, lx, gy + 3, 1, 1, '#fff6c8');
-      }
-      // Star plaque hanging above the cases
-      const px0 = x + 21;
-      rect(ctx, px0, gy + 14, 12, 7, shade('#2a2233', p));
-      rect(ctx, px0 + 5, gy + 15, 2, 5, '#f2c84b');
-      rect(ctx, px0 + 3, gy + 17, 6, 1, '#f2c84b');
-      rect(ctx, px0 + 4, gy + 16, 4, 3, '#f2c84b');
-      // Pedestals with outlined trophies. The case is lit, so colours stay full at night.
-      const cases: [number, number, string][] = [
-        [x + 9, 6, '#f2c84b'], [x + 21, 10, '#c9ccd6'], [x + 33, 6, '#f2c84b'], [x + 45, 10, '#f2c84b'],
-      ];
-      for (const [cxT, ph, gold] of cases) {
-        const baseY = GROUND - 3 - ph;
-        box(ctx, cxT - 4, baseY, 10, ph, shade('#e9e4da', p), p);
-        const parts: [number, number, number, number][] = [
-          [cxT - 2, baseY - 9, 5, 4], [cxT - 4, baseY - 8, 2, 2], [cxT + 3, baseY - 8, 2, 2],
-          [cxT, baseY - 5, 1, 3], [cxT - 1, baseY - 2, 3, 2],
-        ];
-        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
-        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, gold === '#c9ccd6' && !p.night ? '#aab0c4' : gold);
-        rect(ctx, cxT - 1, baseY - 8, 1, 2, '#fff6c8');
-      }
-      // Glass double door
-      const dx = x + w - 19;
-      box(ctx, dx, GROUND - 22, 16, 22, glass, p);
-      rect(ctx, dx + 7, GROUND - 21, 1, 21, steel);
-      rect(ctx, dx + 5, GROUND - 11, 1, 3, '#e8c547');
-      rect(ctx, dx + 9, GROUND - 11, 1, 3, '#e8c547');
-      rect(ctx, dx + 2, GROUND - 19, 3, 1, glassHi);
-      sign(ctx, label, cx, top - 6, '#e8c547', '#2a2233', p);
-      break;
-    }
-    case 'monument': {
-      box(ctx, x, GROUND - 18, w, 18, shade('#a49c90', p), p);
-      box(ctx, x + 6, GROUND - 24, w - 12, 7, shade('#bdb5a8', p), p);
-      centeredText(ctx, label, cx, GROUND - 12, shade('#3a3530', p));
-      const cups: [number, number, string][] = [[cx - 34, 42, '#f2c84b'], [cx, 30, '#c9ccd6'], [cx + 34, 42, '#f2c84b']];
-      for (const [px, ph, gold] of cups) {
-        box(ctx, px - 7, GROUND - 24 - ph + 14, 14, ph - 14, shade('#d9d2c4', p), p);
-        const cupY = GROUND - 24 - ph;
-        // Trophy parts, drawn once with a dark outline and once filled so they
-        // stay readable against the daytime sky.
-        const parts: [number, number, number, number][] = [
-          [px - 5, cupY, 10, 7], [px - 7, cupY + 1, 2, 3], [px + 5, cupY + 1, 2, 3],
-          [px - 1, cupY + 7, 2, 4], [px - 3, cupY + 11, 6, 2],
-        ];
-        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx - 1, ry - 1, rw + 2, rh + 2, p.outline);
-        const fill = p.night || gold !== '#c9ccd6' ? shade(gold, p) : '#aab0c4';
-        for (const [rx, ry, rw, rh] of parts) rect(ctx, rx, ry, rw, rh, fill);
-        rect(ctx, px - 4, cupY + 1, 2, 3, '#fff6c8');
-      }
-      text(ctx, '1', cx - 35, GROUND - 24 - 42 + 18, shade('#3a3530', p));
-      text(ctx, '2', cx - 1, GROUND - 24 - 30 + 18, shade('#3a3530', p));
-      text(ctx, '1', cx + 33, GROUND - 24 - 42 + 18, shade('#3a3530', p));
-      break;
-    }
     case 'post': {
       box(ctx, x, top + 8, w, h - 8, shade('#b5533c', p), p);
       for (let yy = top + 12; yy < GROUND - 2; yy += 4) rect(ctx, x + 1, yy, w - 2, 1, shade('#9a4330', p));
@@ -327,23 +270,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#8fd14f', p);
       door(ctx, cx, 10, 14, shade('#24301f', p));
       sign(ctx, label, cx, top + 6, '#9bd23c', '#1d2a10', p);
-      break;
-    }
-    case 'billboard': {
-      rect(ctx, x + 10, GROUND - 26, 3, 26, shade('#5b5560', p));
-      rect(ctx, x + w - 13, GROUND - 26, 3, 26, shade('#5b5560', p));
-      box(ctx, x, top, w, h - 26, shade('#f5f1e8', p), p);
-      const bh = h - 30;
-      if (s.text?.length === 2 && s.text[0] === 'A') {
-        rect(ctx, x + 2, top + 2, w / 2 - 3, bh, shade('#e0457b', p));
-        rect(ctx, x + w / 2 + 1, top + 2, w / 2 - 3, bh, shade('#3b82f6', p));
-        centeredText(ctx, 'A', x + w / 4, top + 2 + bh / 2 - 2, '#ffffff');
-        centeredText(ctx, 'B', x + (3 * w) / 4, top + 2 + bh / 2 - 2, '#ffffff');
-      } else {
-        rect(ctx, x + 2, top + 2, w - 4, bh, shade('#1f2b3d', p));
-        s.text?.forEach((t, i) => centeredText(ctx, t, cx, top + 8 + i * 10, i === 0 ? '#9bd23c' : '#ffffff'));
-      }
-      for (let i = 0; i < 3; i++) rect(ctx, x + 12 + i * ((w - 24) / 2), top - 2, 2, 2, p.lamp);
       break;
     }
     case 'hall': {
@@ -530,20 +456,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       break;
     }
-    case 'grocer': {
-      box(ctx, x, top + 12, w, h - 12, shade('#f1ead8', p), p);
-      for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 18, 4, 7, shade('#3fb950', p));
-      for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 18, 4, 7, shade('#ffffff', p));
-      rect(ctx, x + 6, GROUND - 22, w - 30, 14, p.night ? '#4a5a3a' : '#cfeedd');
-      for (let i = 0; i < 4; i++) {
-        const bx = x + 6 + i * 13;
-        box(ctx, bx, GROUND - 7, 11, 7, shade('#a06a3a', p), p);
-        for (let k = 0; k < 4; k++) rect(ctx, bx + 2 + k * 2, GROUND - 9, 2, 2, shade(['#e0457b', '#f2a33a', '#3fb950', '#e8c547'][(i + k) % 4], p));
-      }
-      door(ctx, x + w - 12, 10, 14);
-      sign(ctx, label, cx, top + 4, '#3fb950', '#ffffff', p);
-      break;
-    }
     case 'construction': {
       // Brick schoolhouse behind the scaffolding: clock tower, door, three rows of windows.
       const sx = x + 6, sw = w - 40, scx = sx + sw / 2;
@@ -716,26 +628,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       if (s.text?.[1]) sign(ctx, s.text[1], cx, GROUND - 32, '#f2a33a', '#2a2233', p);
       break;
     }
-    case 'mediahq': {
-      // Go Lime HQ: a tall office with the A/B test billboard on the roof.
-      const bTop = top, bH = 24, roof = top + 34;
-      rect(ctx, x + 14, bTop + bH, 2, roof - bTop - bH, shade('#5b5560', p));
-      rect(ctx, x + w - 16, bTop + bH, 2, roof - bTop - bH, shade('#5b5560', p));
-      box(ctx, x + 4, bTop, w - 8, bH, shade('#f5f1e8', p), p);
-      rect(ctx, x + 6, bTop + 2, (w - 12) / 2 - 1, bH - 4, shade('#c8336c', p));
-      rect(ctx, x + 6 + (w - 12) / 2 + 1, bTop + 2, (w - 12) / 2 - 1, bH - 4, shade('#2f6fd6', p));
-      text(ctx, 'A', x + 6 + (w - 12) / 4 - 1, bTop + 9, '#ffffff');
-      text(ctx, 'B', x + 6 + (3 * (w - 12)) / 4 - 1, bTop + 9, '#ffffff');
-      box(ctx, x, roof, w, GROUND - roof, shade('#2f3b2b', p), p);
-      rect(ctx, x + 1, roof + 1, w - 2, 3, shade('#9bd23c', p));
-      windows(ctx, p, r, x + 6, roof + 18, w - 12, GROUND - roof - 48);
-      for (let i = 0; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#9bd23c', p));
-      for (let i = 4; i < w - 4; i += 8) rect(ctx, x + 2 + i, GROUND - 26, 4, 5, shade('#f6ffe0', p));
-      box(ctx, x + 6, GROUND - 20, w - 12, 20, p.night ? '#4d6b2a' : '#8fd14f', p);
-      door(ctx, cx, 10, 14, shade('#24301f', p));
-      sign(ctx, label, cx, roof + 6, '#9bd23c', '#1d2a10', p);
-      break;
-    }
     case 'arcadehall': {
       box(ctx, x, top + 16, w, h - 16, shade('#2a1f4a', p), p);
       // Marquee
@@ -751,15 +643,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       for (let i = 0; i < 4; i++) {
         const cell = (w - 20) / 4, sw = Math.min(22, Math.floor(cell) - 2);
         const sx = Math.round(x + 10 + i * cell + (cell - sw) / 2);
-        box(ctx, sx, top + 28, sw, 18, shade('#120f1e', p), p);
-        rect(ctx, sx + 3, top + 31, sw - 6, 10, ['#22b8cf', '#3fb950', '#e0457b', '#f2a33a'][i]);
-        rect(ctx, sx + 6, top + 34, 4, 2, '#ffffff');
+        box(ctx, sx, top + 22, sw, 16, shade('#120f1e', p), p);
+        rect(ctx, sx + 2, top + 24, sw - 4, 10, ['#22b8cf', '#3fb950', '#e0457b', '#f2a33a'][i]);
+        rect(ctx, sx + 3, top + 26, 2, 2, '#ffffff');
       }
       // Joystick sign and doors
-      rect(ctx, x + 12, GROUND - 30, 20, 4, shade('#e0457b', p));
-      rect(ctx, x + 21, GROUND - 40, 2, 10, shade('#9aa3ad', p));
-      rect(ctx, x + 19, GROUND - 44, 6, 5, shade('#e0457b', p));
-      box(ctx, x + w / 2 - 14, GROUND - 26, 28, 26, p.night ? '#3a2f6a' : '#5a4a8a', p);
+      rect(ctx, x + 5, GROUND - 16, 14, 4, shade('#e0457b', p));
+      rect(ctx, x + 11, GROUND - 24, 2, 8, shade('#9aa3ad', p));
+      rect(ctx, x + 9, GROUND - 28, 6, 5, shade('#e0457b', p));
+      box(ctx, x + w / 2 - 10, GROUND - 22, 20, 22, p.night ? '#3a2f6a' : '#5a4a8a', p);
       rect(ctx, x + w / 2, GROUND - 25, 1, 25, p.outline);
       if (!p.night) for (let i = 0; i < w; i += 6) rect(ctx, x + i, top + 16, 3, 2, neon[(i / 6) % neon.length]);
       break;
@@ -834,30 +726,6 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       break;
     }
-    case 'patio': {
-      // Eco Eats patio table under a striped umbrella, with a plate of packets.
-      const wood = shade('#a06a3a', p), woodDk = shade('#6b4428', p);
-      rect(ctx, cx, GROUND - 21, 1, 21, p.lamp);
-      rect(ctx, cx - 7, GROUND - 24, 15, 1, shade('#3fb950', p));
-      for (let i = 0; i < 23; i++) rect(ctx, cx - 11 + i, GROUND - 23, 1, 2, shade(Math.floor(i / 4) % 2 ? '#ffffff' : '#3fb950', p));
-      for (let i = 0; i < 23; i += 4) rect(ctx, cx - 11 + i, GROUND - 21, 2, 1, shade(Math.floor(i / 4) % 2 ? '#ffffff' : '#3fb950', p));
-      rect(ctx, cx - 6, GROUND - 9, 13, 2, wood);
-      rect(ctx, cx - 1, GROUND - 7, 3, 7, woodDk);
-      rect(ctx, cx - 3, GROUND - 10, 7, 1, '#ffffff');
-      rect(ctx, cx - 2, GROUND - 11, 1, 1, shade('#e8c547', p));
-      rect(ctx, cx, GROUND - 11, 1, 1, shade('#e0457b', p));
-      rect(ctx, cx + 2, GROUND - 11, 1, 1, shade('#22b8cf', p));
-      for (const [chx, back] of [[x + 1, x + 1], [x + w - 6, x + w - 2]]) {
-        rect(ctx, chx, GROUND - 5, 5, 1, woodDk);
-        rect(ctx, back, GROUND - 11, 1, 11, woodDk);
-        rect(ctx, chx + (back === chx ? 4 : 0), GROUND - 4, 1, 4, woodDk);
-      }
-      // A diner on the right chair, eating
-      rect(ctx, x + w - 7, GROUND - 15, 3, 3, shade('#8d5a3b', p));
-      rect(ctx, x + w - 7, GROUND - 12, 3, 7, shade('#f2a33a', p));
-      rect(ctx, x + w - 8, GROUND - 10, 1, 1, shade('#8d5a3b', p));
-      break;
-    }
     case 'museum': {
       const stone = shade('#e6dfcf', p), dark = shade('#b9ae96', p);
       for (let i = 0; i < 3; i++) rect(ctx, x + i * 3, GROUND - 3 - i * 3, w - i * 6, 3, dark);
@@ -888,6 +756,213 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         rect(ctx, mid - 2, by + 14, 5, 1, shade('#c8a24a', p));
       }
       sign(ctx, label, cx, top + 12, '#22b8cf', '#ffffff', p);
+      break;
+    }
+    case 'pyramid': {
+      // Hall of Fame: a glass pyramid on a stone plinth, the podium trophies inside.
+      const plinthTop = GROUND - 38, ph = plinthTop - top, hw = w / 2 - 6;
+      const glass = p.night ? '#6a5a3a' : '#cfeaf6';
+      const frame = shade('#5d6676', p);
+      for (let ry = 0; ry < ph; ry++) {
+        const half = Math.round(((ry + 1) / ph) * hw);
+        const y = top + ry;
+        rect(ctx, cx - half - 1, y, half * 2 + 2, 1, p.outline);
+        rect(ctx, cx - half, y, half * 2, 1, glass);
+        // Diamond lattice: two families of struts parallel to the faces.
+        for (let dx = -half + 1; dx < half; dx++) {
+          const a = ry + dx, b = ry - dx;
+          if (((a % 9) + 9) % 9 === 0 || ((b % 9) + 9) % 9 === 0) rect(ctx, cx + dx, y, 1, 1, frame);
+        }
+      }
+      // A soft sheen down the left face
+      for (let k = 6; k < ph - 4; k++) rect(ctx, cx - Math.round((k / ph) * hw) + 3, top + k, 2, 1, p.night ? '#9a8458' : '#ffffff');
+      // Plinth: light slab over a dark base, with the plaque in the middle.
+      box(ctx, x + 2, plinthTop, w - 4, 7, shade('#8a8f9c', p), p);
+      rect(ctx, x + 3, plinthTop + 1, w - 6, 1, shade('#b4b9c4', p));
+      box(ctx, x, plinthTop + 6, w, GROUND - plinthTop - 6, shade('#5f6470', p), p);
+      for (let i = 6; i < w - 6; i += 4) rect(ctx, x + i, GROUND - 4, 2, 1, shade('#4a4f5a', p));
+      // Glass doors either side of the plaque
+      for (const dx of [x + 10, x + w - 26]) {
+        box(ctx, dx, GROUND - 22, 16, 22, p.night ? '#e6cf8f' : '#cfe6f5', p);
+        rect(ctx, dx + 7, GROUND - 21, 1, 21, frame);
+      }
+      // Pedestals 1 / 2 / 1 with gold, silver and gold cups, inside the glass.
+      const peds: [number, number, string, string][] = [[cx - 22, 16, '#f2c84b', '1'], [cx, 10, '#c9ccd6', '2'], [cx + 22, 16, '#f2c84b', '1']];
+      for (const [px, pH, metal, n] of peds) {
+        box(ctx, px - 7, plinthTop - pH, 14, pH + 1, shade('#9aa0ad', p), p);
+        rect(ctx, px - 6, plinthTop - pH + 1, 12, 1, shade('#c4c9d4', p));
+        text(ctx, n, px - 1, plinthTop - pH + 4, shade('#2a2233', p));
+        trophy(ctx, px, plinthTop - pH - 13, metal, p);
+      }
+      // Spotlights at the apex
+      rect(ctx, cx - 1, top + 2, 3, 1, '#fff6c8');
+      sign(ctx, label, cx, GROUND - 23, '#e8c547', '#2a2233', p, true);
+      break;
+    }
+    case 'parksign': {
+      // Wooden entrance sign that names the green space: chess, CityScapes, the pond.
+      const wood = shade('#8a5a34', p), woodDk = shade('#5b3b22', p);
+      rect(ctx, x + 4, GROUND - 26, 2, 26, woodDk);
+      rect(ctx, x + w - 6, GROUND - 26, 2, 26, woodDk);
+      rect(ctx, x + 3, GROUND - 27, 4, 1, wood);
+      rect(ctx, x + w - 7, GROUND - 27, 4, 1, wood);
+      box(ctx, x, GROUND - 24, w, 17, shade('#2e7d32', p), p);
+      rect(ctx, x + 1, GROUND - 23, w - 2, 1, shade('#4caf50', p));
+      (s.text ?? []).forEach((t, i) => centeredText(ctx, t, cx, GROUND - 21 + i * 7, '#ffffff'));
+      // Flower bed at the foot of the sign
+      rect(ctx, x + 1, GROUND - 2, w - 2, 2, shade('#4fa84f', p));
+      for (let i = 2; i < w - 2; i += 4) rect(ctx, x + i, GROUND - 4, 2, 2, shade(['#e0457b', '#e8c547', '#ffffff'][(i / 4) % 3 | 0], p));
+      break;
+    }
+    case 'restaurant': {
+      // Eco Eats: a brick corner restaurant with a striped awning and diners in the window.
+      const brick = shade('#a8503a', p), mortar = shade('#8a3f2d', p);
+      const bodyTop = top + 14;
+      box(ctx, x + 8, top + 2, 6, 13, shade('#7a3a2a', p), p); // chimney
+      box(ctx, x, bodyTop, w, h - 14, brick, p);
+      for (let yy = bodyTop + 3; yy < GROUND - 1; yy += 3) {
+        rect(ctx, x + 1, yy, w - 2, 1, mortar);
+        for (let xx = x + ((yy / 3) % 2 ? 3 : 7); xx < x + w - 1; xx += 8) rect(ctx, xx, yy - 2, 1, 2, mortar);
+      }
+      rect(ctx, x, bodyTop, w, 3, shade('#4a2a22', p)); // cornice
+      sign(ctx, label, cx, top + 4, '#3fb950', '#ffffff', p, true);
+      // Scalloped awning
+      const ay = bodyTop + 8, ax0 = x + 2, aw = w - 4;
+      rect(ctx, ax0, ay - 1, aw, 1, p.outline);
+      for (let i = 0; i < aw; i++) {
+        const green = Math.floor(i / 4) % 2 === 0;
+        rect(ctx, ax0 + i, ay, 1, 6, shade(green ? '#2e9d48' : '#ffffff', p));
+        if (i % 4 !== 0 && i % 4 !== 3) rect(ctx, ax0 + i, ay + 6, 1, 1, shade(green ? '#2e9d48' : '#ffffff', p));
+      }
+      // Front window with two tables, diners and pendant lamps
+      const wx = x + 5, wy = ay + 11, ww = w - 30, wh = GROUND - 6 - wy;
+      box(ctx, wx - 1, wy - 1, ww + 2, wh + 2, shade('#3a2a24', p), p);
+      rect(ctx, wx, wy, ww, wh, p.night ? '#e6c98a' : '#d6ecf5');
+      for (const tx of [wx + 12, wx + ww - 14]) {
+        rect(ctx, tx + 1, wy, 1, 4, shade('#3a2a24', p));
+        rect(ctx, tx - 1, wy + 4, 5, 2, shade('#e8c547', p));
+        rect(ctx, tx - 4, wy + wh - 6, 11, 2, shade('#6b4428', p));
+        rect(ctx, tx + 1, wy + wh - 4, 1, 4, shade('#4a2f1c', p));
+        rect(ctx, tx - 7, wy + wh - 11, 3, 3, shade('#c98e64', p));
+        rect(ctx, tx - 7, wy + wh - 8, 3, 5, shade('#3b82f6', p));
+        rect(ctx, tx + 8, wy + wh - 11, 3, 3, shade('#f1c7a0', p));
+        rect(ctx, tx + 8, wy + wh - 8, 3, 5, shade('#e0457b', p));
+        rect(ctx, tx - 1, wy + wh - 7, 2, 1, '#ffffff');
+        rect(ctx, tx + 2, wy + wh - 7, 2, 1, shade('#3fb950', p));
+      }
+      rect(ctx, wx + Math.floor(ww / 2), wy, 1, wh, shade('#3a2a24', p)); // mullion
+      rect(ctx, wx - 2, GROUND - 6, ww + 4, 2, shade('#d9d2c4', p)); // sill
+      // Chalkboard menu and the door
+      box(ctx, x + w - 23, GROUND - 22, 7, 10, shade('#24302a', p), p);
+      for (let k = 0; k < 3; k++) rect(ctx, x + w - 21, GROUND - 20 + k * 2, 3, 1, '#e8e4d8');
+      door(ctx, x + w - 9, 10, 18, shade('#2e7d32', p));
+      break;
+    }
+    case 'patio': {
+      // Eco Eats patio: two umbrella tables under a string of lights.
+      const wood = shade('#a06a3a', p), woodDk = shade('#6b4428', p);
+      rect(ctx, x, GROUND - 26, 1, 26, p.lamp);
+      rect(ctx, x + w - 1, GROUND - 26, 1, 26, p.lamp);
+      for (let i = 1; i < w - 1; i++) {
+        const sag = Math.round(Math.sin((i / (w - 1)) * Math.PI) * 3);
+        rect(ctx, x + i, GROUND - 26 + sag, 1, 1, p.lamp);
+        if (i % 5 === 2) {
+          rect(ctx, x + i, GROUND - 25 + sag, 1, 1, p.night ? '#ffe9a3' : '#e8dcb0');
+          if (p.night) {
+            ctx.fillStyle = 'rgba(255, 220, 140, 0.25)';
+            ctx.fillRect(x + i - 1, GROUND - 26 + sag, 3, 3);
+          }
+        }
+      }
+      const shirts = [['#f2a33a', '#8d5a3b'], ['#9b6bf2', '#f1c7a0']];
+      [x + 12, x + w - 13].forEach((tc, n) => {
+        rect(ctx, tc, GROUND - 19, 1, 19, p.lamp);
+        for (let i = 0; i < 19; i++) rect(ctx, tc - 9 + i, GROUND - 20, 1, 2, shade(Math.floor(i / 4) % 2 ? '#ffffff' : '#3fb950', p));
+        rect(ctx, tc - 6, GROUND - 21, 13, 1, shade('#3fb950', p));
+        rect(ctx, tc - 5, GROUND - 9, 11, 2, wood);
+        rect(ctx, tc - 1, GROUND - 7, 3, 7, woodDk);
+        rect(ctx, tc - 3, GROUND - 10, 7, 1, '#ffffff');
+        rect(ctx, tc - 2, GROUND - 11, 1, 1, shade('#e8c547', p));
+        rect(ctx, tc, GROUND - 11, 1, 1, shade('#e0457b', p));
+        rect(ctx, tc + 2, GROUND - 11, 1, 1, shade('#22b8cf', p));
+        for (const [chx, back] of [[tc - 10, tc - 10], [tc + 6, tc + 10]]) {
+          rect(ctx, chx, GROUND - 5, 5, 1, woodDk);
+          rect(ctx, back, GROUND - 11, 1, 11, woodDk);
+          rect(ctx, chx + (back === chx ? 4 : 0), GROUND - 4, 1, 4, woodDk);
+        }
+        const [shirt, skin] = shirts[n];
+        rect(ctx, tc + 6, GROUND - 15, 3, 3, shade(skin, p));
+        rect(ctx, tc + 6, GROUND - 12, 3, 7, shade(shirt, p));
+        rect(ctx, tc + 5, GROUND - 10, 1, 1, shade(skin, p));
+      });
+      // Planters at each end
+      for (const px of [x + 1, x + w - 6]) {
+        rect(ctx, px, GROUND - 4, 5, 4, shade('#8a5a34', p));
+        rect(ctx, px, GROUND - 7, 5, 3, shade('#3f9a48', p));
+        rect(ctx, px + 2, GROUND - 8, 1, 1, shade('#e0457b', p));
+      }
+      break;
+    }
+    case 'mediahq': {
+      // Go Lime HQ: a dark-glass downtown tower with lime fins and a digital billboard.
+      const facade = GOLIME_BILLBOARD === 'facade';
+      const bodyTop = facade ? top + 8 : top + 46, bx = x + 6, bw = w - 12;
+      const pane = p.night ? '#16261c' : shade('#3f6b55', p);
+      box(ctx, bx, bodyTop, bw, GROUND - bodyTop, pane, p);
+      // Curtain wall: mullions every 6px, floor lines every 8px, lit offices at night.
+      const gTop = bodyTop + 2;
+      if (p.night) {
+        for (let yy = gTop; yy + 8 <= GROUND - 22; yy += 8)
+          for (let xx = bx + 3; xx < bx + bw - 3; xx += 6) if (r() < 0.3) rect(ctx, xx, yy, 6, 8, p.lit);
+      } else {
+        for (let k = 0; k < GROUND - gTop - 22; k++) {
+          const rx = bx + 3 + (Math.round(k * 0.4) % (bw + 12)) - 8;
+          if (rx >= bx + 3 && rx + 4 <= bx + bw - 3) rect(ctx, rx, gTop + k, 4, 1, '#5f9479');
+        }
+      }
+      for (let xx = bx + 3; xx < bx + bw - 2; xx += 6) rect(ctx, xx, gTop, 1, GROUND - gTop, shade('#24392d', p));
+      for (let yy = gTop + 8; yy < GROUND - 20; yy += 8) rect(ctx, bx + 1, yy, bw - 2, 1, shade('#24392d', p));
+      // Lime corner fins run the full height.
+      rect(ctx, bx + 1, bodyTop + 1, 2, GROUND - bodyTop - 1, shade('#9bd23c', p));
+      rect(ctx, bx + bw - 3, bodyTop + 1, 2, GROUND - bodyTop - 1, shade('#9bd23c', p));
+      if (facade) {
+        // A tall LED wall wraps the upper face. drawProps plays the ads on it.
+        const b = boardRect(s);
+        rect(ctx, cx, top - 0, 1, 8, p.lamp);
+        box(ctx, b.x - 2, b.y - 2, b.w + 4, b.h + 4, shade('#14181c', p), p);
+        rect(ctx, b.x, b.y, b.w, b.h, shade('#1f2b3d', p));
+        for (const lx of [b.x + 6, b.x + b.w / 2, b.x + b.w - 7]) rect(ctx, lx, b.y + b.h + 2, 2, 2, '#fff6c8');
+      } else {
+        // Rooftop billboard on a steel truss, lit by gooseneck lamps.
+        const b = boardRect(s), steel = shade('#5b5560', p);
+        box(ctx, b.x - 2, b.y - 2, b.w + 4, b.h + 4, shade('#14181c', p), p);
+        rect(ctx, b.x, b.y, b.w, b.h, shade('#1f2b3d', p));
+        for (const lx of [b.x + 10, b.x + 34, b.x + 58, b.x + 82]) {
+          rect(ctx, lx, top, 1, 6, steel);
+          rect(ctx, lx - 3, top, 3, 1, steel);
+          rect(ctx, lx - 5, top, 3, 2, shade('#2a2a33', p));
+          rect(ctx, lx - 5, top + 2, 3, 1, '#fff6c8');
+        }
+        const ty = b.y + b.h + 2, tb = bodyTop;
+        rect(ctx, x + 2, ty, w - 4, 2, steel); // catwalk
+        for (let i = 4; i < w - 4; i += 4) rect(ctx, x + i, ty - 1, 1, 1, steel);
+        for (const px of [x + 14, x + w - 16]) {
+          rect(ctx, px, ty + 2, 2, tb - ty - 2, steel);
+        }
+        for (let k = 0; k < tb - ty - 2; k++) {
+          const f = k / (tb - ty - 2);
+          rect(ctx, x + 16 + Math.round(f * (w - 32)), ty + 2 + k, 1, 1, steel);
+          rect(ctx, x + w - 17 - Math.round(f * (w - 32)), ty + 2 + k, 1, 1, steel);
+        }
+        rect(ctx, bx, bodyTop - 1, bw, 2, shade('#2a2a33', p));
+      }
+      // Lobby: stone podium, glass doors, the Go Lime sign on the canopy.
+      box(ctx, x, GROUND - 20, w, 20, shade('#d9d2c4', p), p);
+      rect(ctx, x + 1, GROUND - 20, w - 2, 2, shade('#9bd23c', p));
+      box(ctx, cx - 12, GROUND - 16, 24, 16, p.night ? '#e6cf8f' : '#cfe6f5', p);
+      rect(ctx, cx, GROUND - 15, 1, 15, shade('#3a4a3a', p));
+      for (const wx of [x + 6, x + w - 22]) box(ctx, wx, GROUND - 14, 16, 9, p.night ? '#e6cf8f' : '#cfe6f5', p);
+      sign(ctx, label, cx, GROUND - 31, '#9bd23c', '#1d2a10', p, true);
       break;
     }
     case 'warp': {
@@ -979,7 +1054,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const label = d.name.toUpperCase().replace("'", '');
     const plate = shade(LENS_COLOR[d.lens], p);
     // Long names would run under the pipes beside them, so these two stack on two lines.
-    const stacked = d.id === 'commercial' || d.id === 'marketing' || d.id === 'data';
+    const stacked = d.id === 'commercial' || d.id === 'data';
     const lines = stacked ? [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)] : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
     box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
@@ -998,7 +1073,8 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
-  for (const [tx, size] of [[2410, 1], [2424, 2], [2456, 1], [2472, 2], [2500, 1]] as const) tree(ctx, tx, p, size);
+  const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
+  for (const [dx, size] of [[-12, 1], [2, 2], [34, 1], [50, 2], [78, 1]] as const) tree(ctx, pond + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -1344,64 +1420,95 @@ export function drawStreetLife(ctx: Ctx, t: number, originX: number, offsetY: nu
   }
 }
 
-// Tri-vision flip board on the leads billboard: four Go Lime ads drawn in
-// code, swapped by 23 vertical slats that turn in a wave from left to right.
-const BOARD = { w: 92, h: 28, slat: 4, hold: 3000, flip: 420, stagger: 28 };
-let boardFaces: { night: boolean; faces: HTMLCanvasElement[] } | null = null;
+// Tri-vision flip board on the Go Lime billboard: four ads drawn in code,
+// swapped by vertical slats that turn in a wave from left to right. The same
+// ads come in a wide layout (rooftop board) and a tall one (LED facade).
+const BOARD = { slat: 4, hold: 3000, flip: 420, stagger: 28 };
+let boardFaces: { key: string; faces: HTMLCanvasElement[] } | null = null;
 
-function boardFace(p: Palette, bg: string, lines: [string, string][], icon?: (c: Ctx) => void) {
+type Icon = (c: Ctx) => void;
+interface Ad { bg: string; wide: [string, string][]; tall: [string, string][]; icon?: Icon }
+
+function boardFace(p: Palette, ad: Ad, w: number, h: number) {
   const c = document.createElement('canvas');
-  c.width = BOARD.w;
-  c.height = BOARD.h;
+  c.width = w;
+  c.height = h;
   const ctx = c.getContext('2d')!;
-  rect(ctx, 0, 0, BOARD.w, BOARD.h, shade(bg, p));
-  icon?.(ctx);
-  const left = icon ? 20 : 0, room = BOARD.w - left;
-  lines.forEach(([str, col], i) => text(ctx, str, left + Math.round((room - textWidth(str)) / 2), 6 + i * 10, col));
+  rect(ctx, 0, 0, w, h, shade(ad.bg, p));
+  if (h <= 32) {
+    ad.icon?.(ctx);
+    const left = ad.icon ? 20 : 0, room = w - left;
+    ad.wide.forEach(([str, col], i) => text(ctx, str, left + Math.round((room - textWidth(str)) / 2), 6 + i * 10, col));
+  } else {
+    // Tall: the icon sits centred near the top at double size, text stacks below.
+    let y0 = 14;
+    if (ad.icon) {
+      const ic = document.createElement('canvas');
+      ic.width = 22;
+      ic.height = 26;
+      ad.icon(ic.getContext('2d')!);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(ic, 0, 0, 22, 26, Math.round(w / 2 - 22), 6, 44, 52);
+      y0 = 60;
+    }
+    const gap = ad.icon ? 9 : 14;
+    ad.tall.forEach(([str, col], i) => text(ctx, str, Math.round((w - textWidth(str)) / 2), y0 + i * gap, col));
+  }
   return c;
 }
 
-function buildBoardFaces(p: Palette) {
+function buildAds(): Ad[] {
   const white = '#ffffff', lime = '#9bd23c';
   return [
-    boardFace(p, '#1f2b3d', [['LEADS', lime], ['12 MIN > 10 S', white]]),
-    boardFace(p, '#0d4d3c', [['BEAT THE HEAT,', white], ['NOT YOUR WALLET', lime]], (c) => {
-      // Air conditioner: grille box with a fan.
-      rect(c, 4, 7, 13, 14, '#d9dde2');
-      rect(c, 5, 8, 11, 12, '#9aa3ad');
-      for (let y = 9; y < 19; y += 2) rect(c, 6, y, 9, 1, '#d9dde2');
-      rect(c, 4, 21, 13, 1, '#2a2233');
-    }),
-    boardFace(p, '#1e6f2a', [['$99 TANKLESS', white], ['+ HEAT PUMP', '#ffd23f']], (c) => {
-      // Tankless water heater with a red price badge.
-      rect(c, 6, 5, 9, 17, '#f5f1e8');
-      rect(c, 8, 8, 5, 3, '#2a2233');
-      rect(c, 9, 9, 3, 1, lime);
-      rect(c, 8, 22, 1, 2, '#9aa3ad');
-      rect(c, 12, 22, 1, 2, '#9aa3ad');
-      rect(c, 12, 15, 6, 5, '#e0302f');
-      rect(c, 13, 17, 4, 1, white);
-    }),
-    boardFace(p, '#2a6fae', [['CLEAN WATER,', white], ['EVERY TAP', '#d6f0ff']], (c) => {
-      // A water drop.
-      const rows = [[10, 1], [9, 3], [9, 3], [8, 5], [7, 7], [6, 9], [6, 9], [6, 9], [7, 7], [8, 5]];
-      rows.forEach(([x, w], i) => rect(c, x, 8 + i, w, 1, '#9fd0ff'));
-      rect(c, 8, 13, 1, 2, white);
-    }),
+    { bg: '#1f2b3d', wide: [['LEADS', lime], ['12 MIN > 10 S', white]], tall: [['GO LIME', lime], ['LEAD', white], ['REPORTS', white], ['12 MIN', white], ['> 10 S', lime]] },
+    {
+      bg: '#0d4d3c', wide: [['BEAT THE HEAT,', white], ['NOT YOUR WALLET', lime]], tall: [['BEAT THE', white], ['HEAT,', white], ['NOT YOUR', lime], ['WALLET', lime]],
+      icon: (c) => {
+        // Air conditioner: grille box with a fan.
+        rect(c, 4, 7, 13, 14, '#d9dde2');
+        rect(c, 5, 8, 11, 12, '#9aa3ad');
+        for (let y = 9; y < 19; y += 2) rect(c, 6, y, 9, 1, '#d9dde2');
+        rect(c, 4, 21, 13, 1, '#2a2233');
+      },
+    },
+    {
+      bg: '#1e6f2a', wide: [['$99 TANKLESS', white], ['+ HEAT PUMP', '#ffd23f']], tall: [['$99', '#ffd23f'], ['TANKLESS', white], ['+ HEAT', white], ['PUMP', white]],
+      icon: (c) => {
+        // Tankless water heater with a red price badge.
+        rect(c, 6, 5, 9, 17, '#f5f1e8');
+        rect(c, 8, 8, 5, 3, '#2a2233');
+        rect(c, 9, 9, 3, 1, lime);
+        rect(c, 8, 22, 1, 2, '#9aa3ad');
+        rect(c, 12, 22, 1, 2, '#9aa3ad');
+        rect(c, 12, 15, 6, 5, '#e0302f');
+        rect(c, 13, 17, 4, 1, white);
+      },
+    },
+    {
+      bg: '#2a6fae', wide: [['CLEAN WATER,', white], ['EVERY TAP', '#d6f0ff']], tall: [['CLEAN', white], ['WATER,', white], ['EVERY', '#d6f0ff'], ['TAP', '#d6f0ff']],
+      icon: (c) => {
+        // A water drop.
+        const rows = [[10, 1], [9, 3], [9, 3], [8, 5], [7, 7], [6, 9], [6, 9], [6, 9], [7, 7], [8, 5]];
+        rows.forEach(([x, w], i) => rect(c, x, 8 + i, w, 1, '#9fd0ff'));
+        rect(c, 8, 13, 1, 2, white);
+      },
+    },
   ];
 }
 
-function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, top: number, p: Palette) {
+function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, offsetY: number, p: Palette) {
   if (typeof document === 'undefined') return;
-  if (!boardFaces || boardFaces.night !== p.night) boardFaces = { night: p.night, faces: buildBoardFaces(p) };
+  const b = boardRect(s);
+  const key = `${p.night}-${b.w}x${b.h}`;
+  if (!boardFaces || boardFaces.key !== key) boardFaces = { key, faces: buildAds().map((ad) => boardFace(p, ad, b.w, b.h)) };
   const { faces } = boardFaces;
-  const slats = BOARD.w / BOARD.slat;
+  const slats = b.w / BOARD.slat;
   const turn = BOARD.flip + BOARD.stagger * (slats - 1);
   const each = BOARD.hold + turn;
   const phase = t % (each * faces.length);
   const i = Math.floor(phase / each), k = phase - i * each;
   const cur = faces[i], next = faces[(i + 1) % faces.length];
-  const dx = s.x + 2 + originX, dy = top + 2;
+  const dx = b.x + originX, dy = b.y + offsetY;
   if (k < BOARD.hold) {
     ctx.drawImage(cur, dx, dy);
     return;
@@ -1412,15 +1519,15 @@ function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, top: 
     const lin = Math.min(1, Math.max(0, (e - j * BOARD.stagger) / BOARD.flip));
     const q = lin * lin * (3 - 2 * lin);
     const wb = Math.round(BOARD.slat * q), wa = BOARD.slat - wb;
-    if (wb) ctx.drawImage(next, x0, 0, BOARD.slat, BOARD.h, dx + x0, dy, wb, BOARD.h);
-    if (wa) ctx.drawImage(cur, x0, 0, BOARD.slat, BOARD.h, dx + x0 + wb, dy, wa, BOARD.h);
+    if (wb) ctx.drawImage(next, x0, 0, BOARD.slat, b.h, dx + x0, dy, wb, b.h);
+    if (wa) ctx.drawImage(cur, x0, 0, BOARD.slat, b.h, dx + x0 + wb, dy, wa, b.h);
     if (lin > 0 && lin < 1) {
       // The face turning away darkens, and the slat edge catches a seam.
       ctx.fillStyle = `rgba(0,0,0,${(0.45 * q).toFixed(2)})`;
-      if (wa) ctx.fillRect(dx + x0 + wb, dy, wa, BOARD.h);
+      if (wa) ctx.fillRect(dx + x0 + wb, dy, wa, b.h);
       ctx.fillStyle = `rgba(0,0,0,${(0.45 * (1 - q)).toFixed(2)})`;
-      if (wb) ctx.fillRect(dx + x0, dy, wb, BOARD.h);
-      rect(ctx, dx + x0 + wb, dy, 1, BOARD.h, 'rgba(0,0,0,0.35)');
+      if (wb) ctx.fillRect(dx + x0, dy, wb, b.h);
+      rect(ctx, dx + x0 + wb, dy, 1, b.h, 'rgba(0,0,0,0.35)');
     }
   }
 }
@@ -1428,7 +1535,7 @@ function drawFlipBoard(ctx: Ctx, s: Structure, t: number, originX: number, top: 
 export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number, p: Palette) {
   for (const s of STRUCTURES) {
     const top = GROUND - s.h + offsetY;
-    if (s.id === 'leads' && t > 0) drawFlipBoard(ctx, s, t, originX, top, p);
+    if (s.kind === 'mediahq') drawFlipBoard(ctx, s, t, originX, offsetY, p);
     if (s.kind === 'loadtruck' && t > 0) {
       // A piece drops from the chute into the gap, the row flashes clear, repeat.
       const cycle = 2600, f = (t % cycle) / cycle, k = Math.floor(t / cycle);
@@ -1523,12 +1630,6 @@ export function drawProps(ctx: Ctx, t: number, originX: number, offsetY: number,
         }
       }
       void hallW;
-    }
-    if (s.kind === 'mediahq' && t > 0 && Math.floor(t / 1600) % 2 === 1) {
-      const cx = s.x + 6 + (3 * (s.w - 12)) / 4 + originX;
-      rect(ctx, cx - 10, top + 4, 21, 9, p.outline);
-      rect(ctx, cx - 9, top + 5, 19, 7, '#e8c547');
-      text(ctx, 'WIN', cx - 5, top + 6, '#2a2233');
     }
   }
 }

@@ -1390,6 +1390,10 @@ html[data-sound='off'] .i-waves {
   margin-right: 4px;
 }
 
+.panel-body .place.silver {
+  background: #c9ccd6;
+}
+
 @media (max-width: 720px) {
   .hud {
     flex-wrap: wrap;
