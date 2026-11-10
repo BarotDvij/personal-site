@@ -342,7 +342,7 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
 
 // Hauser Furniture showroom, the podium between the AltaML towers. Its body takes the
 // tower glass colour but has no pane lines, because the big furniture display is its window. SHOP_MIX: 0 = cream, 1 = tower glass.
-const SHOP_MIX = 1;
+const SHOP_MIX = 0.65;
 function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette, pane: string) {
   const top = GROUND - h, cx = x + w / 2;
   const base = shade('#efe3cf', p), body = mixHex(base, pane, SHOP_MIX);
