@@ -698,14 +698,14 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       // shared podium that holds the Hauser Furniture showroom. Pane lines are a lighter
       // shade of the glass so they read.
       const paneDay = '#2f5f7a', paneNight = '#16303f', lines = shade(mixHex(paneDay, '#ffffff', 0.32), p);
-      const core = Math.floor((s.h - 8) / CELL_H);
+      const cap = 6, core = Math.floor((s.h - cap) / CELL_H);
       glassTower(ctx, s, p, r, {
         pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'], mullion: lines, floor: lines,
       }, [
-        { x: 0, w: 32, rows: core, cap: 8, signs: [{ text: 'CT', bg: '#f2a33a', fg: '#2a2233' }] },
+        { x: 0, w: 32, rows: core, cap, signs: [{ text: 'CT', bg: '#f2a33a', fg: '#2a2233' }] },
         { x: 32, w: 20, rows: 16 },
         { x: s.w - 52, w: 20, rows: 16 },
-        { x: s.w - 32, w: 32, rows: core, cap: 8, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
+        { x: s.w - 32, w: 32, rows: core, cap, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
       ]);
       furnitureShop(ctx, x + 52, s.w - 104, 48, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p));
       break;
