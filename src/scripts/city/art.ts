@@ -340,13 +340,16 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
   }
 }
 
-// Hauser Furniture showroom: awning, a display window with a sofa and lamp, and a door.
-function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette) {
+// Hauser Furniture showroom, the podium between the AltaML towers. Its body takes the
+// tower glass colour and grid (the floor lines continue across it), and the showroom
+// window and door form the ground-floor storefront. SHOP_MIX: 0 = cream, 1 = tower glass.
+const SHOP_MIX = 1;
+function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette, pane: string, lines: string) {
   const top = GROUND - h, cx = x + w / 2;
-  box(ctx, x, top + 10, w, h - 10, shade('#efe3cf', p), p);
-  rect(ctx, x - 2, top + 8, w + 4, 3, p.outline);
-  for (let i = 0; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#f2a33a', p));
-  for (let i = 4; i < w; i += 8) rect(ctx, x + i, top + 22, 4, 6, shade('#fff4e0', p));
+  const base = shade('#efe3cf', p), body = mixHex(base, pane, SHOP_MIX);
+  box(ctx, x, top, w, h, body, p);
+  for (let xx = x + 4; xx < x + w; xx += CELL_W) rect(ctx, xx, top + 1, 1, h - 1, lines);
+  for (let row = 1; row < h / CELL_H; row++) rect(ctx, x + 1, GROUND - row * CELL_H, w - 2, 1, lines);
   const wx = x + 5, wy = GROUND - 30, ww = w - 22;
   // Shop windows glow warm at night so the furniture reads against them.
   rect(ctx, wx, wy, ww, 26, p.night ? '#e6cf8f' : '#cfe6f5');
@@ -357,7 +360,7 @@ function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string,
   rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
   rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
   door(ctx, x + w - 8, 8, 14);
-  sign(ctx, label, cx, top + 12, '#000000', '#ffffff', p, true);
+  sign(ctx, label, cx, top + 8, '#000000', '#ffffff', p, true);
 }
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
@@ -704,7 +707,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         { x: s.w - 52, w: 20, rows: 16 },
         { x: s.w - 32, w: 32, rows: core, cap: 8, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
       ]);
-      furnitureShop(ctx, x + 52, s.w - 104, 66, 'HAUSER', p);
+      furnitureShop(ctx, x + 52, s.w - 104, 56, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p), lines);
       break;
     }
     case 'arcadehall': {
