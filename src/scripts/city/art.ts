@@ -307,13 +307,13 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
       rect(ctx, bx + inset, top - 1 - k, bay.w - 2 * inset, 1, pane);
     }
     rect(ctx, bx, top, bay.w, h, pane);
-    // Windows touching a title sign are always lit, so the sign never floats on dark glass.
+    // Windows touching a title sign stay dark, so the sign reads cleanly against the glass.
     bay.signs?.forEach((sg, i) => {
       const sw = textWidth(sg.text) + 6, sx0 = mid - sw / 2, sy0 = top + 4 + i * 11;
       for (let row = 0; row < bay.rows; row++)
         for (let c = bay.x / CELL_W; c < (bay.x + bay.w) / CELL_W; c++) {
           const cx0 = s.x + c * CELL_W, cy0 = top + row * CELL_H;
-          if (cx0 < sx0 + sw && cx0 + CELL_W > sx0 && cy0 < sy0 + 9 && cy0 + CELL_H > sy0) lit.add((bay.rows - 1 - row) * cols + c);
+          if (cx0 < sx0 + sw && cx0 + CELL_W > sx0 && cy0 < sy0 + 9 && cy0 + CELL_H > sy0) lit.delete((bay.rows - 1 - row) * cols + c);
         }
     });
     if (p.night) {
