@@ -262,7 +262,7 @@ interface Bay {
   rows: number; // floors
   cap?: number; // height of a pitched roof above the bay
   ant?: boolean;
-  signs?: { text: string; bg: string; fg: string }[];
+  signs?: { text: string; bg: string; fg: string; litBelow?: boolean }[];
 }
 
 const CELL_W = 4, CELL_H = 7;
@@ -315,6 +315,11 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
           const cx0 = s.x + c * CELL_W, cy0 = top + row * CELL_H;
           if (cx0 < sx0 + sw && cx0 + CELL_W > sx0 && cy0 < sy0 + 9 && cy0 + CELL_H > sy0) lit.delete((bay.rows - 1 - row) * cols + c);
         }
+      // Some of the row right under the sign glow, like offices working late.
+      const below = Math.floor((sy0 + 8 - top) / CELL_H) + 1;
+      if (sg.litBelow && below < bay.rows)
+        for (let c = bay.x / CELL_W; c < (bay.x + bay.w) / CELL_W; c++)
+          if ((c * 5 + 3) % 7 < 4) lit.add((bay.rows - 1 - below) * cols + c);
     });
     if (p.night) {
       // A lit window fills its whole cell. The mullions and floor lines are painted
@@ -433,7 +438,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         pane: ['#7fb6e6', '#1c2a4a'], paneHi: ['#b9dcf8', '#2a3c66'], mullion: shade('#4a6f96', p), floor: shade('#5d84ad', p),
       }, [
         { x: 0, w: 12, rows: 14 },
-        { x: 12, w: 24, rows: Math.floor(s.h / CELL_H), ant: true, signs: [{ text: 'KNOW', bg: '#7c4ddb', fg: '#ffffff' }, { text: 'IDEA', bg: '#7c4ddb', fg: '#ffffff' }] },
+        { x: 12, w: 24, rows: Math.floor(s.h / CELL_H), ant: true, signs: [{ text: 'KNOW', bg: '#7c4ddb', fg: '#ffffff' }, { text: 'IDEA', bg: '#7c4ddb', fg: '#ffffff', litBelow: true }] },
         { x: 36, w: 12, rows: 14 },
       ]);
       break;
