@@ -340,9 +340,10 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
   }
 }
 
-// Hauser Furniture showroom, the podium between the AltaML towers. Its body takes the
-// tower glass colour but has no pane lines, because the big furniture display is its window. SHOP_MIX: 0 = cream, 1 = tower glass.
-const SHOP_MIX = 0.65;
+// Hauser Furniture showroom, the podium between the AltaML towers: a plain grey body with
+// no pane lines, because the big furniture display is its window. SHOP_MIX can tint it
+// towards the tower glass (0 = original grey). SHOP_MIX: 0 = cream, 1 = tower glass.
+const SHOP_MIX = 0;
 function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string, p: Palette, pane: string) {
   const top = GROUND - h, cx = x + w / 2;
   const base = shade('#efe3cf', p), body = mixHex(base, pane, SHOP_MIX);
@@ -356,7 +357,9 @@ function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string,
   rect(ctx, wx + 6, wy + 12, ww - 16, 3, shade('#9b6bb0', p));
   rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
   rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
-  door(ctx, x + w - 8, 8, 14);
+  // Door: a darker shade of the body with a light grey knob.
+  rect(ctx, x + w - 12, GROUND - 14, 8, 14, mixHex(body, '#000000', 0.35));
+  rect(ctx, x + w - 7, GROUND - 7, 1, 1, '#c8ccd2');
   sign(ctx, label, cx, top + 8, '#000000', '#ffffff', p, true);
 }
 
@@ -704,7 +707,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         { x: s.w - 52, w: 20, rows: 16 },
         { x: s.w - 32, w: 32, rows: core, cap: 8, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
       ]);
-      furnitureShop(ctx, x + 52, s.w - 104, 56, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p));
+      furnitureShop(ctx, x + 52, s.w - 104, 52, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p));
       break;
     }
     case 'arcadehall': {
