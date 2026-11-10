@@ -360,7 +360,7 @@ function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string,
   // Door: a darker shade of the body with a light grey knob.
   rect(ctx, x + w - 12, GROUND - 14, 8, 14, mixHex(body, '#000000', 0.35));
   rect(ctx, x + w - 7, GROUND - 7, 1, 1, '#c8ccd2');
-  sign(ctx, label, cx, top + 8, '#000000', '#ffffff', p, true);
+  sign(ctx, label, cx, top + 6, '#000000', '#ffffff', p, true);
 }
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
@@ -707,7 +707,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
         { x: s.w - 52, w: 20, rows: 16 },
         { x: s.w - 32, w: 32, rows: core, cap: 8, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
       ]);
-      furnitureShop(ctx, x + 52, s.w - 104, 52, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p));
+      furnitureShop(ctx, x + 52, s.w - 104, 48, 'HAUSER', p, p.night ? paneNight : shade(paneDay, p));
       break;
     }
     case 'arcadehall': {
