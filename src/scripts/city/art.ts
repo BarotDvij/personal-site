@@ -357,7 +357,7 @@ function furnitureShop(ctx: Ctx, x: number, w: number, h: number, label: string,
   rect(ctx, wx + ww - 4, wy + 6, 1, 16, p.lamp);
   rect(ctx, wx + ww - 6, wy + 4, 5, 3, '#b5541c'); // deep orange-brown shade, readable against the lit window
   door(ctx, x + w - 8, 8, 14);
-  sign(ctx, label, cx, top + 12, '#ffffff', '#000000', p, true);
+  sign(ctx, label, cx, top + 12, '#000000', '#ffffff', p, true);
 }
 
 function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
