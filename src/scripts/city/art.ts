@@ -650,26 +650,26 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'refinery': {
       // Data refinery: files ride the conveyor in on the right, tables leave by pipe.
-      const hallW = w - 40, belt = GROUND - 10;
-      box(ctx, x, top + 26, hallW, h - 26, shade('#6f6252', p), p);
-      for (let yy = top + 30; yy < GROUND - 2; yy += 5) rect(ctx, x + 1, yy, hallW - 2, 1, shade('#5e5244', p));
+      const hallW = w - 40, belt = GROUND - 10, bt = top + 18; // the stacks rise 18px above the hall
+      box(ctx, x, bt + 26, hallW, h - 44, shade('#6f6252', p), p);
+      for (let yy = bt + 30; yy < GROUND - 2; yy += 5) rect(ctx, x + 1, yy, hallW - 2, 1, shade('#5e5244', p));
       for (let i = 0; i < hallW; i += 20) {
-        for (let k = 0; k < 12; k++) rect(ctx, x + i + k, top + 26 - k, 1, k, shade('#8a7c68', p));
-        rect(ctx, x + i + 12, top + 14, 1, 12, p.outline);
+        for (let k = 0; k < 12; k++) rect(ctx, x + i + k, bt + 26 - k, 1, k, shade('#8a7c68', p));
+        rect(ctx, x + i + 12, bt + 14, 1, 12, p.outline);
       }
-      // Smokestacks with warning bands
-      for (const sx of [x + 6, x + 22]) {
-        box(ctx, sx, top, 8, 26, shade('#9aa3ad', p), p);
-        for (let yy = top + 3; yy < top + 24; yy += 7) rect(ctx, sx + 1, yy, 6, 2, shade('#c8336c', p));
+      // Smokestacks of different heights with warning bands
+      for (const [sx, sh] of [[x + 6, 44], [x + 22, 32]] as const) {
+        box(ctx, sx, bt + 26 - sh, 8, sh, shade('#9aa3ad', p), p);
+        for (let yy = bt + 29 - sh; yy < bt + 24; yy += 7) rect(ctx, sx + 1, yy, 6, 2, shade('#c8336c', p));
       }
-      windows(ctx, p, r, x + 6, top + 46, hallW - 12, 10, 6, 5, 5, 4);
+      windows(ctx, p, r, x + 6, bt + 46, hallW - 12, 14, 6, 5, 5, 4); // two rows
       box(ctx, x + hallW - 16, GROUND - 18, 14, 18, shade('#3a3530', p), p);
       // Conveyor and intake hopper
       rect(ctx, x + hallW - 4, belt, 44, 3, shade('#3a3a44', p));
       for (let i = 0; i < 44; i += 6) rect(ctx, x + hallW - 3 + i, belt + 3, 2, 7, p.lamp);
       for (let k = 0; k < 6; k++) rect(ctx, x + w - 16 + k, belt - 22 + k * 2, 16 - k * 2, 2, shade('#9aa3ad', p));
       rect(ctx, x + w - 12, belt - 10, 8, 10, shade('#9aa3ad', p));
-      sign(ctx, label, x + hallW / 2 + 14, top + 32, '#008878', '#ffffff', p);
+      sign(ctx, label, x + hallW / 2 + 14, bt + 32, '#008878', '#ffffff', p);
       break;
     }
     case 'hq': {
