@@ -4,7 +4,6 @@ import Cite from './Cite.astro';
 import PixelIcon from './PixelIcon.astro';
 import Org from './Org.astro';
 import { STRUCTURES } from '../scripts/city/world';
-import { BUILT, EXHIBITS, HISTORY } from '../scripts/city/museum';
 
 // Map each role and project to its building so the Wiki can link into the city.
 const buildingFor = (match: (r: NonNullable<(typeof STRUCTURES)[number]['ref']>) => boolean) =>
@@ -38,6 +37,15 @@ const projectRefs = profile.projects.map((p) => {
   return cite(`${p.name} source`, href);
 });
 
+// Influences comes after Projects, so its refs are created after the project ones.
+const wikiHistory = cite('History of Wikipedia', 'https://en.wikipedia.org/wiki/History_of_Wikipedia');
+const mediaWiki = cite('MediaWiki', 'https://en.wikipedia.org/wiki/MediaWiki');
+const citationNeeded = cite('Wikipedia:Citation needed', 'https://en.wikipedia.org/wiki/Wikipedia:Citation_needed');
+const wikimedia = cite('Wikimedia Foundation', 'https://en.wikipedia.org/wiki/Wikimedia_Foundation');
+const fourthGen = cite('History of video game consoles (fourth generation)', 'https://en.wikipedia.org/wiki/History_of_video_game_consoles_(fourth_generation)');
+const mode7 = cite('Mode 7', 'https://en.wikipedia.org/wiki/Mode_7');
+const strongTowns = cite('Strong Towns', 'https://www.strongtowns.org/');
+
 const current = profile.experience[0];
 const sections = [
   ['early-life', 'Early Life & Education'],
@@ -48,9 +56,6 @@ const sections = [
   ['influences', 'Influences'],
   ['references', 'References'],
 ];
-
-// Influences reuses the museum's data so the article and the city never drift apart.
-const influenceWings = HISTORY.filter((w) => w.lines !== BUILT);
 
 const awardGroups = ['Dance', 'Business competitions', 'Junior Achievement', 'School'].map(
   (g) => [g, profile.awards.filter((a) => a.group === g)] as const,
@@ -284,25 +289,22 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
     <section id="influences" aria-labelledby="influences-h">
       <h2 id="influences-h">Influences</h2>
-      <p>The ideas behind this site came from the games, websites, and cities I grew up with.</p>
-      {influenceWings.map((w) => (
-        <>
-          <h3>{w.title}</h3>
-          {w.personal && <p>{w.personal}</p>}
-          <p>{w.intro}</p>
-          <ul>
-            {w.lines.map(([k, v]) => <li><b>{k}.</b> {v}</li>)}
-          </ul>
-          <p class="ext">{w.links.map((l, i) => <>{i > 0 && ' · '}<a href={l.href}>{l.label}</a></>)}</p>
-        </>
-      ))}
+      <p>The ideas behind this site came from the games, websites, and cities Dvij grew up with.</p>
+
+      <h3>Wikipedia</h3>
+      <p>Dvij read <a href="https://en.wikipedia.org/wiki/Wikipedia">Wikipedia</a> for hours as a kid, and it was the first recurring donation he set up once he started earning, which is why this site is a wiki. Launched in January 2001 as a free encyclopedia that anyone can edit<Cite n={wikiHistory} />, it runs on the open-source <a href="https://en.wikipedia.org/wiki/MediaWiki">MediaWiki</a> software, which keeps a full revision history for every page<Cite n={mediaWiki} />. Its pages are plain and text-first, so they load quickly on slow connections and old devices. The project is run by volunteers through talk pages and consensus, flags unsourced claims with the "citation needed" tag<Cite n={citationNeeded} />, and is funded by donations to the Wikimedia Foundation rather than advertising<Cite n={wikimedia} />.</p>
+
+      <h3>The 16-bit era</h3>
+      <p>Dvij's first console was a Game Boy, and the design language of the 16-bit era, with its crisp pixel art, simple controls, and levels that teach through play, carried straight into the free browser games he grew up on. The Sega Genesis and the Super Nintendo brought richer color and sound to home consoles running from small cartridges<Cite n={fourthGen} />. Worlds were built from small reusable tiles and sprites with tight color palettes, and techniques such as the Super Nintendo's <a href="https://en.wikipedia.org/wiki/Mode_7">Mode 7</a> faked 3D depth on flat hardware<Cite n={mode7} />. A fixed hardware budget forced hard choices about what to keep and what to cut, a constraint that became a style games still borrow today.</p>
+
+      <h3>Urban planning and walkable cities</h3>
+      <p>Dvij loves urban planning, walkable cities, and public transit, and that is why this site is a city. Creators and organizations such as <a href="https://www.youtube.com/@CityBeautiful">City Beautiful</a>, <a href="https://www.strongtowns.org/">Strong Towns</a>, and <a href="https://www.youtube.com/@NotJustBikes">Not Just Bikes</a> are a big part of how he got into it. The case for walkable cities is that daily life works better when it is reachable on foot, by bike, and by transit, not only by car, and Strong Towns argues for small, incremental changes that a town can afford to maintain instead of giant projects it cannot<Cite n={strongTowns} />. In Dvij City, visitors explore on foot, the warp pipes run like a transit line between districts, and Downtown mixes glass towers, a digital billboard, and a corner restaurant on one street.</p>
+
       <h3>Games</h3>
-      <p>Free browser and console games shaped how I think about design and product. A few of my favourites:</p>
-      <ul>
-        {EXHIBITS.map((e) => <li><b>{e.title}.</b> {e.note}</li>)}
-      </ul>
+      <p>Dvij also played a lot of free browser games growing up, and a few stuck. <a href="https://en.wikipedia.org/wiki/Super_Mario_Bros.">Super Mario</a> was one of the first games he ever played, and the green warp pipes that carry visitors around the city are a tribute. <a href="https://undertale.com/">Undertale</a> made him fall in love with the idea of gaming, and the underground layer of the city is a nod to it. The rest are staples of the browser-game years: the platformer <a href="https://www.coolmathgames.com/0-red-ball-4">Red Ball</a>, the two-player puzzler <a href="https://www.coolmathgames.com/0-fireboy-and-water-girl-in-the-forest-temple">Fireboy and Watergirl</a>, the endless runner <a href="https://www.coolmathgames.com/0-run-2">Run 2</a>, the ragdoll swinger <a href="https://www.kongregate.com/en/games/chribbe1/hanger">Hanger</a>, <a href="https://www.y8.com/games/top_spinner_cricket">Top Spinner Cricket</a>, the choose-your-path <a href="https://www.innersloth.com/games/the-henry-stickmin-collection/">Henry Stickmin</a> collection, and button-mashing stickman fighting games that are best played with a friend on the same keyboard.</p>
+
       <h3>What this site borrows</h3>
-      {BUILT.map(([k, v]) => <p><b>{k}.</b> {v}</p>)}
+      <p>Dvij City takes three ideas from these influences. For optimization, every building, sprite, and font in the city is drawn in code with no image files, the Wiki view ships about 3 KB of JavaScript (gzipped) and reads fine with it turned off, and the city and each arcade game load only when requested. For creativity, tiles, small palettes, warp pipes, and an underground layer borrowed from the 16-bit playbook are used to tell a career story. For values, the site is <a href="https://en.wikipedia.org/wiki/Free_content">free</a> to read, with no accounts, no ads, and no tracking, and like Wikipedia the information is here for anyone who wants it.</p>
       <a class="city-link" href="#tour/museum" data-city-target="museum">See the Museum of Favourites in Dvij City</a>
     </section>
 
