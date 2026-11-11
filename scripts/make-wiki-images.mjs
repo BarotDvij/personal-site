@@ -7,7 +7,7 @@
 //
 // The city canvas is captured at 1x (viewport as wide as the world, so the
 // whole street fits), scaled 2x with no smoothing, and saved as lossless WebP.
-// If the banner's size changes, update the width/height in Wiki.astro and the
+// The banner is 5848 x 460 after the top trim. If its size changes, update the width/height in Wiki.astro and the
 // .notice-thumb img heights in global.css (0.75 of the image height on desktop,
 // 0.5 on phones).
 
@@ -66,8 +66,17 @@ async function capture(theme) {
 const twice = (img, w, h) => img.resize(w * 2, h * 2, { kernel: 'nearest' }).webp({ lossless: true, effort: 6 }).toBuffer();
 
 const day = await capture('light');
-writeFileSync(pub('city-banner.webp'), await twice(sharp(day), WORLD_W, WORLD_H));
-console.log(`banner  ${WORLD_W * 2} x ${WORLD_H * 2}`);
+// The darkest strip of sky at the top is trimmed off (72px at 2x, 36 world px).
+const BANNER_TRIM_TOP = 72;
+const bannerFull = await twice(sharp(day), WORLD_W, WORLD_H);
+writeFileSync(
+  pub('city-banner.webp'),
+  await sharp(bannerFull)
+    .extract({ left: 0, top: BANNER_TRIM_TOP, width: WORLD_W * 2, height: WORLD_H * 2 - BANNER_TRIM_TOP })
+    .webp({ lossless: true, effort: 6 })
+    .toBuffer(),
+);
+console.log(`banner  ${WORLD_W * 2} x ${WORLD_H * 2 - BANNER_TRIM_TOP}`);
 
 const night = await capture('dark');
 const { x, y, w, h } = LOCATOR;
