@@ -228,6 +228,12 @@ html[data-mode='city'] body {
   border-bottom: 0;
 }
 
+/* Pull the last tab's text out to the same right edge as the Settings button
+   (cancels its 12px padding and 1px border). */
+.tab-group:last-child a:last-child {
+  margin-right: -13px;
+}
+
 .tabs a[aria-current='page'] {
   color: var(--ink);
   background: var(--paper);
@@ -740,10 +746,6 @@ q {
   .wiki-body {
     grid-template-columns: var(--toc-w) minmax(0, 1fr) var(--toc-w);
   }
-
-  .tabs {
-    padding-right: calc(16px + var(--toc-w) + 20px);
-  }
 }
 
 /* Wide screens, rail hidden: the contents collapse into the hamburger button
@@ -806,10 +808,6 @@ q {
   /* Keep the article centred when the contents are hidden. */
   .wiki[data-toc-hidden] .wiki-body {
     grid-template-columns: var(--toc-gutter) minmax(0, 1fr) var(--toc-gutter);
-  }
-
-  .wiki[data-toc-hidden] .tabs {
-    padding-right: calc(16px + var(--toc-gutter) + 20px);
   }
 }
 
