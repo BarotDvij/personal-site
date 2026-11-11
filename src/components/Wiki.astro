@@ -46,7 +46,6 @@ const sections = [
   ['civic', 'Personal life'],
   ['awards', 'Awards'],
   ['influences', 'Influences'],
-  ['talk', 'Contact'],
   ['references', 'References'],
 ];
 
@@ -177,6 +176,13 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
+    <div class="lead-more" id="talk">
+      <p>Dvij Barot <b>can be contacted</b> via:</p>
+      <ul>
+        <li>Email: <a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
+        <li>LinkedIn: <a href={profile.links.linkedin}>linkedin.com/in/barotdvij</a></li>
+      </ul>
+    </div>
 
     <section id="early-life" aria-labelledby="early-h">
       <h2 id="early-h">Early Life &amp; Education</h2>
@@ -302,17 +308,6 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <h3>What this site borrows</h3>
       {BUILT.map(([k, v]) => <p><b>{k}.</b> {v}</p>)}
       <a class="city-link" href="#tour/museum" data-city-target="museum">See the Museum of Favourites in Dvij City</a>
-    </section>
-
-    <section id="talk" aria-labelledby="talk-h">
-      <h2 id="talk-h">Contact</h2>
-      <p>Open to {profile.seeking} in forward deployed engineering, technical product management, data engineering, and AI engineering.</p>
-      <ul class="contact">
-        <li><a href={`mailto:${profile.links.email}`}>{profile.links.email}</a></li>
-        <li><a href={profile.links.linkedin}>LinkedIn</a></li>
-        <li><a href={profile.links.github}>GitHub</a></li>
-        <li><a href={profile.links.devpost}>Devpost</a></li>
-      </ul>
     </section>
 
     <section id="references" aria-labelledby="refs-h">
