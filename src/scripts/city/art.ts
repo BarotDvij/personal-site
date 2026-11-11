@@ -454,7 +454,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }, [
         { x: 0, w: 12, rows: 16 },
         { x: 12, w: 24, rows: Math.floor(s.h / CELL_H), ant: true, signs: [{ text: 'KNOW', bg: '#7c4ddb', fg: '#ffffff' }, { text: 'IDEA', bg: '#7c4ddb', fg: '#ffffff', litBelow: true }] },
-        { x: 36, w: 12, rows: 13 },
+        { x: 36, w: 16, rows: 13 },
       ]);
       break;
     case 'tower': {
