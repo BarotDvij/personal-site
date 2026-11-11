@@ -3,6 +3,7 @@
 :root {
   --wiki-max: 2000px;
   --toc-w: 205px;
+  --toc-gutter: 50px; /* empty strip left of the article when the contents are hidden, holds the floating button */
   --paper: #ffffff;
   --page: #f6f6f4;
   --ink: #1f2328;
@@ -748,16 +749,37 @@ q {
 /* Wide screens, rail hidden: the contents collapse into the hamburger button
    and open as the same dropdown the narrow layout uses. */
 @media (min-width: 1001px) {
+  /* The button floats in the left gutter so it stays reachable while scrolling. */
   .wiki[data-toc-hidden] .toc-toggle {
     display: inline-flex;
+    position: fixed;
+    z-index: 25;
+    top: 14px;
+    left: calc(max(0px, (100vw - var(--wiki-max)) / 2) + 16px);
+    background: var(--panel);
+    border-color: var(--line-strong);
+  }
+
+  .wiki[data-toc-hidden] .toc-toggle:hover,
+  .wiki[data-toc-hidden] .toc-toggle[aria-expanded='true'] {
+    border-color: var(--ink);
+  }
+
+  /* Keep the wordmark clear of the floating button while the page is at the top. */
+  .wiki[data-toc-hidden] .wiki-bar {
+    padding-left: 68px;
   }
 
   .wiki[data-toc-hidden] .wiki-body {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: var(--toc-gutter) minmax(0, 1fr);
+  }
+
+  .wiki[data-toc-hidden] .article {
+    grid-column: 2;
   }
 
   .wiki[data-toc-hidden] .tabs {
-    padding-left: 16px;
+    padding-left: calc(16px + var(--toc-gutter) + 20px);
     padding-right: 16px;
   }
 
@@ -777,6 +799,17 @@ q {
 
   .wiki[data-toc-hidden] .toc.open {
     display: block;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* Keep the article centred when the contents are hidden. */
+  .wiki[data-toc-hidden] .wiki-body {
+    grid-template-columns: var(--toc-gutter) minmax(0, 1fr) var(--toc-gutter);
+  }
+
+  .wiki[data-toc-hidden] .tabs {
+    padding-right: calc(16px + var(--toc-gutter) + 20px);
   }
 }
 
