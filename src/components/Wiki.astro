@@ -38,7 +38,7 @@ const sections = [
   ['projects', 'Projects'],
   ['awards', 'Awards'],
   ['approach', 'Approach'],
-  ['civic', 'Civic life'],
+  ['civic', 'Personal life'],
   ['skills', 'Skills'],
   ['education', 'Education'],
   ['talk', 'Contact'],
@@ -258,7 +258,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </section>
 
     <section id="civic" aria-labelledby="civic-h">
-      <h2 id="civic-h">Civic life</h2>
+      <h2 id="civic-h">Personal life</h2>
       <ul>
         {profile.civic.map((c) => (
           <li><b>{c.title}.</b> {c.body}</li>
