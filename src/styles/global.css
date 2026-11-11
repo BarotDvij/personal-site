@@ -2,7 +2,7 @@
 
 :root {
   --wiki-max: 2000px;
-  --toc-w: 220px;
+  --toc-w: 205px;
   --paper: #ffffff;
   --page: #f6f6f4;
   --ink: #1f2328;
@@ -644,6 +644,10 @@ q {
 }
 
 .toc-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   font-weight: 700;
   padding: 0 10px 6px 22px;
   border-bottom: 1px solid var(--line);
@@ -680,6 +684,22 @@ q {
   border-top: 2px solid var(--ink);
   border-right: 2px solid var(--ink);
   transform: translateY(-50%) rotate(45deg);
+}
+
+.toc-hide {
+  padding: 2px 8px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.toc-hide:hover {
+  border-color: var(--ink);
 }
 
 .toc-toggle {
@@ -725,7 +745,46 @@ q {
   }
 }
 
+/* Wide screens, rail hidden: the contents collapse into the hamburger button
+   and open as the same dropdown the narrow layout uses. */
+@media (min-width: 1001px) {
+  .wiki[data-toc-hidden] .toc-toggle {
+    display: inline-flex;
+  }
+
+  .wiki[data-toc-hidden] .wiki-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .wiki[data-toc-hidden] .tabs {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .wiki[data-toc-hidden] .toc {
+    display: none;
+    position: fixed;
+    z-index: 30;
+    left: 8px;
+    top: 60px;
+    width: 280px;
+    max-height: 70vh;
+    padding: 12px 6px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .wiki[data-toc-hidden] .toc.open {
+    display: block;
+  }
+}
+
 @media (max-width: 1000px) {
+  .toc-hide {
+    display: none;
+  }
+
   .toc-toggle {
     display: inline-flex;
   }

@@ -85,7 +85,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   <div class="wiki-body">
   <nav class="toc" id="toc" aria-label="Contents">
-    <div class="toc-title">Contents</div>
+    <div class="toc-title">Contents <button type="button" class="toc-hide" aria-controls="toc">hide</button></div>
     <ol>
       <li><a href="#article" data-toc="article">(Top)</a></li>
       {sections.map(([id, name]) => <li><a href={`#${id}`} data-toc={id}>{name}</a></li>)}
