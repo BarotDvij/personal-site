@@ -5,7 +5,10 @@
   --toc-w: 205px;
   --toc-gutter: 50px; /* empty strip left of the article when the contents are hidden, holds the floating button */
   --paper: #ffffff;
-  --page: #f6f6f4;
+  --page: #ffffff; /* same as --paper so the article and sidebar share one background */
+  --table-head: #eaecf0; /* Wikipedia table palette */
+  --table-cell: #f8f9fa;
+  --table-border: #a2a9b1;
   --ink: #1f2328;
   --muted: #5a6068;
   --line: #d4d7dc;
@@ -28,8 +31,11 @@
 }
 
 :root[data-theme='dark'] {
-  --paper: #161b21;
-  --page: #0f1318;
+  --paper: #101418;
+  --page: #101418;
+  --table-head: #27292d;
+  --table-cell: #202122;
+  --table-border: #72777d;
   --ink: #e7e9ec;
   --muted: #a4abb4;
   --line: #2b323b;
@@ -530,13 +536,13 @@ html[data-mode='city'] body {
   }
 
   .wikitable.career-table tr {
-    border: 1px solid var(--line-strong);
+    border: 1px solid var(--table-border);
     border-top: 0;
     padding: 8px 0;
   }
 
   .wikitable.career-table tr:first-child {
-    border-top: 1px solid var(--line-strong);
+    border-top: 1px solid var(--table-border);
   }
 }
 
@@ -902,7 +908,7 @@ q {
 
 .wikitable {
   border-collapse: collapse;
-  background: var(--panel);
+  background: var(--table-cell);
   font-size: 0.92rem;
   max-width: 100%;
 }
@@ -915,13 +921,13 @@ q {
 
 .wikitable th,
 .wikitable td {
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--table-border);
   padding: 6px 10px;
   text-align: left;
 }
 
 .wikitable th {
-  background: var(--line);
+  background: var(--table-head);
 }
 
 .wikitable .place {
