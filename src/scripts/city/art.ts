@@ -160,6 +160,14 @@ function sign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: st
   centeredText(ctx, label, cx, y + 2, force ? fg : ink(bg, fg));
 }
 
+// Vertical sign: letters stacked top to bottom on a narrow plate.
+const vsignHeight = (label: string) => label.length * 6 + 3;
+function vsign(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
+  const w = 9, h = vsignHeight(label), x = Math.round(cx - w / 2);
+  box(ctx, x, y, w, h, bg, p);
+  label.split('').forEach((ch, i) => text(ctx, ch, x + 3, y + 2 + i * 6, fg));
+}
+
 // Ribbon banner: a wide centre panel with two folded tails that have V notches.
 function ribbon(ctx: Ctx, label: string, cx: number, y: number, bg: string, fg: string, p: Palette) {
   const tw = textWidth(label), w = tw + 24, h = 21, tail = 18, th = 17, nd = 9;
@@ -262,7 +270,7 @@ interface Bay {
   rows: number; // floors
   cap?: number; // height of a pitched roof above the bay
   ant?: boolean;
-  signs?: { text: string; bg: string; fg: string; litBelow?: boolean }[];
+  signs?: { text: string; bg: string; fg: string; litBelow?: boolean; vertical?: boolean; dx?: number }[];
 }
 
 const CELL_W = 4, CELL_H = 7;
@@ -309,14 +317,15 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
     rect(ctx, bx, top, bay.w, h, pane);
     // Windows touching a title sign stay dark, so the sign reads cleanly against the glass.
     bay.signs?.forEach((sg, i) => {
-      const sw = textWidth(sg.text) + 6, sx0 = mid - sw / 2, sy0 = top + 4 + i * 11;
+      const sw = (sg.vertical ? 9 : textWidth(sg.text) + 6), sh = sg.vertical ? vsignHeight(sg.text) : 9;
+      const sx0 = mid + (sg.dx ?? 0) - sw / 2, sy0 = top + 4 + i * 11;
       for (let row = 0; row < bay.rows; row++)
         for (let c = bay.x / CELL_W; c < (bay.x + bay.w) / CELL_W; c++) {
           const cx0 = s.x + c * CELL_W, cy0 = top + row * CELL_H;
-          if (cx0 < sx0 + sw && cx0 + CELL_W > sx0 && cy0 < sy0 + 9 && cy0 + CELL_H > sy0) lit.delete((bay.rows - 1 - row) * cols + c);
+          if (cx0 < sx0 + sw && cx0 + CELL_W > sx0 && cy0 < sy0 + sh && cy0 + CELL_H > sy0) lit.delete((bay.rows - 1 - row) * cols + c);
         }
       // Some of the row right under the sign glow, like offices working late.
-      const below = Math.floor((sy0 + 8 - top) / CELL_H) + 1;
+      const below = Math.floor((sy0 + sh - 1 - top) / CELL_H) + 1;
       if (sg.litBelow && below < bay.rows)
         for (let c = bay.x / CELL_W; c < (bay.x + bay.w) / CELL_W; c++)
           if ((c * 5 + 3) % 7 < 4) lit.add((bay.rows - 1 - below) * cols + c);
@@ -336,7 +345,10 @@ function glassTower(ctx: Ctx, s: Structure, p: Palette, r: () => number, g: Glas
     for (let xx = bx; xx < bx + bay.w; xx += CELL_W) rect(ctx, xx, top, 1, h, g.mullion);
     for (let row = 1; row < bay.rows; row++) rect(ctx, bx, top + row * CELL_H, bay.w, 1, g.floor);
     if (bay.ant) rect(ctx, mid, top - cap - 12, 1, 12, p.lamp);
-    bay.signs?.forEach((sg, i) => sign(ctx, sg.text, mid, top + 4 + i * 11, sg.bg, sg.fg, p, true));
+    bay.signs?.forEach((sg, i) => {
+      if (sg.vertical) vsign(ctx, sg.text, mid + (sg.dx ?? 0), top + 4 + i * 11, sg.bg, sg.fg, p);
+      else sign(ctx, sg.text, mid, top + 4 + i * 11, sg.bg, sg.fg, p, true);
+    });
   }
 }
 
@@ -702,7 +714,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       glassTower(ctx, s, p, r, {
         pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'], mullion: lines, floor: lines,
       }, [
-        { x: 0, w: 32, rows: core, cap, signs: [{ text: 'CT', bg: '#f2a33a', fg: '#2a2233' }] },
+        { x: 0, w: 32, rows: core, cap, signs: [{ text: 'COMMUNITECH', vertical: true, dx: -4, bg: '#f2a33a', fg: '#2a2233' }] },
         { x: 32, w: 20, rows: 16 },
         { x: s.w - 52, w: 20, rows: 16 },
         { x: s.w - 32, w: 32, rows: core, cap, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
