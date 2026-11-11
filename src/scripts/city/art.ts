@@ -452,9 +452,9 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       glassTower(ctx, s, p, r, {
         pane: ['#7fb6e6', '#1c2a4a'], paneHi: ['#b9dcf8', '#2a3c66'], mullion: shade('#4a6f96', p), floor: shade('#5d84ad', p),
       }, [
-        { x: 0, w: 12, rows: 14 },
+        { x: 0, w: 12, rows: 16 },
         { x: 12, w: 24, rows: Math.floor(s.h / CELL_H), ant: true, signs: [{ text: 'KNOW', bg: '#7c4ddb', fg: '#ffffff' }, { text: 'IDEA', bg: '#7c4ddb', fg: '#ffffff', litBelow: true }] },
-        { x: 36, w: 12, rows: 14 },
+        { x: 36, w: 12, rows: 13 },
       ]);
       break;
     case 'tower': {
@@ -714,7 +714,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       glassTower(ctx, s, p, r, {
         pane: [paneDay, paneNight], paneHi: ['#4a7d98', '#1f4256'], mullion: lines, floor: lines,
       }, [
-        { x: 0, w: 32, rows: core, cap, signs: [{ text: 'COMMUNITECH', vertical: true, dx: -4, bg: '#f2a33a', fg: '#2a2233' }] },
+        { x: 0, w: 32, rows: core, cap, signs: [{ text: 'COMMUNITECH', vertical: true, dx: -8, bg: '#f2a33a', fg: '#2a2233' }] },
         { x: 32, w: 20, rows: 16 },
         { x: s.w - 52, w: 20, rows: 16 },
         { x: s.w - 32, w: 32, rows: core, cap, signs: [{ text: s.text?.[0] ?? label, bg: '#15a6bb', fg: '#ffffff' }] },
