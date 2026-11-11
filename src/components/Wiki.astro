@@ -90,7 +90,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   <div class="wiki-body">
   <nav class="toc" id="toc" aria-label="Contents">
-    <div class="toc-title">Contents</div>
+    <div class="toc-title">Contents <button type="button" class="toc-hide" aria-controls="toc">hide</button></div>
     <ol>
       <li><a href="#article" data-toc="article">(Top)</a></li>
       {sections.map(([id, name]) => <li><a href={`#${id}`} data-toc={id}>{name}</a></li>)}
@@ -100,7 +100,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   <main class="article" id="article" tabindex="-1">
     <div class="sitenotice">
       <button type="button" class="notice-thumb" data-set-mode="city" aria-label="Open Dvij City">
-        <img src="/city-banner.webp" alt="" width="5848" height="532" />
+        <img src="/city-banner.webp" alt="" width="5848" height="460" />
       </button>
       <div class="notice-text">
         <p><b>This article is also a city.</b> Every role and project below is a building you can walk into, with data pipelines running underground.</p>

@@ -2,7 +2,8 @@
 
 :root {
   --wiki-max: 2000px;
-  --toc-w: 220px;
+  --toc-w: 205px;
+  --toc-gutter: 50px; /* empty strip left of the article when the contents are hidden, holds the floating button */
   --paper: #ffffff;
   --page: #f6f6f4;
   --ink: #1f2328;
@@ -304,7 +305,7 @@ html[data-mode='city'] body {
 }
 
 .notice-thumb img {
-  height: 399px;
+  height: 345px;
   object-fit: cover;
   object-position: left top;
 }
@@ -549,7 +550,7 @@ q {
 
 .infobox {
   float: right;
-  width: 300px;
+  width: 330px;
   margin: 0 0 12px 16px;
   border: 1px solid var(--line-strong);
   background: var(--panel);
@@ -644,8 +645,12 @@ q {
 }
 
 .toc-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   font-weight: 700;
-  padding: 0 10px 6px;
+  padding: 0 10px 6px 22px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -656,17 +661,46 @@ q {
 }
 
 .toc a {
+  position: relative;
   display: block;
-  padding: 5px 8px 5px 10px;
+  padding: 5px 8px 5px 22px;
   min-height: 24px;
-  border-left: 3px solid transparent;
   text-decoration: none;
 }
 
+/* The current section gets a chevron in the left gutter, like Wikipedia's
+   Vector 2022 contents. It reads --ink, so it is white in dark mode. */
 .toc a[aria-current='true'] {
-  border-left-color: var(--link);
   color: var(--ink);
   font-weight: 700;
+}
+
+.toc a[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid var(--ink);
+  border-right: 2px solid var(--ink);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.toc-hide {
+  padding: 2px 8px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.toc-hide:hover {
+  border-color: var(--ink);
 }
 
 .toc-toggle {
@@ -712,7 +746,78 @@ q {
   }
 }
 
+/* Wide screens, rail hidden: the contents collapse into the hamburger button
+   and open as the same dropdown the narrow layout uses. */
+@media (min-width: 1001px) {
+  /* The button floats in the left gutter so it stays reachable while scrolling. */
+  .wiki[data-toc-hidden] .toc-toggle {
+    display: inline-flex;
+    position: fixed;
+    z-index: 25;
+    top: 14px;
+    left: calc(max(0px, (100vw - var(--wiki-max)) / 2) + 16px);
+    background: var(--panel);
+    border-color: var(--line-strong);
+  }
+
+  .wiki[data-toc-hidden] .toc-toggle:hover,
+  .wiki[data-toc-hidden] .toc-toggle[aria-expanded='true'] {
+    border-color: var(--ink);
+  }
+
+  /* Keep the wordmark clear of the floating button while the page is at the top. */
+  .wiki[data-toc-hidden] .wiki-bar {
+    padding-left: 68px;
+  }
+
+  .wiki[data-toc-hidden] .wiki-body {
+    grid-template-columns: var(--toc-gutter) minmax(0, 1fr);
+  }
+
+  .wiki[data-toc-hidden] .article {
+    grid-column: 2;
+  }
+
+  .wiki[data-toc-hidden] .tabs {
+    padding-left: calc(16px + var(--toc-gutter) + 20px);
+    padding-right: 16px;
+  }
+
+  .wiki[data-toc-hidden] .toc {
+    display: none;
+    position: fixed;
+    z-index: 30;
+    left: 8px;
+    top: 60px;
+    width: 280px;
+    max-height: 70vh;
+    padding: 12px 6px;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .wiki[data-toc-hidden] .toc.open {
+    display: block;
+  }
+}
+
+@media (min-width: 1600px) {
+  /* Keep the article centred when the contents are hidden. */
+  .wiki[data-toc-hidden] .wiki-body {
+    grid-template-columns: var(--toc-gutter) minmax(0, 1fr) var(--toc-gutter);
+  }
+
+  .wiki[data-toc-hidden] .tabs {
+    padding-right: calc(16px + var(--toc-gutter) + 20px);
+  }
+}
+
 @media (max-width: 1000px) {
+  .toc-hide {
+    display: none;
+  }
+
   .toc-toggle {
     display: inline-flex;
   }
@@ -934,7 +1039,7 @@ blockquote p {
   }
 
   .notice-thumb img {
-    height: 266px;
+    height: 230px;
   }
 
   .article > .sitenotice,
