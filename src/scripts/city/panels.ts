@@ -90,7 +90,7 @@ export function panelFor(ref: Ref): PanelContent | null {
     case 'civic': {
       return {
         kicker: 'Kitchener City Hall',
-        title: 'Personal life',
+        title: 'Civic life',
         html: `<p class="lead">City planning isn't just a theme here. Some of this city's history happened at the real City Hall.</p>
           ${profile.civic.map((c) => `<p><strong>${esc(c.title)}.</strong> ${esc(c.body)}</p>`).join('')}`,
       };

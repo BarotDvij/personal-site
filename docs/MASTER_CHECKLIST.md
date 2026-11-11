@@ -12,7 +12,7 @@ Everything in one place. `[x]` done, `[ ]` left. Items marked **(you)** need inp
 - [x] "View as" lens filter, light and dark themes, print stylesheet, phone layout
 - [x] Dvij City: 6 districts, pixel art drawn in code, day and night, underground data pipes with packets
 - [x] Classic green warp pipes, copper data pipes, warehouse junction, Data Lake pipelines panel
-- [x] Kitchener City Hall (personal life) and Hauser Furniture (AltaML)
+- [x] Kitchener City Hall (civic life) and Hauser Furniture (AltaML)
 - [x] HUD, minimap, guided tour (Prev and Next), deep links like `/#tour/genledge`
 - [x] Street life, A/B billboard, crane, chiptune sound effects, Konami easter egg
 - [x] Settings: view, theme, motion, sound
