@@ -28,6 +28,11 @@ const cityscapes = cite('CityScapes on Devpost', 'https://devpost.com/software/c
 const summitProject = profile.projects.find((p) => p.name === 'SUMMIT Financial Learning')!;
 const summit = cite(`${summitProject.name} source`, summitProject.links.code);
 const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/software/urban-marble');
+// Early life & education comes before Projects, so its refs are created first.
+const wlooNews = cite('Embracing change, Waterloo Management Science and Engineering', 'https://uwaterloo.ca/management-science-engineering/news/embracing-change');
+const wlooCalendar = cite('Management Engineering, Waterloo Undergraduate Calendar', 'https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/programs/HkzsJ1CRsh');
+const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
+const decaVideo = cite('DECA ICDC recording on YouTube', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
   return cite(`${p.name} source`, href);
@@ -35,14 +40,12 @@ const projectRefs = profile.projects.map((p) => {
 
 const current = profile.experience[0];
 const sections = [
+  ['early-life', 'Early life & education'],
   ['career', 'Career'],
   ['projects', 'Projects'],
-  ['awards', 'Awards'],
-  ['approach', 'Approach'],
-  ['influences', 'Influences'],
   ['civic', 'Personal life'],
-  ['skills', 'Skills'],
-  ['education', 'Education'],
+  ['awards', 'Awards'],
+  ['influences', 'Influences'],
   ['talk', 'Contact'],
   ['references', 'References'],
 ];
@@ -175,6 +178,19 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
 
+    <section id="early-life" aria-labelledby="early-h">
+      <h2 id="early-h">Early life &amp; education</h2>
+      <p>
+        Dvij Barot is in his third year of his undergraduate degree at the <a href={profile.education.url}>University of Waterloo</a> in the <a href="https://uwaterloo.ca/engineering/future-students/management-engineering">Management Engineering</a> program.{' '}
+        Management Engineering is often described as a combination of <a href="https://en.wikipedia.org/wiki/Software_engineering">software engineering</a> and <a href="https://en.wikipedia.org/wiki/Industrial_engineering">industrial engineering</a>, with the University of Waterloo's program being considered a pioneer in the modernization of the industrial engineering field<Cite n={wlooNews} />, with courses ranging from Databases and Software Design, Probability and Statistics II, Algorithms and Data Structures, and Modelling in Operations Research to Introduction to Machine Learning and Organizational Behaviour<Cite n={wlooCalendar} />.{' '}
+        Outside of class, he has been part of the Wat.AI Engineering Design Team and the Warriors Dance Team, and served as HSC President.
+      </p>
+      <p>
+        Dvij also graduated with distinction from Huron Heights Secondary School in Kitchener, ON. He won the Dustin Picard Memorial Award of Integrity, a graduation award presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.{' '}
+        He was known to be one of the only drummers in the school, which meant he took part in all of the school bands and concerts (Jr. Band, Sr. Band, Jazz Band, and the MYART concert) by default. He was also the sole winner from his school's chapter in the <a href="https://deca.ca/v2/">DECA</a> competition at the provincial level for three consecutive years, and the only student to take part in the international competition (ICDC) during his time at the school<Cite n={decaDoc} /><Cite n={decaVideo} />.
+      </p>
+    </section>
+
     <section id="career" aria-labelledby="career-h">
       <h2 id="career-h">Career</h2>
       <div class="table-wrap">
@@ -191,7 +207,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
               <td>
                 {e.summary}
                 {roleBuilding(e.org) && (
-                  <a class="city-link" href={`#tour/${roleBuilding(e.org)}`} data-city-target={roleBuilding(e.org)} aria-label={`See ${e.org} in Dvij City`}>Dvij City</a>
+                  <a class="city-link" href={`#tour/${roleBuilding(e.org)}`} data-city-target={roleBuilding(e.org)} aria-label={`See ${e.org} in Dvij City`}>See it in Dvij City</a>
                 )}
               </td>
             </tr>
@@ -220,6 +236,16 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           </article>
         ))}
       </div>
+    </section>
+
+    <section id="civic" aria-labelledby="civic-h">
+      <h2 id="civic-h">Personal life</h2>
+      <ul>
+        {profile.civic.map((c) => (
+          <li><b>{c.title}.</b> {c.body}</li>
+        ))}
+      </ul>
+      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
     </section>
 
     <section id="awards" aria-labelledby="awards-h">
@@ -254,14 +280,6 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <a class="city-link" href="#tour/halloffame" data-city-target="halloffame">See the trophy case in Dvij City</a>
     </section>
 
-    <section id="approach" aria-labelledby="approach-h">
-      <h2 id="approach-h">Approach</h2>
-      <blockquote><p>{profile.philosophy}</p></blockquote>
-      {profile.lessons.map((l) => (
-        <p><b>{l.title}.</b> {l.body}</p>
-      ))}
-    </section>
-
     <section id="influences" aria-labelledby="influences-h">
       <h2 id="influences-h">Influences</h2>
       <p>The ideas behind this site came from the games, websites, and cities I grew up with.</p>
@@ -284,33 +302,6 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <h3>What this site borrows</h3>
       {BUILT.map(([k, v]) => <p><b>{k}.</b> {v}</p>)}
       <a class="city-link" href="#tour/museum" data-city-target="museum">See the Museum of Favourites in Dvij City</a>
-    </section>
-
-    <section id="civic" aria-labelledby="civic-h">
-      <h2 id="civic-h">Personal life</h2>
-      <ul>
-        {profile.civic.map((c) => (
-          <li><b>{c.title}.</b> {c.body}</li>
-        ))}
-      </ul>
-      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
-    </section>
-
-    <section id="skills" aria-labelledby="skills-h">
-      <h2 id="skills-h">Skills</h2>
-      <dl class="skills">
-        <dt>Languages</dt><dd>{profile.skills.languages.join(', ')}</dd>
-        <dt>Frameworks</dt><dd>{profile.skills.frameworks.join(', ')}</dd>
-        <dt>Methods</dt><dd>{profile.skills.methods.join(', ')}</dd>
-        <dt>Tools</dt><dd>{profile.skills.tools.join(', ')}</dd>
-      </dl>
-    </section>
-
-    <section id="education" aria-labelledby="edu-h">
-      <h2 id="edu-h">Education</h2>
-      <p><b><a href={profile.education.url}>{profile.education.school}</a></b>, {profile.education.degree}, expected {profile.education.expected}.</p>
-      <p>Relevant courses: {profile.education.courses.join(', ')}.</p>
-      <p>Clubs: {profile.education.clubs.join(', ')}.</p>
     </section>
 
     <section id="talk" aria-labelledby="talk-h">
