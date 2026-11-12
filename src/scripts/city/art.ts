@@ -1152,6 +1152,14 @@ function drawStreet(ctx: Ctx, p: Palette) {
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
+  // One continuous lawn from the park sign to CityScapes, so no bare gaps show between the pieces.
+  const sign = STRUCTURES.find((x) => x.id === 'parksign')!, chess = STRUCTURES.find((x) => x.id === 'chess')!;
+  const lawnEnd = STRUCTURES.find((x) => x.id === 'cityscapes')!.x;
+  // Fill only the bare stretches: sign to chess table, and chess table to CityScapes.
+  for (const [from, to] of [[sign.x + sign.w - 1, chess.x], [chess.x + chess.w + 4, lawnEnd]]) {
+    rect(ctx, from, GROUND - 2, to - from, 2, shade('#4fa84f', p));
+    for (let xx = from; xx < to; xx += 3) rect(ctx, xx, GROUND - 3, 1, 1, shade('#7fd17a', p));
+  }
   const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
   for (const [dx, size] of [[31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
 }
