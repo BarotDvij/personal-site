@@ -1138,7 +1138,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const lines = stacked ? split : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
     let px = d.x0 + 4;
-    if (d.id === 'data') {
+    if (d.id === 'data' || d.id === 'ai') {
       // Centre this plate in the clear span between the warp pipe on its left and the copper riser on its right.
       const spans = pipeSpans();
       const left = Math.max(...spans.filter(([, b]) => b <= px).map(([, b]) => b));
