@@ -1151,7 +1151,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
   });
   // The civic green: extra trees behind the duck pond and around the park.
   const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
-  for (const [dx, size] of [[-12, 1], [2, 2], [31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
+  for (const [dx, size] of [[31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
