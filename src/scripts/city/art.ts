@@ -441,10 +441,10 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, cx - 7, GROUND - 6, 14, 2, shade('#8a5a34', p));
       rect(ctx, cx - 6, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, cx + 5, GROUND - 4, 1, 4, shade('#5b3b22', p));
-      rect(ctx, x + w - 44, GROUND - 22, 1, 22, p.lamp);
+      rect(ctx, x + w - 44, GROUND - 27, 1, 27, p.lamp);
       sign(ctx, label, cx, GROUND - 43, '#3fb950', '#ffffff', p);
-      rect(ctx, x + w - 44, GROUND - 25, 7, 5, shade('#f2c84b', p));
-      text(ctx, '1', x + w - 42, GROUND - 25, '#2a2233');
+      rect(ctx, x + w - 44, GROUND - 27, 9, 7, shade('#f2c84b', p));
+      text(ctx, '1', x + w - 41, GROUND - 26, '#2a2233');
       break;
     }
     case 'glass':
