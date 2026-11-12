@@ -1137,8 +1137,16 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const stacked = label.includes(' ') && pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3);
     const lines = stacked ? split : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
-    box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
-    lines.forEach((l, i) => text(ctx, l, d.x0 + 7, GROUND + 8 + i * 8, ink(plate)));
+    let px = d.x0 + 4;
+    if (d.id === 'data') {
+      // Centre this plate in the clear span between the warp pipe on its left and the copper riser on its right.
+      const spans = pipeSpans();
+      const left = Math.max(...spans.filter(([, b]) => b <= px).map(([, b]) => b));
+      const right = Math.min(...spans.filter(([a]) => a >= left + pw).map(([a]) => a));
+      px = Math.round(left + (right - left - pw) / 2);
+    }
+    box(ctx, px, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
+    lines.forEach((l, i) => text(ctx, l, px + 3, GROUND + 8 + i * 8, ink(plate)));
   }
 
   // Street furniture fills the gaps between buildings: lamps and trees alternate.
