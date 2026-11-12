@@ -95,7 +95,7 @@ export function mountCity(root: HTMLElement): City {
       // Short props (truck, chess table, mower) sit under the walker's UP: PLAY
       // prompt, so their name tag floats 10px above the top of that prompt.
       const tag = b.querySelector<HTMLElement>('.tag');
-      if (tag) tag.style.bottom = s.tagAt !== undefined ? `${s.tagAt * 100}%` : `calc(100% + ${Math.max(15, (PROMPT_TOP - s.h) * scale + 15)}px)`;
+      if (tag) tag.style.bottom = s.tagAt !== undefined ? `${s.tagAt * 100}%` : `calc(100% + ${Math.max(15, (PROMPT_TOP - s.h) * scale + 15) * (s.tagGapScale ?? 1)}px)`;
     }
     root.style.setProperty('--px', `${scale}px`);
     buildViewLayers();
