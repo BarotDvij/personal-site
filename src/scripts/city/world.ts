@@ -94,7 +94,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1344, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // City Square
-  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1385, w: 75, h: 70, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
+  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1391, w: 75, h: 70, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
   { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1492, w: 119, h: 92, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
   { id: 'halloffame', label: 'Hall of Fame: hackathons and awards', kind: 'pyramid', x: 1630, w: 140, h: 85, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
   { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1788, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
