@@ -104,7 +104,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'parksign', label: 'Urban Park', kind: 'parksign', x: 2072, w: 28, h: 26, district: 'civic', text: ['URBAN', 'PARK'] },
   { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2104, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2140, w: 82, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
-  { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2242, w: 68, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
+  { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2228, w: 65, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
   { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2340, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2388 },
   { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2452, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2570, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
