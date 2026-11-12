@@ -1195,12 +1195,17 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
     ctx.fillStyle = p.sky[i - 1];
     for (let xx = 0; xx < width; xx += 2) ctx.fillRect(xx + ((i + 1) % 2), i * bandH, 1, 1);
   }
+  const sx = Math.max(24, width - 60), sy = 22;
   if (p.night) {
     const r = rng(42);
-    for (let i = 0; i < width / 6; i++) rect(ctx, Math.floor(r() * width), Math.floor(r() * height * 0.7), 1, 1, p.star);
+    for (let i = 0; i < width / 6; i++) {
+      const starX = Math.floor(r() * width), starY = Math.floor(r() * height * 0.7);
+      // Keep stars out of the moon's square so none shows through the crescent's cut-out.
+      if (Math.abs(starX - (sx + 8)) <= 11 && Math.abs(starY - (sy + 8)) <= 11) continue;
+      rect(ctx, starX, starY, 1, 1, p.star);
+    }
   }
   // Sun or moon
-  const sx = Math.max(24, width - 60), sy = 22;
   if (p.night) {
     // Waning crescent: a disk with a second, offset disk carved out of its
     // right side, so the lit sliver hugs the left edge and tapers to two tips.
