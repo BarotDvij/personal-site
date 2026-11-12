@@ -1,7 +1,7 @@
 // Dvij City layout, in world pixels. The world is drawn at a tiny base
 // resolution and scaled up by whole numbers so the pixel art stays crisp.
 
-export const WORLD_W = 2895;
+export const WORLD_W = 2885;
 export const WORLD_H = 266;
 export const GROUND = 182; // y of the street surface
 export const TRUNK_Y = GROUND + 58; // main underground pipeline
@@ -31,10 +31,10 @@ export interface District {
 export const DISTRICTS: District[] = [
   { id: 'plaza', name: 'Welcome Plaza', lens: 'plaza', x0: 0, x1: 200 },
   { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 200, x1: 730 },
-  { id: 'ai', name: 'Downtown', lens: 'ai', x0: 730, x1: 1390 },
-  { id: 'commercial', name: 'City Square', lens: 'play', x0: 1390, x1: 1834 },
-  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 1834, x1: 2577 },
-  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2577, x1: 2895 },
+  { id: 'ai', name: 'Downtown', lens: 'ai', x0: 730, x1: 1380 },
+  { id: 'commercial', name: 'City Square', lens: 'play', x0: 1380, x1: 1824 },
+  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 1824, x1: 2567 },
+  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2567, x1: 2885 },
 ];
 
 export type Ref =
@@ -85,35 +85,35 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 694, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
 
   // Downtown
-  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 764, w: 52, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 788 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 844, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 868 },
-  { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 906, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
-  { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 956, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 998 },
-  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1068, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1108 },
-  { id: 'altaml', label: 'AltaML x Communitech for Hauser Industries', kind: 'hq', x: 1174, w: 160, h: 174, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1254, tagAt: 0.55 },
-  { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1354, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
+  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 754, w: 52, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 778 },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 834, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 858 },
+  { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 896, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
+  { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 946, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 988 },
+  { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1058, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1098 },
+  { id: 'altaml', label: 'AltaML x Communitech for Hauser Industries', kind: 'hq', x: 1164, w: 160, h: 174, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1244, tagAt: 0.55 },
+  { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1344, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // City Square
-  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1410, w: 75, h: 70, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
-  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1502, w: 119, h: 92, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
-  { id: 'halloffame', label: 'Hall of Fame: hackathons and awards', kind: 'pyramid', x: 1640, w: 140, h: 85, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
-  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1798, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
+  { id: 'arcade', label: 'Arcade Hall: play games', kind: 'arcadehall', x: 1400, w: 75, h: 70, district: 'commercial', ref: { type: 'arcade' }, text: ['ARCADE'] },
+  { id: 'museum', label: 'Museum of Favourites', kind: 'museum', x: 1492, w: 119, h: 92, district: 'commercial', ref: { type: 'museum' }, text: ['MUSEUM'] },
+  { id: 'halloffame', label: 'Hall of Fame: hackathons and awards', kind: 'pyramid', x: 1630, w: 140, h: 85, district: 'commercial', ref: { type: 'trophies' }, text: ['HALL OF FAME'] },
+  { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1788, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
   // Civic Centre
-  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1856, w: 72, h: 167, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1892 },
-  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 1946, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
-  { id: 'parksign', label: 'Urban Park', kind: 'parksign', x: 2072, w: 28, h: 26, district: 'civic', text: ['URBAN', 'PARK'] },
-  { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2104, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' }, tagGapScale: 0.5 },
-  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2140, w: 76, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
-  { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2216, w: 65, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
-  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2311, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2359 },
-  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2423, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
-  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2541, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
+  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1846, w: 72, h: 167, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1882 },
+  { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 1936, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
+  { id: 'parksign', label: 'Urban Park', kind: 'parksign', x: 2062, w: 28, h: 26, district: 'civic', text: ['URBAN', 'PARK'] },
+  { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2094, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' }, tagGapScale: 0.5 },
+  { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2130, w: 76, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
+  { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2206, w: 65, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
+  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2301, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2349 },
+  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2413, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
+  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2531, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
 
   // Expansion
-  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2617, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
-  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2719, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
-  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2853, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
+  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2607, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
+  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2709, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
+  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2843, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
 ];
 
 

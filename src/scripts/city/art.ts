@@ -1146,9 +1146,9 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const gap = gapEnd - gapStart;
     if (gap < 14) return;
     const mid = Math.round(gapStart + gap / 2);
-    // Overrides: no tree between GenLedge and Super.com, a lamp (not a tree) between the arcade and museum.
+    // Overrides: no tree between GenLedge and Super.com, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
     if (s.id === 'genledge') return;
-    if (i % 2 || s.id === 'arcade') lamp(ctx, mid, p);
+    if (i % 2 || s.id === 'arcade' || s.id === 'warp-2') lamp(ctx, mid, p);
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
@@ -1218,8 +1218,8 @@ export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
 export type ParallaxKind = keyof typeof PARALLAX;
 
 // World x of each landmark's district centre.
-const CN_TOWER_X = 925; // Downtown AI District
-const WILLIS_TOWER_X = 1470; // City Square
+const CN_TOWER_X = 915; // Downtown AI District
+const WILLIS_TOWER_X = 1460; // City Square
 
 export const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
