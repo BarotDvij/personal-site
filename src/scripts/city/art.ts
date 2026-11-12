@@ -1074,9 +1074,9 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   }
 
   // Trunk lines
-  pipe(ctx, 4, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
+  pipe(ctx, 4, TRUNK_Y, WORLD_W - 4, TRUNK_Y, p); // runs edge to edge (the pipe is 8px thick, 4px past each end point)
   pipe(ctx, DEEP_X, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
-  for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
+  for (let xx = 40; xx < WORLD_W - 4; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings
   for (const s of STRUCTURES) {
