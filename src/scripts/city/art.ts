@@ -1134,7 +1134,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     // A name that would run under a pipe beside it stacks on two lines instead.
     const split = [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)];
     const oneLineW = textWidth(label) + 6;
-    const stacked = label.includes(' ') && pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3);
+    const stacked = label.includes(' ') && (d.id === 'commercial' || pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3));
     const lines = stacked ? split : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
     let px = d.x0 + 4;
