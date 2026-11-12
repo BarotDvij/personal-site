@@ -1,7 +1,7 @@
 // Dvij City layout, in world pixels. The world is drawn at a tiny base
 // resolution and scaled up by whole numbers so the pixel art stays crisp.
 
-export const WORLD_W = 2912;
+export const WORLD_W = 2905;
 export const WORLD_H = 266;
 export const GROUND = 182; // y of the street surface
 export const TRUNK_Y = GROUND + 58; // main underground pipeline
@@ -33,8 +33,8 @@ export const DISTRICTS: District[] = [
   { id: 'data', name: 'Industrial Zone', lens: 'data', x0: 200, x1: 730 },
   { id: 'ai', name: 'Downtown', lens: 'ai', x0: 730, x1: 1390 },
   { id: 'commercial', name: 'City Square', lens: 'play', x0: 1390, x1: 1834 },
-  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 1834, x1: 2594 },
-  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2594, x1: 2912 },
+  { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 1834, x1: 2587 },
+  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2587, x1: 2905 },
 ];
 
 export type Ref =
@@ -105,14 +105,14 @@ export const STRUCTURES: Structure[] = [
   { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2104, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' } },
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2140, w: 76, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2216, w: 65, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
-  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2328, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2376 },
-  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2440, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
-  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2558, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
+  { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2321, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2369 },
+  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2433, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
+  { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2551, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
 
   // Expansion
-  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2634, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
-  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2736, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
-  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2870, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
+  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2627, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
+  { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2729, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
+  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2863, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
 ];
 
 
