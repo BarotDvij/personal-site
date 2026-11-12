@@ -752,6 +752,9 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pond': {
       const water = shade('#3b82f6', p), light = shade('#7fb0ff', p);
+      // Grass at both ends so no bare gap shows between the lawn and the water.
+      rect(ctx, x, GROUND - 2, 2, 2, shade('#4fa84f', p));
+      rect(ctx, x + w - 2, GROUND - 2, 2, 2, shade('#4fa84f', p));
       rect(ctx, x + 6, GROUND - 4, w - 12, 4, water);
       rect(ctx, x + 2, GROUND - 3, w - 4, 3, water);
       rect(ctx, x + 10, GROUND - 3, 14, 1, light);
