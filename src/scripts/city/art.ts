@@ -1145,7 +1145,8 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const gapStart = s.x + s.w, gapEnd = next ? next.x : WORLD_W;
     const gap = gapEnd - gapStart;
     if (gap < 14) return;
-    const mid = Math.round(gapStart + gap / 2);
+    // The arcade's right-hand lamp sits 15px left of where it would centre (it was nudged along with the hall).
+    const mid = Math.round(gapStart + gap / 2 - (s.id === 'arcade' ? 7.5 : 0));
     // Overrides: no tree between GenLedge and Super.com, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
     if (s.id === 'genledge') return;
     if (i % 2 || s.id === 'arcade' || s.id === 'warp-2') lamp(ctx, mid, p);
