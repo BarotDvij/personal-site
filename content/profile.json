@@ -98,6 +98,25 @@
       "journey": true
     },
     {
+      "role": "Data Analytics Engineer",
+      "org": "Super.com",
+      "url": "https://www.super.com/",
+      "dates": "Jan 2026 – Apr 2026",
+      "place": "San Francisco, CA · Toronto, ON",
+      "lenses": [
+        "data"
+      ],
+      "summary": "Analytics engineering across marketing data pipelines, dashboards, and fraud detection.",
+      "bullets": [
+        "Extended the LTV:CAC pipeline in dbt and Snowflake with a flat-rate channel sub-pipeline powering 36 downstream tables",
+        "Built modular dbt models and unit tests, improving data completeness by 19%",
+        "Investigated $50K in rebate fraud, identified 4 fraudulent accounts, and built Amplitude alerts",
+        "Automated a daily CPA dashboard across 6 marketing channels with Snowsight and Hightouch",
+        "Root-caused Fivetran and Airflow failures and added alerts safeguarding 22 pipelines"
+      ],
+      "journey": true
+    },
+    {
       "role": "Software Engineer",
       "org": "GenLedge",
       "url": "https://www.genledge.ai/",
@@ -155,25 +174,6 @@
         "Designed a dependency graph and concurrent priority batch scheduler in asyncio, cutting report generation time by 58%",
         "Built telemetry across a multi-stage inference pipeline on Modal, surfacing token usage and timing",
         "Shipped a report-correction feature that triggers background re-runs on a Hermes Agent backend"
-      ],
-      "journey": true
-    },
-    {
-      "role": "Data Analytics Engineer",
-      "org": "Super.com",
-      "url": "https://www.super.com/",
-      "dates": "Jan 2026 – Apr 2026",
-      "place": "San Francisco, CA · Toronto, ON",
-      "lenses": [
-        "data"
-      ],
-      "summary": "Analytics engineering across marketing data pipelines, dashboards, and fraud detection.",
-      "bullets": [
-        "Extended the LTV:CAC pipeline in dbt and Snowflake with a flat-rate channel sub-pipeline powering 36 downstream tables",
-        "Built modular dbt models and unit tests, improving data completeness by 19%",
-        "Investigated $50K in rebate fraud, identified 4 fraudulent accounts, and built Amplitude alerts",
-        "Automated a daily CPA dashboard across 6 marketing channels with Snowsight and Hightouch",
-        "Root-caused Fivetran and Airflow failures and added alerts safeguarding 22 pipelines"
       ],
       "journey": true
     },
