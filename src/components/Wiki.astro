@@ -30,6 +30,8 @@ const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/softwar
 // Early life & education comes before Projects, so its refs are created first.
 const wlooNews = cite('Embracing change, Waterloo Management Science and Engineering', 'https://uwaterloo.ca/management-science-engineering/news/embracing-change');
 const wlooCalendar = cite('Management Engineering, Waterloo Undergraduate Calendar', 'https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/programs/HkzsJ1CRsh');
+// Sahayak is listed by hand (not in profile.json projects), so it links to the Hall of Fame.
+const sahayakRef = cite('Sahayak on Devpost', 'https://devpost.com/software/aol-hackathon-sahayak');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
   return cite(`${p.name} source`, href);
@@ -231,6 +233,16 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <section id="projects" aria-labelledby="projects-h">
       <h2 id="projects-h">Projects</h2>
       <div class="project-grid">
+        <article class="project">
+          <h3>
+            Sahayak
+            <Cite n={sahayakRef} />
+          </h3>
+          <p class="award silver">2nd Place, Art of Living Build for Good Hackathon</p>
+          <p>Platform for Art of Living coordinators to stay connected to participants so fewer people quietly drift away.</p>
+          <p class="stack">TypeScript · React · TanStack Start · Supabase · Tailwind · MCP · Lovable</p>
+          <a class="city-link" href="#tour/halloffame" data-city-target="halloffame">See it in Dvij City</a>
+        </article>
         {profile.projects.map((p, i) => (
           <article class="project">
             <h3>
