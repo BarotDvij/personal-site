@@ -896,10 +896,6 @@ q {
   margin: 2px 0 4px;
 }
 
-.award.silver {
-  background: #c9ccd6;
-}
-
 .award.status {
   background: var(--line);
   color: var(--ink);
