@@ -155,7 +155,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
                 <li>0 to 1 product development</li>
                 <li>Automating workflows</li>
                 <li>Evaluation-driven agents</li>
-                <li>3 hackathon wins in 7 days<Cite n={cityscapes} /></li>
+                <li>3 hackathon wins in 7 days<Cite n={cityscapes} /><Cite n={urbanMarble} /></li>
               </ul>
             </td>
           </tr>
@@ -172,18 +172,14 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </aside>
 
     <p class="lead">
-      <b>Dvij Barot</b> is a Management Engineering student at the <a href={profile.education.url}>{profile.education.school}</a> looking for <b>{profile.seeking}</b>. He works across
-      AI engineering and enablement, <a href="https://en.wikipedia.org/wiki/Product_management">product management</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">data engineering</a>, and <a href="https://en.wikipedia.org/wiki/Software_development">software development</a>. Barot is
-      currently holding the {current.role} position at <Org e={current} />, <Fragment set:html={current.now} />.
+      <b>Dvij Barot</b> is a Management Engineering student at the <a href={profile.education.url}>{profile.education.school}</a> looking for {profile.seeking}. He is currently holding the <b>{current.role}</b> position at <Org e={current} />, <Fragment set:html={current.now} />.
     </p>
-    <p class="lead-more">
-      Barot's work spans <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, LLM evaluation, and full-stack products<Cite n={summit} />. In one week in
-      2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
-      Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
-    </p>
-    <div class="lead-more" id="talk">
-      <p>Dvij Barot <b>can be contacted</b> via email at <a href={`mailto:${profile.links.email}`}><b>{profile.links.email}</b></a> or on LinkedIn at <a href={profile.links.linkedin}><b>linkedin.com/in/barotdvij</b></a>.</p>
+    <div class="hatnote" id="talk">
+      <p>"Dvij Barot can be contacted via email at <a href={`mailto:${profile.links.email}`}>{profile.links.email}</a> or on LinkedIn at <a href={profile.links.linkedin}>linkedin.com/in/barotdvij</a>"</p>
     </div>
+    <p class="lead-more">
+      Barot has worked across AI engineering and enablement, <a href="https://en.wikipedia.org/wiki/Product_management">product management</a>, <a href="https://en.wikipedia.org/wiki/Data_engineering">data engineering</a>, GTM and <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, and <a href="https://en.wikipedia.org/wiki/Software_development">software development</a>. His work has touched <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, marketing channels, web platforms, <a href="https://en.wikipedia.org/wiki/Software_agent">agent harnesses</a>, and full-stack products<Cite n={summit} />. Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
+    </p>
 
     <section id="early-life" aria-labelledby="early-h">
       <h2 id="early-h">Early Life &amp; Education</h2>

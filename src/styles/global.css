@@ -457,6 +457,16 @@ html[data-mode='city'] body {
   font-size: 1.04rem;
 }
 
+/* Wikipedia-style hatnote: indented italic aside under the lead */
+.hatnote {
+  margin: 0 0 14px 1.6em;
+  font-style: italic;
+}
+
+.hatnote p {
+  margin: 0;
+}
+
 /* Intro text runs right up to the infobox, like a wiki lead */
 .article > .lead,
 .article > .lead-more {
