@@ -709,11 +709,8 @@
     {
       "group": "Business competitions",
       "title": "International Youth Success Summit Challenge Winner",
-      "issuer": "Junior Achievement Worldwide, Junior Achievement Canada",
-      "issuers": [
-        { "name": "Junior Achievement Worldwide", "url": "https://www.jaworldwide.org/" },
-        { "name": "Junior Achievement Canada", "url": "https://jacanada.org/" }
-      ],
+      "issuer": "Junior Achievement Worldwide",
+      "issuerUrl": "https://www.jaworldwide.org/",
       "date": "Jul 2019",
       "body": "One of two students chosen to represent JA Waterloo internationally. The team's response to a real company's business challenge was judged the most effective, winning the summit challenge."
     },
@@ -767,11 +764,19 @@
     },
     {
       "group": "School",
-      "title": "Valedictorian and 3 Awards",
+      "title": "Valedictorian",
       "issuer": "Rickson Ridge Public School",
       "issuerUrl": "https://www.ugdsb.ca/o/rrps/",
       "date": "Jun 2017",
-      "body": "One of two students voted by teachers and classmates to speak at graduation. Also won the excellence in math, history, and social justice awards."
+      "body": "One of two students voted by teachers and classmates to speak at graduation."
+    },
+    {
+      "group": "School",
+      "title": "History, Math, and Social Justice Award",
+      "issuer": "Rickson Ridge Public School",
+      "issuerUrl": "https://www.ugdsb.ca/o/rrps/",
+      "date": "Jun 2017",
+      "body": "Won the excellence in math, history, and social justice awards."
     }
   ]
 }

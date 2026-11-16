@@ -10,14 +10,11 @@ interface Props {
     date: string;
     event?: string;
     issuerUrl?: string;
-    issuers?: { name: string; url?: string }[];
   };
   ref?: number;
 }
 const { award: a, ref } = Astro.props;
 // Dates show the year only ("Mar 2021" becomes "2021").
 const year = a.date.replace(/\b[A-Z][a-z]{2}\s+(?=\d{4})/g, '');
-// An award can name several issuers, each with its own link.
-const issuers = a.issuers ?? [{ name: a.issuer, url: a.issuerUrl }];
 ---
-{a.title}, {a.event && <><i>{a.event}</i>, </>}{issuers.map((i, n) => (<>{n > 0 && ', '}{i.url ? <a href={i.url} rel="noopener">{i.name}</a> : i.name}</>))}, {year}.{ref && <Cite n={ref} />}
+{a.title}, {a.event && <><i>{a.event}</i>, </>}{a.issuerUrl ? <a href={a.issuerUrl} rel="noopener">{a.issuer}</a> : a.issuer}, {year}.{ref && <Cite n={ref} />}
