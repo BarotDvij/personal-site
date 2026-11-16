@@ -457,12 +457,6 @@ html[data-mode='city'] body {
   font-size: 1.04rem;
 }
 
-/* Indented continuation line inside a paragraph */
-.indent {
-  display: block;
-  margin-left: 1.6em;
-}
-
 /* Intro text runs right up to the infobox, like a wiki lead */
 .article > .lead,
 .article > .lead-more {
