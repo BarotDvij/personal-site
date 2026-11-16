@@ -81,7 +81,7 @@ export const GAMES: GameInfo[] = [
     id: 'chess',
     title: 'Chess',
     blurb: '2 players on one device, or play the city.',
-    credit: 'One of my favourite games growing up.',
+    credit: 'Inspired by the only game I play daily and incessantly, thanks to my friends Om and Tanvi',
     help: 'Click a piece, then a square. Press C to switch between two players and the computer.',
     load: () => import('./games/chess'),
   },
