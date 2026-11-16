@@ -1,7 +1,7 @@
 // Dvij City layout, in world pixels. The world is drawn at a tiny base
 // resolution and scaled up by whole numbers so the pixel art stays crisp.
 
-export const WORLD_W = 3001;
+export const WORLD_W = 2885;
 export const WORLD_H = 266;
 export const GROUND = 182; // y of the street surface
 export const TRUNK_Y = GROUND + 58; // main underground pipeline
@@ -34,7 +34,7 @@ export const DISTRICTS: District[] = [
   { id: 'ai', name: 'Downtown', lens: 'ai', x0: 730, x1: 1380 },
   { id: 'commercial', name: 'City Square', lens: 'play', x0: 1380, x1: 1824 },
   { id: 'civic', name: 'Civic Centre', lens: 'pm', x0: 1824, x1: 2567 },
-  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2567, x1: 3001 },
+  { id: 'yard', name: 'Expansion', lens: 'dev', x0: 2567, x1: 2885 },
 ];
 
 export type Ref =
@@ -114,8 +114,7 @@ export const STRUCTURES: Structure[] = [
   // Expansion
   { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2607, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
   { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2709, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
-  { id: 'sahayak', label: 'Sahayak Lab', kind: 'lab', x: 2845, w: 96, h: 96, district: 'yard', ref: { type: 'project', name: 'Sahayak' }, text: ['SAHAYAK'] },
-  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2959, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
+  { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2843, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
 ];
 
 
