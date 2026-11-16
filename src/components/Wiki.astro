@@ -30,12 +30,21 @@ const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/softwar
 // Early life & education comes before Projects, so its refs are created first.
 const wlooNews = cite('Embracing change, Waterloo Management Science and Engineering', 'https://uwaterloo.ca/management-science-engineering/news/embracing-change');
 const wlooCalendar = cite('Management Engineering, Waterloo Undergraduate Calendar', 'https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/programs/HkzsJ1CRsh');
-const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
-const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
   return cite(`${p.name} source`, href);
 });
+
+// Awards come after Projects, so their refs follow the project ones.
+const awardRef = new Map<object, number>(
+  profile.awards.flatMap((a) =>
+    'source' in a && a.source ? [[a, cite(`${a.title}, ${a.issuer}, ${a.date}`, a.source as string)] as [object, number]] : [],
+  ),
+);
+
+// Personal life comes after Awards.
+const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
+const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
 
 // Influences comes after Projects, so its refs are created after the project ones.
 const wikiHistory = cite('History of Wikipedia', 'https://en.wikipedia.org/wiki/History_of_Wikipedia');
@@ -250,8 +259,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           <ul class="awards">
             {items.map((a) => (
               <li>
-                <b>{a.title}</b> <span class="award-meta">{a.issuer} · {a.date}</span>
-                <br />{a.body}
+                {a.title}, {a.issuer}, {a.date}.{awardRef.has(a) && <Cite n={awardRef.get(a)!} />} {a.body}
               </li>
             ))}
           </ul>
