@@ -560,16 +560,6 @@ q {
   font-style: italic;
 }
 
-.big-quote::before {
-  content: '\201C';
-  margin-right: 0.08em;
-}
-
-.big-quote::after {
-  content: '\201D';
-  margin-left: 0.08em;
-}
-
 .infobox {
   float: right;
   width: 330px;
