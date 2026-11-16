@@ -2106,13 +2106,25 @@ html.party .hud-title {
   line-height: 1.6;
 }
 
+/* In-sentence jump to the Arcade Hall: a button for keyboards and screen readers, styled as a link. */
 .panel-body .game-btn.inline {
   display: inline;
   width: auto;
-  padding: 2px 8px;
-  font-family: var(--pixel);
-  font-size: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  font: inherit;
   color: #e8c547;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.panel-body .game-btn.inline:hover,
+.panel-body .game-btn.inline:focus-visible {
+  background: none;
+  color: #f5dc7e;
 }
 
 .panel-body .wing {
