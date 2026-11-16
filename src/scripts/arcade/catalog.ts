@@ -41,7 +41,7 @@ export const GAMES: GameInfo[] = [
     id: 'rally',
     title: 'Rally',
     blurb: 'First to 7 points on the city court.',
-    credit: 'Inspired by the browser tennis games I played growing up, and a little Pong.',
+    credit: 'Inspired by the web tennis games I played growing up while paying tribute to classic Pong',
     help: 'W and S, or the arrow keys, to move. Drag on phones.',
     load: () => import('./games/rally'),
   },
