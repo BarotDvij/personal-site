@@ -388,10 +388,11 @@ html[data-mode='city'] body {
 
 .awards {
   padding-left: 20px;
+  margin: 4px 0 0;
 }
 
 .awards li {
-  margin: 6px 0;
+  margin: 0 0 3px;
 }
 
 .ext {
@@ -439,7 +440,7 @@ html[data-mode='city'] body {
 
 .article h3 {
   font-size: 1.05rem;
-  margin: 22px 0 2px;
+  margin: 16px 0 2px;
 }
 
 /* Body text fills the article column, like a wiki page. */
