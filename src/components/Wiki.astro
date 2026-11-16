@@ -51,8 +51,8 @@ const sections = [
   ['early-life', 'Early Life & Education'],
   ['career', 'Career'],
   ['projects', 'Projects'],
-  ['civic', 'Personal life'],
   ['awards', 'Awards'],
+  ['civic', 'Personal life'],
   ['influences', 'Influences'],
   ['references', 'References'],
 ];
@@ -241,16 +241,6 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       </div>
     </section>
 
-    <section id="civic" aria-labelledby="civic-h">
-      <h2 id="civic-h">Personal life</h2>
-      <ul>
-        {profile.civic.map((c) => (
-          <li><b>{c.title}.</b> {c.body}</li>
-        ))}
-      </ul>
-      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
-    </section>
-
     <section id="awards" aria-labelledby="awards-h">
       <h2 id="awards-h">Awards</h2>
       <h3>Hackathons</h3>
@@ -281,6 +271,16 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         </>
       ))}
       <a class="city-link" href="#tour/halloffame" data-city-target="halloffame">See the trophy case in Dvij City</a>
+    </section>
+
+    <section id="civic" aria-labelledby="civic-h">
+      <h2 id="civic-h">Personal life</h2>
+      <ul>
+        {profile.civic.map((c) => (
+          <li><b>{c.title}.</b> {c.body}</li>
+        ))}
+      </ul>
+      <a class="city-link" href="#tour/cityhall" data-city-target="cityhall">See it in Dvij City</a>
     </section>
 
     <section id="influences" aria-labelledby="influences-h">
