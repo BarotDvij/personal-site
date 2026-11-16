@@ -651,18 +651,20 @@
   "awards": [
     {
       "group": "Dance",
-      "title": "Battle of the Raas, First Place",
-      "issuer": "RaasMotion Dance Competition",
+      "title": "First Place",
+      "event": "Battle of the Raas Dance Competition",
+      "issuer": "RaasMotion",
+      "issuerUrl": "https://www.instagram.com/raasmotion/?hl=en",
       "date": "2024",
-      "body": "First place at RaasMotion's Battle of the Raas.",
       "source": "https://www.instagram.com/p/C4Y49-KJeGZ/?img_index=1"
     },
     {
       "group": "Dance",
-      "title": "Battle of the Raas, First Place",
-      "issuer": "RaasMotion Dance Competition",
+      "title": "First Place",
+      "event": "Battle of the Raas Dance Competition",
+      "issuer": "RaasMotion",
+      "issuerUrl": "https://www.instagram.com/raasmotion/?hl=en",
       "date": "2023",
-      "body": "First place at RaasMotion's Battle of the Raas.",
       "source": "https://www.instagram.com/p/CqXCP8uOTdG/?img_index=1"
     },
     {

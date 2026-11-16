@@ -77,7 +77,7 @@ export function panelFor(ref: Ref): PanelContent | null {
         }</li>`)
         .join('');
       const awards = profile.awards
-        .map((a) => `<li><span class="cup" aria-hidden="true"></span><span>${esc(a.title)}<br><small>${esc(`${a.issuer} · ${a.date}`)}</small></span></li>`)
+        .map((a) => `<li><span class="cup" aria-hidden="true"></span><span>${esc('event' in a && a.event ? `${a.title}, ${a.event}` : a.title)}<br><small>${esc(`${a.issuer} · ${a.date}`)}</small></span></li>`)
         .join('');
       return {
         kicker: 'Hall of Fame',

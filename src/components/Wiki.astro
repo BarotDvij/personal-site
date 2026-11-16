@@ -38,7 +38,7 @@ const projectRefs = profile.projects.map((p) => {
 // Awards come after Projects, so their refs follow the project ones.
 const awardRef = new Map<object, number>(
   profile.awards.flatMap((a) =>
-    'source' in a && a.source ? [[a, cite(`${a.title}, ${a.issuer}, ${a.date}`, a.source as string)] as [object, number]] : [],
+    'source' in a && a.source ? [[a, cite(`${'event' in a && a.event ? `${a.event}, ` : ''}${a.issuer}, ${a.date}`, a.source as string)] as [object, number]] : [],
   ),
 );
 
@@ -259,7 +259,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           <ul class="awards">
             {items.map((a) => (
               <li>
-                {a.title}, {a.issuer}, {a.date}.{awardRef.has(a) && <Cite n={awardRef.get(a)!} />} {a.body}
+                {a.title}, {'event' in a && a.event && <><i>{a.event}</i>, </>}{'issuerUrl' in a && a.issuerUrl ? <a href={a.issuerUrl as string} rel="noopener">{a.issuer}</a> : a.issuer}, {a.date}.{awardRef.has(a) && <Cite n={awardRef.get(a)!} />}{'body' in a && a.body && <> {a.body}</>}
               </li>
             ))}
           </ul>
