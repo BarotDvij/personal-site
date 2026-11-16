@@ -387,6 +387,31 @@
   ],
   "projects": [
     {
+      "name": "Sahayak",
+      "award": "2nd Place, Art of Living Build for Good Hackathon",
+      "tagline": "Drafts caring follow-ups for Art of Living coordinators so fewer people quietly drift away, with a human approving every message.",
+      "stack": [
+        "TypeScript",
+        "React",
+        "TanStack Start",
+        "Supabase",
+        "Tailwind",
+        "MCP",
+        "Lovable"
+      ],
+      "links": {
+        "code": "https://github.com/BarotDvij/AOL-Hackathon-Sahayak",
+        "devpost": "https://devpost.com/software/aol-hackathon-sahayak",
+        "demo": "https://aol-hackathon-sahayak.lovable.app/"
+      },
+      "lenses": [
+        "ai",
+        "dev",
+        "pm"
+      ],
+      "featured": true
+    },
+    {
       "name": "Urban Marble",
       "award": "1st Place, DD x Ignition Hackathon",
       "tagline": "Scroll a 3D landscape of North America's biggest cities and get an AI documentary for any building.",
@@ -575,6 +600,12 @@
   "spice": "TODO: hobbies, fun facts, taste",
   "headlineDraft": true,
   "hackathons": [
+    {
+      "place": "2nd",
+      "event": "Art of Living Build for Good Hackathon",
+      "project": "Sahayak",
+      "link": "https://devpost.com/software/aol-hackathon-sahayak"
+    },
     {
       "place": "1st",
       "event": "Claude Hacks @ UWaterloo",

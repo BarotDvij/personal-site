@@ -46,7 +46,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       const p = profile.projects.find((x) => x.name === ref.name);
       if (!p) return null;
       const links = Object.entries(p.links)
-        .map(([k, v]) => link(v as string, k === 'code' ? 'Code' : k === 'devpost' ? 'Devpost' : k))
+        .map(([k, v]) => link(v as string, k === 'code' ? 'Code' : k === 'devpost' ? 'Devpost' : k === 'demo' ? 'Live demo' : k))
         .join(' ');
       const badge = 'award' in p && p.award ? `<p class="badge">${esc(p.award as string)}</p>` : '';
       const status = 'status' in p && p.status ? `<p class="badge">${esc(p.status as string)}</p>` : '';

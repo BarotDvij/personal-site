@@ -27,6 +27,7 @@ const cityscapes = cite('CityScapes on Devpost', 'https://devpost.com/software/c
 // Cited in order of first appearance on the page (infobox, then the lead).
 const summitProject = profile.projects.find((p) => p.name === 'SUMMIT Financial Learning')!;
 const summit = cite(`${summitProject.name} source`, summitProject.links.code);
+const sahayak = cite('Sahayak on Devpost', 'https://devpost.com/software/aol-hackathon-sahayak');
 const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/software/urban-marble');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
@@ -171,7 +172,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     </p>
     <p class="lead-more">
       Barot's work spans <a href="https://en.wikipedia.org/wiki/Marketing_strategy">marketing strategy</a>, <a href="https://en.wikipedia.org/wiki/Pipeline_(computing)">data pipelines</a>, LLM evaluation, and full-stack products<Cite n={summit} />. In one week in
-      2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />.
+      2026, Barot's teams placed first, second, and first at three hackathons<Cite n={cityscapes} /><Cite n={urbanMarble} />. In November 2026, Barot built Sahayak, a follow-up assistant for Art of Living centres, and took second place at the Art of Living Build for Good Hackathon<Cite n={sahayak} />.
       Barot's working philosophy is summed up in one line: <q>{profile.philosophy}</q>
     </p>
 
@@ -226,7 +227,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       <h2 id="awards-h">Awards</h2>
       <h3>Hackathons</h3>
       <table class="wikitable">
-        <caption>Results from one week in 2026</caption>
+        <caption>Hackathon results, 2026</caption>
         <thead><tr><th scope="col">Place</th><th scope="col">Event</th><th scope="col">Project</th></tr></thead>
         <tbody>
           {profile.hackathons.map((h) => (
