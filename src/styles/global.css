@@ -935,6 +935,16 @@ q {
   font-family: var(--pixel);
 }
 
+.wikitable .place.gold {
+  background: #e8c547;
+  color: #2a2233;
+}
+
+.wikitable .place.silver {
+  background: #c9ccd6;
+  color: #2a2233;
+}
+
 blockquote {
   margin: 8px 0 14px;
   padding: 6px 16px;

@@ -262,7 +262,7 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         <tbody>
           {profile.hackathons.map((h) => (
             <tr>
-              <td class="place">{h.place}</td>
+              <td class={`place ${h.place === '1st' ? 'gold' : 'silver'}`}>{h.place}</td>
               <td>{h.event}</td>
               <td>{'link' in h && h.link ? <a href={h.link as string}>{h.project}</a> : h.project}</td>
             </tr>
