@@ -30,8 +30,6 @@ const urbanMarble = cite('Urban Marble on Devpost', 'https://devpost.com/softwar
 // Early life & education comes before Projects, so its refs are created first.
 const wlooNews = cite('Embracing change, Waterloo Management Science and Engineering', 'https://uwaterloo.ca/management-science-engineering/news/embracing-change');
 const wlooCalendar = cite('Management Engineering, Waterloo Undergraduate Calendar', 'https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/programs/HkzsJ1CRsh');
-const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
-const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
   return cite(`${p.name} source`, href);
@@ -184,13 +182,12 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <section id="early-life" aria-labelledby="early-h">
       <h2 id="early-h">Early Life &amp; Education</h2>
       <p>
-        Dvij Barot is in his third year of his undergraduate degree at the <a href={profile.education.url}>University of Waterloo</a> in the <a href="https://uwaterloo.ca/engineering/future-students/management-engineering">Management Engineering</a> program.{' '}
-        Management Engineering is often described as a combination of <a href="https://en.wikipedia.org/wiki/Software_engineering">software engineering</a> and <a href="https://en.wikipedia.org/wiki/Industrial_engineering">industrial engineering</a>, with the University of Waterloo's program being considered a pioneer in the modernization of the industrial engineering field<Cite n={wlooNews} />. Courses include Databases and Software Design, Probability and Statistics II, Algorithms and Data Structures, Modelling in Operations Research, Introduction to Machine Learning, and Organizational Behaviour<Cite n={wlooCalendar} />.{' '}
-        Outside of class, he has been part of the Wat.AI Engineering Design Team and the Warriors Dance Team, and served as HSC President.
+        Dvij Barot was born in Scarborough, Ontario, the youngest of two children. He moved to Guelph, Ontario at four years of age, where he completed his primary schooling. He moved to Kitchener-Waterloo, Ontario when he turned 14, where he attended Huron Heights Secondary School. He graduated with distinction and won the Dustin Picard Memorial Award of Integrity, a graduation award presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.
       </p>
       <p>
-        Dvij also graduated with distinction from Huron Heights Secondary School in Kitchener, ON. He won the Dustin Picard Memorial Award of Integrity, a graduation award presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.{' '}
-        He was known to be one of the only drummers in the school, which meant he took part in all of the school bands and concerts (Jr. Band, Sr. Band, Jazz Band, and the MYART concert) by default. He was also the sole winner from his school's chapter in the <a href="https://deca.ca/v2/">DECA</a> competition at the provincial level for three consecutive years, and the only student to take part in the international competition (ICDC) during his time at the school<Cite n={decaDoc} /><Cite n={decaVideo} />.
+        Currently, Dvij Barot is in his third year of his undergraduate degree at the <a href={profile.education.url}>University of Waterloo</a> in the <a href="https://uwaterloo.ca/engineering/future-students/management-engineering">Management Engineering</a> program.{' '}
+        Management Engineering is often described as a combination of <a href="https://en.wikipedia.org/wiki/Software_engineering">software engineering</a> and <a href="https://en.wikipedia.org/wiki/Industrial_engineering">industrial engineering</a>, with the University of Waterloo's program being considered a pioneer in the modernization of the industrial engineering field<Cite n={wlooNews} />. Courses include Databases and Software Design, Probability and Statistics II, Algorithms and Data Structures, Modelling in Operations Research, Introduction to Machine Learning, and Organizational Behaviour<Cite n={wlooCalendar} />.{' '}
+        Outside of class, he has been part of the Wat.AI Engineering Design Team and the Warriors Dance Team, and served as Hindu Yuva (formerly Hindu Students Council) President.
       </p>
     </section>
 
