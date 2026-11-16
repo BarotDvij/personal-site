@@ -67,9 +67,12 @@ const sections = [
   ['references', 'References'],
 ];
 
-const awardGroups = ['Dance', 'Business competitions', 'Junior Achievement', 'School'].map(
-  (g) => [g, profile.awards.filter((a) => a.group === g)] as const,
-);
+// Junior Achievement awards sit with the business competitions.
+const awardGroups = [
+  ['Dance', ['Dance']],
+  ['Business competitions', ['Business competitions', 'Junior Achievement']],
+  ['School', ['School']],
+].map(([title, groups]) => [title as string, profile.awards.filter((a) => (groups as string[]).includes(a.group))] as const);
 
 const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 ---
