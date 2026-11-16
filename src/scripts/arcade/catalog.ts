@@ -25,7 +25,7 @@ export const GAMES: GameInfo[] = [
     id: 'sweeper',
     title: 'Lawn Sweeper',
     blurb: 'Mow the lawn without hitting a bug.',
-    credit: 'Inspired by Minesweeper, which I played growing up.',
+    credit: 'Inspired by Minesweeper, which I played all day during summer school in Civics & Careers class',
     help: 'Click to dig. Right-click, or switch to flag mode, to flag a bug.',
     load: () => import('./games/sweeper'),
   },
