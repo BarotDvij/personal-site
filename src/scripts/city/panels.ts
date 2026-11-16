@@ -19,7 +19,7 @@ const gallery = (items: Media[], title = 'Campaign work') => `<h3>${esc(title)}<
     ? `<figure><a href="${esc(m.src)}" target="_blank" rel="noopener"><img src="${esc(m.poster ?? '')}" alt="" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"><figcaption>${esc(m.alt)} <span class="ext" aria-label="(PDF, opens in a new tab)">↗</span></figcaption></a></figure>`
     : m.type === 'video'
     ? `<figure><video controls playsinline preload="none" poster="${esc(m.poster ?? '')}" width="${m.w}" height="${m.h}" aria-label="${esc(m.alt)}"><source src="${esc(m.src)}" type="video/mp4"></video></figure>`
-    : `<figure><img src="${esc(m.src)}" alt="${esc(m.alt)}" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"></figure>`)
+    : `<figure${m.w > m.h ? ' class="wide"' : ''}><img src="${esc(m.src)}" alt="${esc(m.alt)}" width="${m.w}" height="${m.h}" loading="lazy" decoding="async"></figure>`)
   .join('')}</div>`;
 
 export interface PanelContent {

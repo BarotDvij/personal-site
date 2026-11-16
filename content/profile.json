@@ -201,6 +201,13 @@
       "media": [
         {
           "type": "image",
+          "src": "/media/golime/app-mock.webp",
+          "w": 980,
+          "h": 541,
+          "alt": "Go Lime customer app mock: home, services, and equipment screens"
+        },
+        {
+          "type": "image",
           "src": "/media/golime/still-ac.webp",
           "w": 600,
           "h": 600,
@@ -212,6 +219,13 @@
           "w": 450,
           "h": 800,
           "alt": "Still ad: Go Lime whole house water filter"
+        },
+        {
+          "type": "image",
+          "src": "/media/golime/still-thermostat.webp",
+          "w": 670,
+          "h": 1197,
+          "alt": "Still ad: free smart thermostat with a water heater, from $39.99 bi-weekly for the first 99 users"
         }
       ]
     },

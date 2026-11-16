@@ -2167,6 +2167,11 @@ html.party .hud-title {
   align-items: start;
 }
 
+/* Landscape pieces (the app mock) take the full row as the focal image. */
+.panel-body .media-grid figure.wide {
+  grid-column: 1 / -1;
+}
+
 .panel-body .media-grid figure {
   margin: 0;
   background: #120f1e;
