@@ -32,6 +32,8 @@ const wlooNews = cite('Embracing change, Waterloo Management Science and Enginee
 const wlooCalendar = cite('Management Engineering, Waterloo Undergraduate Calendar', 'https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/programs/HkzsJ1CRsh');
 const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
 const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
+// Sahayak is listed by hand (not in profile.json projects), so it has no city building.
+const sahayakRef = cite('Sahayak on Devpost', 'https://devpost.com/software/aol-hackathon-sahayak');
 const projectRefs = profile.projects.map((p) => {
   const href = 'devpost' in p.links && p.links.devpost ? (p.links.devpost as string) : p.links.code;
   return cite(`${p.name} source`, href);
@@ -227,6 +229,15 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     <section id="projects" aria-labelledby="projects-h">
       <h2 id="projects-h">Projects</h2>
       <div class="project-grid">
+        <article class="project">
+          <h3>
+            Sahayak
+            <Cite n={sahayakRef} />
+          </h3>
+          <p class="award silver">2nd Place, Art of Living Build for Good Hackathon</p>
+          <p>Drafts caring follow-ups for Art of Living coordinators so fewer people quietly drift away, with a human approving every message.</p>
+          <p class="stack">TypeScript · React · TanStack Start · Supabase · Tailwind · MCP · Lovable</p>
+        </article>
         {profile.projects.map((p, i) => (
           <article class="project">
             <h3>
