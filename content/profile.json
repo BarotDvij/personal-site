@@ -576,6 +576,12 @@
   "headlineDraft": true,
   "hackathons": [
     {
+      "place": "2nd",
+      "event": "Art of Living Build for Good Hackathon",
+      "project": "Sahayak",
+      "link": "https://devpost.com/software/aol-hackathon-sahayak"
+    },
+    {
       "place": "1st",
       "event": "Claude Hacks @ UWaterloo",
       "project": "CityScapes",
