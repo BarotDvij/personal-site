@@ -36,16 +36,14 @@ const projectRefs = profile.projects.map((p) => {
   return cite(`${p.name} source`, href);
 });
 
-// Awards come after Projects, so their refs follow the project ones.
-const awardRef = new Map<object, number>(
-  profile.awards.flatMap((a) =>
-    'source' in a && a.source ? [[a, cite(`${'event' in a && a.event ? `${a.event}, ` : ''}${a.issuer}, ${a.date}`, a.source as string)] as [object, number]] : [],
-  ),
-);
-
-// Personal life comes after Awards.
+// Awards come after Projects, so their refs follow the project ones. Personal life reuses the DECA refs.
+const raas2023 = cite('Battle of the Raas 2023 on Instagram', 'https://www.instagram.com/p/CqXCP8uOTdG/?img_index=1');
+const raas2024 = cite('Battle of the Raas 2024 on Instagram', 'https://www.instagram.com/p/C4Y49-KJeGZ/?img_index=1');
 const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
 const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
+const velocity = cite('Velocity Pitch Competition semi-finalist post on LinkedIn', 'https://lnkd.in/p/gmE37jkp');
+// Inline citation markup for the award paragraphs, which are written as HTML strings.
+const ref = (n: number) => `<sup class="cite"><a href="#ref-${n}" aria-label="Reference ${n}">[${n}]</a></sup>`;
 
 // Influences comes after Projects, so its refs are created after the project ones.
 const wikiHistory = cite('History of Wikipedia', 'https://en.wikipedia.org/wiki/History_of_Wikipedia');
@@ -67,24 +65,24 @@ const sections = [
   ['references', 'References'],
 ];
 
-// Junior Achievement awards sit with the business competitions.
-// Each group opens with a short paragraph that carries the detail the one-line entries leave out.
+// Junior Achievement awards sit with the business competitions. Dance and Velocity are covered
+// in prose only, so they have no list entries. Award names are italic.
 const awardSections = [
   {
     title: 'Dance',
-    groups: ['Dance'],
-    intro: "Dvij won first place at RaasMotion's Battle of the Raas dance competition in both 2023 and 2024.",
+    groups: [] as string[],
+    intro: `Dvij won first place at RaasMotion's <i>Battle of the Raas</i> dance competition in consecutive years 2023 and 2024.${ref(raas2023)}${ref(raas2024)}`,
   },
   {
     title: 'Business competitions',
     groups: ['Business competitions', 'Junior Achievement'],
-    intro: `Dvij competed in <a href="https://deca.ca/v2/">DECA</a> from 2017 to 2021. His regional awards covered Marketing Communications (2017), the marketing cluster test across 14 series (2018), Retail Merchandising and the marketing cluster test (2019), and a top 20 finish out of 237 competitors overall in Retail Merchandising (2020). At the provincial level, he placed in the top 15 for the first Retail Merchandising case competition (2020) and for the marketing cluster test (2019), and in the top 15 highest scores in the Retail Merchandising series (2021). In 2021, he was selected as one of two representatives from the Huron Area at the Believe Initiative Collective Fair, which placed his project among the top 24 in North America.`,
-    intro2: `With <a href="https://jaswo.org/">Junior Achievement Waterloo</a>, he won Salesperson of the Year, Production Company of the Year, and Company of the Year in 2019. Salesperson of the Year went to the student who generated the most sales revenue in the charter. Production Company of the Year recognized the best product overall, judged on quality, creativity, and utility, and he led the production team as VP of Production. Company of the Year recognized the company that best epitomized entrepreneurship, innovation, and collaboration while running a financially successful business. In 2018, he won the Product Design Award for the most innovative product in the charter and VP of Marketing of the Year, which goes to the single VP of Marketing who best embodies leadership, innovation, and collaboration. In 2019, he was also one of two students chosen to represent Junior Achievement Waterloo internationally, where his team's response to a real company's business challenge was judged the most effective and won the International Youth Success Summit challenge.`,
+    intro: `Dvij competed in <a href="https://deca.ca/v2/">DECA</a> from 2017 to 2021.${ref(decaDoc)} His regional awards covered Marketing Communications (2017), the marketing cluster test across 14 series (2018), Retail Merchandising and the marketing cluster test (2019), and a top 20 finish out of 237 competitors overall in Retail Merchandising (2020). At the provincial level, he placed in the top 15 for the first Retail Merchandising case competition (2020) and for the marketing cluster test (2019), and in the top 15 highest scores in the Retail Merchandising series (2021).${ref(decaVideo)} In 2021, he was selected as one of two representatives from the Huron Area at the Believe Initiative Collective Fair, which placed his project among the top 24 in North America. In 2024, he was a semi-finalist at the <i>Velocity Pitch Competition</i>.${ref(velocity)}`,
+    intro2: `With <a href="https://jaswo.org/">Junior Achievement Waterloo</a>, he won <i>Salesperson of the Year</i>, <i>Production Company of the Year</i>, and <i>Company of the Year</i> in 2019. <i>Salesperson of the Year</i> went to the student who generated the most sales revenue in the charter. <i>Production Company of the Year</i> recognized the best product overall, judged on quality, creativity, and utility, and he led the production team as VP of Production. <i>Company of the Year</i> recognized the company that best epitomized entrepreneurship, innovation, and collaboration while running a financially successful business. In 2018, he won the <i>Product Design Award</i> for the most innovative product in the charter and <i>VP of Marketing of the Year</i>, which goes to the single VP of Marketing who best embodies leadership, innovation, and collaboration. In 2019, he was also one of two students chosen to represent Junior Achievement Waterloo internationally, where his team's response to a real company's business challenge was judged the most effective and won the <i>International Youth Success Summit</i> challenge.`,
   },
   {
     title: 'School',
     groups: ['School'],
-    intro: `At Rickson Ridge Public School, Dvij was one of two students voted by teachers and classmates to speak at graduation in 2017, and he also won the excellence in math, history, and social justice awards. At Huron Heights Secondary School, he received the Dustin Picard Memorial Award of Integrity in 2021, which is presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.`,
+    intro: `At Rickson Ridge Public School, Dvij was one of two students voted by teachers and classmates to speak at graduation in 2017, and he also won the excellence in math, history, and social justice awards. At Huron Heights Secondary School, he received the <i>Dustin Picard Memorial Award of Integrity</i> in 2021, which is presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.`,
   },
 ].map((g) => ({ ...g, items: profile.awards.filter((a) => g.groups.includes(a.group)) }));
 
@@ -276,13 +274,15 @@ const anchor = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
           <h3>{g.title}</h3>
           <p set:html={g.intro} />
           {g.intro2 && <p set:html={g.intro2} />}
-          <ul class="awards">
-            {g.items.map((a) => (
-              <li>
-                <Award award={a} ref={awardRef.get(a)} />
-              </li>
-            ))}
-          </ul>
+          {g.items.length > 0 && (
+            <ul class="awards">
+              {g.items.map((a) => (
+                <li>
+                  <Award award={a} />
+                </li>
+              ))}
+            </ul>
+          )}
         </>
       ))}
       <a class="city-link" href="#tour/halloffame" data-city-target="halloffame">See the trophy case in Dvij City</a>
