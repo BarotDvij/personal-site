@@ -37,11 +37,11 @@ const projectRefs = profile.projects.map((p) => {
 });
 
 // Awards come after Projects, so their refs follow the project ones. Personal life reuses the DECA refs.
-const raas2023 = cite('Battle of the Raas 2023 on Instagram', 'https://www.instagram.com/p/CqXCP8uOTdG/?img_index=1');
-const raas2024 = cite('Battle of the Raas 2024 on Instagram', 'https://www.instagram.com/p/C4Y49-KJeGZ/?img_index=1');
 const decaDoc = cite('DECA Ontario, Marketing Competency (MC) document', 'https://deca.ca/documents/MC.pdf');
 const decaVideo = cite('DECA Provincials Awards Ceremony Medal Appearance', 'https://youtu.be/2vD2lEhETNU?si=75cFrAoT5XMPi-X_&t=5589');
 const velocity = cite('Velocity Pitch Competition semi-finalist post on LinkedIn', 'https://lnkd.in/p/gmE37jkp');
+const raas2023 = cite('Battle of the Raas 2023 on Instagram', 'https://www.instagram.com/p/CqXCP8uOTdG/?img_index=1');
+const raas2024 = cite('Battle of the Raas 2024 on Instagram', 'https://www.instagram.com/p/C4Y49-KJeGZ/?img_index=1');
 // Inline citation markup for the award paragraphs, which are written as HTML strings.
 const ref = (n: number) => `<sup class="cite"><a href="#ref-${n}" aria-label="Reference ${n}">[${n}]</a></sup>`;
 
@@ -69,11 +69,6 @@ const sections = [
 // in prose only, so they have no list entries. Award names are italic.
 const awardSections = [
   {
-    title: 'Dance',
-    groups: [] as string[],
-    intro: `Dvij won first place at RaasMotion's <i>Battle of the Raas</i> dance competition in consecutive years 2023 and 2024.${ref(raas2023)}${ref(raas2024)}`,
-  },
-  {
     title: 'Business competitions',
     groups: ['Business competitions', 'Junior Achievement'],
     intro: `Dvij competed in <a href="https://deca.ca/v2/">DECA</a> from 2017 to 2021.${ref(decaDoc)} His regional awards covered Marketing Communications (2017), the marketing cluster test across 14 series (2018), Retail Merchandising and the marketing cluster test (2019), and a top 20 finish out of 237 competitors overall in Retail Merchandising (2020). At the provincial level, he placed in the top 15 for the first Retail Merchandising case competition (2020) and for the marketing cluster test (2019), and in the top 15 highest scores in the Retail Merchandising series (2021).${ref(decaVideo)} In 2021, he was selected as one of two representatives from the Huron Area at the Believe Initiative Collective Fair, which placed his project among the top 24 in North America. In 2024, he was a semi-finalist at the <i>Velocity Pitch Competition</i>.${ref(velocity)}`,
@@ -83,6 +78,11 @@ const awardSections = [
     title: 'School',
     groups: ['School'],
     intro: `At Rickson Ridge Public School, Dvij was one of two students voted by teachers and classmates to speak at graduation in 2017, and he also won the excellence in math, history, and social justice awards. At Huron Heights Secondary School, he received the <i>Dustin Picard Memorial Award of Integrity</i> in 2021, which is presented to a student who exemplifies the spirit of unfailing friendship, courage to stand up for people, respect for individuality, and above all, integrity.`,
+  },
+  {
+    title: 'Dance',
+    groups: [] as string[],
+    intro: `Dvij won first place at RaasMotion's <i>Battle of the Raas</i> dance competition in consecutive years 2023 and 2024.${ref(raas2023)}${ref(raas2024)}`,
   },
 ].map((g) => ({ ...g, items: profile.awards.filter((a) => g.groups.includes(a.group)) }));
 
