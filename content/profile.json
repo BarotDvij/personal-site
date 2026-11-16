@@ -226,6 +226,13 @@
           "w": 670,
           "h": 1197,
           "alt": "Still ad: free smart thermostat with a water heater, from $39.99 bi-weekly for the first 99 users"
+        },
+        {
+          "type": "image",
+          "src": "/media/golime/logo.webp",
+          "w": 600,
+          "h": 600,
+          "alt": "Go Lime logo"
         }
       ]
     },
