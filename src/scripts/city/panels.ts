@@ -37,7 +37,7 @@ export function panelFor(ref: Ref): PanelContent | null {
       const e = profile.experience.find((x) => x.org === ref.org);
       if (!e) return null;
       return {
-        kicker: `${e.dates} · ${e.place}`,
+        kicker: `${e.type} · ${e.place}`,
         title: `${e.role}, ${e.org}`,
         html: `<p class="lead">${esc(e.summary)}</p>${list(e.bullets)}${ref.org === 'AltaML Inc.' ? HAUSER_NOTE : ''}${'media' in e ? gallery(e.media as Media[], 'mediaTitle' in e ? (e.mediaTitle as string) : undefined) : ''}`,
       };

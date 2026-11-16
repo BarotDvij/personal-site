@@ -79,7 +79,7 @@
       "role": "Technical Product Manager",
       "org": "AltaML Inc.",
       "url": "https://altaml.com/",
-      "dates": "Sep 2026 – Dec 2026",
+      "type": "Internship",
       "place": "Waterloo, ON",
       "lenses": [
         "pm",
@@ -101,7 +101,7 @@
       "role": "Data Analytics Engineer",
       "org": "Super.com",
       "url": "https://www.super.com/",
-      "dates": "Jan 2026 – Apr 2026",
+      "type": "Internship",
       "place": "San Francisco, CA · Toronto, ON",
       "lenses": [
         "data"
@@ -120,7 +120,7 @@
       "role": "Software Engineer",
       "org": "GenLedge",
       "url": "https://www.genledge.ai/",
-      "dates": "Jul 2026 – Sep 2026",
+      "type": "Internship",
       "place": "Remote",
       "lenses": [
         "ai",
@@ -142,7 +142,7 @@
       "role": "Product Manager",
       "org": "SevenAfter Technologies",
       "url": "https://www.linkedin.com/company/142886175/",
-      "dates": "May 2026 – Jul 2026",
+      "type": "Internship",
       "place": "Remote",
       "lenses": [
         "pm",
@@ -163,7 +163,7 @@
       "role": "AI Engineer",
       "org": "KnowIdea Inc.",
       "url": "https://www.knowidea.dev/",
-      "dates": "Apr 2026 – May 2026",
+      "type": "Contract",
       "place": "Remote",
       "lenses": [
         "ai",
@@ -181,7 +181,7 @@
       "role": "Project Manager",
       "org": "Go Lime Inc.",
       "url": "https://golime.com/",
-      "dates": "May 2024 – Dec 2024",
+      "type": "Internship",
       "place": "Toronto, ON",
       "lenses": [
         "marketing",
@@ -219,7 +219,7 @@
       "role": "Program Manager",
       "org": "Ontario Chamber of Commerce",
       "url": "https://occ.ca/",
-      "dates": "May 2023 – Aug 2023",
+      "type": "Internship",
       "place": "Toronto, ON",
       "lenses": [
         "marketing",
@@ -338,7 +338,7 @@
       "role": "Business Development Representative",
       "org": "Swap Robotics",
       "url": "https://www.swaprobotics.com/",
-      "dates": "May 2022 – Dec 2022",
+      "type": "Internship",
       "place": "Kitchener, ON",
       "lenses": [
         "marketing",
