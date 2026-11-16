@@ -49,7 +49,7 @@ export const GAMES: GameInfo[] = [
     id: 'tanks',
     title: 'Tank Duel',
     blurb: '2 players, one keyboard, bouncing shells.',
-    credit: 'Inspired by Tank Trouble, which I played growing up.',
+    credit: 'Inspired by Tank Trouble, which I played every summer with my friends in school.',
     help: 'Green: WASD to drive, Q to fire. Blue: arrow keys to drive, M or / to fire. Best on a keyboard.',
     load: () => import('./games/tanks'),
   },
