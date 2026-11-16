@@ -66,9 +66,7 @@ export function panelFor(ref: Ref): PanelContent | null {
           <p class="links">${link(`mailto:${l.email}`, l.email)}</p>
           <p class="links">${link(l.linkedin, 'LinkedIn')} ${link(l.github, 'GitHub')} ${link(l.devpost, 'Devpost')}</p>
           <h3>How this site is built</h3>
-          <dl class="built">${BUILT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
-          <h3>Approach</h3>
-          ${profile.lessons.map((x) => `<p><strong>${esc(x.title)}.</strong> ${esc(x.body)}</p>`).join('')}`,
+          <dl class="built">${BUILT.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`,
       };
     }
     case 'trophies': {
