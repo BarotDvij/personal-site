@@ -431,7 +431,7 @@ html[data-mode='city'] body {
   font-family: var(--serif);
   font-weight: 400;
   font-size: 1.6rem;
-  margin: 34px 0 10px;
+  margin: 24px 0 8px;
   border-bottom: 1px solid var(--line-strong);
   padding-bottom: 2px;
   scroll-margin-top: 16px;
