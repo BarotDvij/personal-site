@@ -441,10 +441,10 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, cx - 7, GROUND - 6, 14, 2, shade('#8a5a34', p));
       rect(ctx, cx - 6, GROUND - 4, 1, 4, shade('#5b3b22', p));
       rect(ctx, cx + 5, GROUND - 4, 1, 4, shade('#5b3b22', p));
-      rect(ctx, x + w - 44, GROUND - 22, 1, 22, p.lamp);
+      rect(ctx, x + w - 44, GROUND - 27, 1, 27, p.lamp);
       sign(ctx, label, cx, GROUND - 43, '#3fb950', '#ffffff', p);
-      rect(ctx, x + w - 44, GROUND - 25, 7, 5, shade('#f2c84b', p));
-      text(ctx, '1', x + w - 42, GROUND - 25, '#2a2233');
+      rect(ctx, x + w - 44, GROUND - 27, 9, 7, shade('#f2c84b', p));
+      text(ctx, '1', x + w - 41, GROUND - 26, '#2a2233');
       break;
     }
     case 'glass':
@@ -752,6 +752,9 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
     }
     case 'pond': {
       const water = shade('#3b82f6', p), light = shade('#7fb0ff', p);
+      // Grass at both ends so no bare gap shows between the lawn and the water.
+      rect(ctx, x, GROUND - 2, 2, 2, shade('#4fa84f', p));
+      rect(ctx, x + w - 2, GROUND - 2, 2, 2, shade('#4fa84f', p));
       rect(ctx, x + 6, GROUND - 4, w - 12, 4, water);
       rect(ctx, x + 2, GROUND - 3, w - 4, 3, water);
       rect(ctx, x + 10, GROUND - 3, 14, 1, light);
@@ -1071,9 +1074,9 @@ function drawUnderground(ctx: Ctx, p: Palette) {
   }
 
   // Trunk lines
-  pipe(ctx, 4, TRUNK_Y, WORLD_W - 20, TRUNK_Y, p);
+  pipe(ctx, 4, TRUNK_Y, WORLD_W - 4, TRUNK_Y, p); // runs edge to edge (the pipe is 8px thick, 4px past each end point)
   pipe(ctx, DEEP_X, DEEP_Y, STRUCTURES.find((x) => x.id === 'lake')!.riser!, DEEP_Y, p, 7);
-  for (let xx = 40; xx < WORLD_W - 20; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
+  for (let xx = 40; xx < WORLD_W - 4; xx += 48) flange(ctx, xx, TRUNK_Y, false, p);
 
   // Risers from buildings
   for (const s of STRUCTURES) {
@@ -1131,11 +1134,19 @@ function drawStreet(ctx: Ctx, p: Palette) {
     // A name that would run under a pipe beside it stacks on two lines instead.
     const split = [label.slice(0, label.lastIndexOf(' ')), label.slice(label.lastIndexOf(' ') + 1)];
     const oneLineW = textWidth(label) + 6;
-    const stacked = label.includes(' ') && pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3);
+    const stacked = label.includes(' ') && (d.id === 'commercial' || pipeSpans().some(([a, b]) => a < d.x0 + 4 + oneLineW + 1 && b > d.x0 + 3));
     const lines = stacked ? split : [label];
     const pw = Math.max(...lines.map((l) => textWidth(l))) + 6;
-    box(ctx, d.x0 + 4, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
-    lines.forEach((l, i) => text(ctx, l, d.x0 + 7, GROUND + 8 + i * 8, ink(plate)));
+    let px = d.x0 + 4;
+    if (d.id === 'data' || d.id === 'ai') {
+      // Centre this plate in the clear span between the warp pipe on its left and the copper riser on its right.
+      const spans = pipeSpans();
+      const left = Math.max(...spans.filter(([, b]) => b <= px).map(([, b]) => b));
+      const right = Math.min(...spans.filter(([a]) => a >= left + pw).map(([a]) => a));
+      px = Math.round(left + (right - left - pw) / 2);
+    }
+    box(ctx, px, GROUND + 6, pw, lines.length * 8 + 1, plate, p);
+    lines.forEach((l, i) => text(ctx, l, px + 3, GROUND + 8 + i * 8, ink(plate)));
   }
 
   // Street furniture fills the gaps between buildings: lamps and trees alternate.
@@ -1146,12 +1157,22 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const gap = gapEnd - gapStart;
     if (gap < 14) return;
     const mid = Math.round(gapStart + gap / 2);
-    if (i % 2) lamp(ctx, mid, p);
+    // Overrides: no tree between GenLedge and Super.com, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
+    if (s.id === 'genledge') return;
+    if (i % 2 || s.id === 'arcade' || s.id === 'warp-2') lamp(ctx, mid, p);
     else tree(ctx, mid - 5, p, 1);
   });
   // The civic green: extra trees behind the duck pond and around the park.
+  // One continuous lawn from the park sign to CityScapes, so no bare gaps show between the pieces.
+  const sign = STRUCTURES.find((x) => x.id === 'parksign')!, chess = STRUCTURES.find((x) => x.id === 'chess')!;
+  const lawnEnd = STRUCTURES.find((x) => x.id === 'cityscapes')!.x;
+  // Fill only the bare stretches: sign to chess table, and chess table to CityScapes.
+  for (const [from, to] of [[sign.x + sign.w - 1, chess.x], [chess.x + chess.w + 4, lawnEnd]]) {
+    rect(ctx, from, GROUND - 2, to - from, 2, shade('#4fa84f', p));
+    for (let xx = from; xx < to; xx += 3) rect(ctx, xx, GROUND - 3, 1, 1, shade('#7fd17a', p));
+  }
   const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
-  for (const [dx, size] of [[-12, 1], [2, 2], [31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
+  for (const [dx, size] of [[31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
@@ -1182,12 +1203,17 @@ export function buildSkyLayer(p: Palette, width: number, height: number) {
     ctx.fillStyle = p.sky[i - 1];
     for (let xx = 0; xx < width; xx += 2) ctx.fillRect(xx + ((i + 1) % 2), i * bandH, 1, 1);
   }
+  const sx = Math.max(24, width - 60), sy = 22;
   if (p.night) {
     const r = rng(42);
-    for (let i = 0; i < width / 6; i++) rect(ctx, Math.floor(r() * width), Math.floor(r() * height * 0.7), 1, 1, p.star);
+    for (let i = 0; i < width / 6; i++) {
+      const starX = Math.floor(r() * width), starY = Math.floor(r() * height * 0.7);
+      // Keep stars out of the moon's square so none shows through the crescent's cut-out.
+      if (Math.abs(starX - (sx + 8)) <= 11 && Math.abs(starY - (sy + 8)) <= 11) continue;
+      rect(ctx, starX, starY, 1, 1, p.star);
+    }
   }
   // Sun or moon
-  const sx = Math.max(24, width - 60), sy = 22;
   if (p.night) {
     // Waning crescent: a disk with a second, offset disk carved out of its
     // right side, so the lit sliver hugs the left edge and tapers to two tips.
@@ -1216,8 +1242,8 @@ export const PARALLAX = { far: 0.25, mid: 0.55 } as const;
 export type ParallaxKind = keyof typeof PARALLAX;
 
 // World x of each landmark's district centre.
-const CN_TOWER_X = 925; // Downtown AI District
-const WILLIS_TOWER_X = 1470; // City Square
+const CN_TOWER_X = 915; // Downtown AI District
+const WILLIS_TOWER_X = 1460; // City Square
 
 export const parallaxPad = (viewW: number) => Math.ceil(viewW / 2) + 2;
 
