@@ -533,13 +533,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'watertower': {
+      // The hit box runs up to the tip of the funnel, so the tank itself sits 6px below `top`.
+      const tk = top + 6;
       rect(ctx, x + 6, GROUND - 46, 2, 46, p.lamp);
       rect(ctx, x + w - 8, GROUND - 46, 2, 46, p.lamp);
       for (let yy = GROUND - 40; yy < GROUND; yy += 12) rect(ctx, x + 6, yy, w - 12, 1, p.lamp);
-      box(ctx, x, top, w, 52, shade('#3b82f6', p), p);
-      rect(ctx, x + 2, top + 2, 3, 46, shade('#7fb0ff', p));
-      for (let i = 0; i < 6; i++) rect(ctx, x + 2 + i * 2, top - 6 + i, w - 4 - i * 4, 1, shade('#2a63c8', p));
-      s.text?.forEach((t, i) => centeredText(ctx, t, cx, top + 16 + i * 8, '#ffffff'));
+      box(ctx, x, tk, w, 52, shade('#3b82f6', p), p);
+      rect(ctx, x + 2, tk + 2, 3, 46, shade('#7fb0ff', p));
+      for (let i = 0; i < 6; i++) rect(ctx, x + 2 + i * 2, tk - 6 + i, w - 4 - i * 4, 1, shade('#2a63c8', p));
+      s.text?.forEach((t, i) => centeredText(ctx, t, cx, tk + 16 + i * 8, '#ffffff'));
       break;
     }
     case 'arcade': {

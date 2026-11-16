@@ -78,7 +78,7 @@ export const STRUCTURES: Structure[] = [
 
   // Industrial Zone
   { id: 'truck', label: 'Block Stack GAME', kind: 'loadtruck', x: 206, w: 32, h: 20, district: 'data', ref: { type: 'game', id: 'blocks' } },
-  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 240, w: 36, h: 96, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 258 },
+  { id: 'lake', label: 'Data Lake: pipelines', kind: 'watertower', x: 240, w: 36, h: 102, district: 'data', ref: { type: 'pipelines' }, text: ['DATA', 'LAKE'], riser: 258 },
   { id: 'genledge', label: 'GenLedge Data Refinery', kind: 'refinery', x: 296, w: 120, h: 100, district: 'data', ref: { type: 'role', org: 'GenLedge' }, text: ['GENLEDGE'], riser: 356 },
   { id: 'super', label: 'Super.com Warehouse', kind: 'warehouse', x: 432, w: 117, h: 62, district: 'data', ref: { type: 'role', org: 'Super.com' }, text: ['SUPER.COM'], riser: 491 },
   { id: 'mower', label: 'Lawn Sweeper GAME', kind: 'lawn', x: 566, w: 40, h: 14, district: 'data', ref: { type: 'game', id: 'sweeper' } },
