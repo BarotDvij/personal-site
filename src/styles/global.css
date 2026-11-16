@@ -560,6 +560,26 @@ q {
   font-style: italic;
 }
 
+/* Oversized quotation marks that sit inline, so they add no height */
+.big-quote::before,
+.big-quote::after {
+  font-family: var(--serif);
+  font-size: 2.6em;
+  line-height: 0;
+  color: var(--accent);
+  vertical-align: -0.3em;
+}
+
+.big-quote::before {
+  content: '\201C';
+  margin-right: 0.08em;
+}
+
+.big-quote::after {
+  content: '\201D';
+  margin-left: 0.08em;
+}
+
 .infobox {
   float: right;
   width: 330px;
