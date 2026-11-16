@@ -977,6 +977,14 @@ blockquote p {
 
 .refs {
   font-size: 0.9rem;
+  /* Wikipedia-style: as many columns as fit, up to 3 */
+  column-width: 19em;
+  column-count: 3;
+  column-gap: 2em;
+}
+
+.refs li {
+  break-inside: avoid;
 }
 
 .refs li:target {
