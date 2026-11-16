@@ -1,0 +1,18 @@
+---
+import Cite from './Cite.astro';
+
+// One award as a Wikipedia-style list entry: Title, Event (italic), Issuer (linked when known), Date.[ref]
+// The optional `event`, `issuerUrl` and `source` fields in profile.json switch those parts on.
+interface Props {
+  award: {
+    title: string;
+    issuer: string;
+    date: string;
+    event?: string;
+    issuerUrl?: string;
+  };
+  ref?: number;
+}
+const { award: a, ref } = Astro.props;
+---
+{a.title}, {a.event && <><i>{a.event}</i>, </>}{a.issuerUrl ? <a href={a.issuerUrl} rel="noopener">{a.issuer}</a> : a.issuer}, {a.date}.{ref && <Cite n={ref} />}
