@@ -60,7 +60,7 @@ describe('content and city stay in sync', () => {
   });
 
   it('museum copy has no em dashes or semicolons, and history links use https', () => {
-    const text = [...EXHIBITS.flatMap((e) => [e.title, e.note]), ...HISTORY.flatMap((w) => [w.title, w.intro, w.personal ?? '', ...w.lines.flat()])];
+    const text = [...EXHIBITS.flatMap((e) => [e.title, e.note]), ...HISTORY.flatMap((w) => [w.title, w.intro ?? '', w.personal ?? '', ...w.lines.flat(2)])];
     for (const line of text) {
       expect(/[—;]/.test(line), `museum copy: ${line}`).toBe(false);
     }

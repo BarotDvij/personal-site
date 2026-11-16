@@ -2158,6 +2158,15 @@ html.party .hud-title {
   margin: 0;
 }
 
+/* A wing entry can hold two paragraphs (Product). */
+.panel-body .wing dd p {
+  margin: 0;
+}
+
+.panel-body .wing dd p + p {
+  margin-top: 8px;
+}
+
 /* ---------- campaign media ---------- */
 
 .panel-body .media-grid {

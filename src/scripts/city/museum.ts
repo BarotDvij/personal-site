@@ -33,7 +33,7 @@ export const EXHIBITS: Exhibit[] = [
   },
   {
     title: 'Fireboy and Watergirl',
-    note: 'Two characters, one keyboard, and a lot of teamwork.',
+    note: 'My sister forced me to play this for hours in the summers. Two characters, one keyboard, and a lot of teamwork.',
     link: { href: 'https://www.coolmathgames.com/0-fireboy-and-water-girl-in-the-forest-temple', label: 'Play it' },
     art: ['..o.....', '.oo...b.', '.ooo..b.', 'oyyo.bbb', 'oyyo.bwb', '.oo..bbb', '.oo...b.', '........'],
     colors: { o: '#f28c28', y: '#e8c547', b: '#3b82f6', w: '#9fd0ff' },
@@ -80,8 +80,8 @@ export const EXHIBITS: Exhibit[] = [
 interface Wing {
   title: string;
   personal?: string; // what it means to Dvij, shown before the history
-  intro: string;
-  lines: [string, string][];
+  intro?: string;
+  lines: [string, string | string[]][];
   links: { href: string; label: string }[];
   art: string[];
   colors: Record<string, string>;
@@ -101,8 +101,10 @@ export const HISTORY: Wing[] = [
     intro: 'Launched in January 2001 as a free encyclopedia that anyone can edit, it grew into one of the most visited sites in the world.',
     lines: [
       ['Engineering', 'Open-source wiki software (MediaWiki) keeps a full revision history for every page, and heavy caching lets a nonprofit serve billions of page views on a small budget.'],
-      ['Product', 'Plain, text-first pages that load fast on slow connections and old devices. Nothing gets in the way of reading.'],
-      ['Product management', 'Run by volunteers through talk pages, consensus, and the famous "citation needed" tag, funded by donations to the Wikimedia Foundation with no ads, and published under a free licence.'],
+      ['Product', [
+        'Plain, text-first pages that load fast on slow connections and old devices. Nothing gets in the way of reading.',
+        'Run by volunteers through talk pages, consensus, and the famous "citation needed" tag, funded by donations to the Wikimedia Foundation with no ads, and published under a free licence.',
+      ]],
     ],
     links: [{ href: 'https://en.wikipedia.org/wiki/History_of_Wikipedia', label: 'Read the history' }],
     art: ['..wwww..', '.w....w.', 'wk....kw', 'wk....kw', 'wk.kk.kw', 'wkk..kkw', '.w....w.', '..wwww..'],
@@ -111,11 +113,12 @@ export const HISTORY: Wing[] = [
   {
     title: 'The 16-bit era (late 1980s to mid 1990s)',
     personal: 'My first console was a Game Boy. The design language of that era, with crisp pixel art, simple controls, and levels that teach you as you play, carried straight into the free browser games I grew up on.',
-    intro: 'The Sega Genesis and the Super Nintendo brought richer colour and sound to home consoles, all running from small cartridges.',
     lines: [
       ['Engineering', 'Worlds were built from small reusable tiles and sprites, colours came from tight palettes, and whole games fit in a few megabytes or less. Tricks like the Super Nintendo\'s Mode 7 faked 3D depth on flat hardware.'],
-      ['Product', 'Games taught you by letting you play, with tight controls and first levels designed so you learn without a manual.'],
-      ['Product management', 'A fixed hardware budget forced hard choices about what to keep and what to cut. That constraint became a style that games still borrow today.'],
+      ['Product', [
+        'Games taught you by letting you play, with tight controls and first levels designed so you learn without a manual.',
+        'A fixed hardware budget forced hard choices about what to keep and what to cut. That constraint became a style that games still borrow today.',
+      ]],
     ],
     links: [{ href: 'https://en.wikipedia.org/wiki/History_of_video_game_consoles_(fourth_generation)', label: 'Read the history' }],
     art: ['........', '.kkkkkk.', 'kgkkkkrk', 'gggkkbkr', 'kgkkkkbk', '.kkkkkk.', '........', '........'],
@@ -128,7 +131,6 @@ export const HISTORY: Wing[] = [
     lines: [
       ['Engineering', 'Transit is systems design. Lines, transfers, and frequency decide whether a city connects or splits apart.'],
       ['Product', 'Walkable streets are designed around the person on foot, with homes, shops, and work close together so a short walk covers a lot of daily life.'],
-      ['Product management', 'Strong Towns argues for small, incremental changes a town can afford to maintain, instead of giant projects it can\'t.'],
       ['In this city', 'You explore on foot, the warp pipes run like a transit line between districts, and Downtown mixes glass towers, a digital billboard, and a corner restaurant on one street.'],
     ],
     links: [
@@ -168,8 +170,8 @@ export function museumHtml() {
     ${HISTORY.map(
       (w) => `<section class="wing">
         <span class="frame">${pixelSvg(w.art, w.colors)}</span>
-        <div class="plaque"><strong>${esc(w.title)}</strong>${w.personal ? `<p class="why">${esc(w.personal)}</p>` : ''}<p class="intro">${esc(w.intro)}</p>
-          <dl>${w.lines.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+        <div class="plaque"><strong>${esc(w.title)}</strong>${w.personal ? `<p class="why">${esc(w.personal)}</p>` : ''}${w.intro ? `<p class="intro">${esc(w.intro)}</p>` : ''}
+          <dl>${w.lines.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${[v].flat().map((t, i, a) => (a.length > 1 ? `<p>${esc(t)}</p>` : esc(t))).join('')}</dd>`).join('')}</dl>
           <p class="links">${w.links.map(extLink).join(' ')}</p>
         </div>
       </section>`,
