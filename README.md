@@ -30,7 +30,7 @@ Change `content/profile.json` and both modes update.
 
 ### Photos and media
 
-- **Portrait:** put a square image in `public/media/` (for example `public/media/dvij.jpg`, at least 400×400) and set `photo.src` in `profile.json` to `/media/dvij.jpg`. The pixel placeholder disappears automatically.
+- **Portrait:** put a square image in `public/media/` (for example `public/media/dvij.webp`, at least 400×400) and set `photo.src` in `profile.json` to `/media/dvij.webp`. The pixel placeholder disappears automatically.
 - **Go Lime ads and project demos:** drop files in `public/media/` and tell Claude where they should appear. Billboards and panels are ready to take them.
 
 ### Tests
