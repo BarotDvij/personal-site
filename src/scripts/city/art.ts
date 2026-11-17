@@ -1161,8 +1161,8 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const gap = gapEnd - gapStart;
     if (gap < 14) return;
     const mid = Math.round(gapStart + gap / 2);
-    // Overrides: no tree between GenLedge and Super.com, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
-    if (s.id === 'genledge') return;
+    // Overrides: no tree between GenLedge and Super.com, nothing between Swap Robotics and the warp pipe, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
+    if (s.id === 'genledge' || s.id === 'swap') return;
     if (i % 2 || s.id === 'arcade' || s.id === 'warp-2') lamp(ctx, mid, p);
     else tree(ctx, mid - 5, p, 1);
   });
