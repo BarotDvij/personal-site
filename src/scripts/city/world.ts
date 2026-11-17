@@ -112,7 +112,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2531, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
 
   // Expansion
-  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2607, w: 82, h: 62, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
+  { id: 'boggle', label: 'Boggle Zen (under construction)', kind: 'arcade', x: 2605, w: 86, h: 68, district: 'yard', ref: { type: 'project', name: 'Boggle Zen' }, text: ['BOGGLE'] },
   { id: 'summit', label: 'SUMMIT (under construction)', kind: 'construction', x: 2709, w: 116, h: 108, district: 'yard', ref: { type: 'project', name: 'SUMMIT Financial Learning' }, text: ['SUMMIT'] },
   { id: 'warp-0', label: 'Warp pipe', kind: 'warp', x: 2843, w: 22, h: 26, district: 'yard', ref: { type: 'warp', to: 0 } },
 ];

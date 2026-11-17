@@ -545,6 +545,8 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'arcade': {
+      // The hit box wraps the scaffolding (2px out each side, 6px above the roof), so the building sits inside it.
+      const x = s.x + 2, w = s.w - 4, h = s.h - 6, top = GROUND - h, cx = x + w / 2;
       box(ctx, x, top + 10, w, h - 10, shade('#1f1b2e', p), p);
       const letters = 'BOGGLE';
       const tile = ['#e0457b', '#f2a33a', '#3fb950', '#3b82f6', '#9b6bf2', '#e8c547'];
