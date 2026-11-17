@@ -422,7 +422,7 @@
     },
     {
       "name": "Learning Technique Recommendation Engine",
-      "tagline": "Classifies a syllabus and ranks 21 study techniques using evidence from 22 meta-analyses.",
+      "tagline": "Creates a study plan for any syllabus while recommending the best study techniques based on course content, student ability, and preference. Synthesizing evidence from 22 meta-analyses to do so!",
       "stack": [
         "Python",
         "scikit-learn",
