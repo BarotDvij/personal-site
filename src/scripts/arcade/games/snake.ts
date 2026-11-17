@@ -1,13 +1,12 @@
 // Packet Snake: a data packet grows as it collects more packets in the pipes.
 
-import type { Api, Game, GameModule } from '../types';
+import type { Api, Dir, Game, GameModule } from '../types';
 import { text, textWidth } from '../../pixelfont';
 
 const C = 8;
 const COLS = 20;
 const ROWS = 16;
 const COLORS = ['#e0457b', '#f2a33a', '#9b6bf2', '#3b82f6', '#3fb950'];
-type Dir = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight';
 const VEC: Record<Dir, [number, number]> = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
 const KEYS: Record<string, Dir> = { ArrowUp: 'ArrowUp', w: 'ArrowUp', ArrowDown: 'ArrowDown', s: 'ArrowDown', ArrowLeft: 'ArrowLeft', a: 'ArrowLeft', ArrowRight: 'ArrowRight', d: 'ArrowRight' };
 

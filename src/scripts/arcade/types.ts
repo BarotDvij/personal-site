@@ -19,13 +19,15 @@ export interface Api {
   reduced: boolean;
 }
 
+export type Dir = 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight';
+
 export type PointerKind = 'down' | 'up' | 'move' | 'alt';
 
 export interface Game {
   update(dt: number): void;
   render(): void;
   pointer?(x: number, y: number, kind: PointerKind): void;
-  swipe?(dir: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight'): void;
+  swipe?(dir: Dir): void;
 }
 
 export interface GameModule {

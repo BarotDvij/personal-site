@@ -2,15 +2,12 @@
 // rules before first paint, so keep the two in sync.
 
 export type Mode = 'cv' | 'city';
-export type ThemePref = 'system' | 'light' | 'dark';
-export type MotionPref = 'system' | 'full' | 'reduced';
-export type SoundPref = 'off' | 'on';
 
 export interface Prefs {
   mode: Mode;
-  theme: ThemePref;
-  motion: MotionPref;
-  sound: SoundPref;
+  theme: 'system' | 'light' | 'dark';
+  motion: 'system' | 'full' | 'reduced';
+  sound: 'off' | 'on';
 }
 
 const KEY = 'dvij.prefs';
@@ -50,11 +47,15 @@ export function apply(p: Prefs) {
   document.dispatchEvent(new CustomEvent('prefs:change', { detail: p }));
 }
 
-export function update(patch: Partial<Prefs>) {
-  // The current view wins over what was saved, so a deep link into the city
-  // isn't undone by changing the theme or sound.
+// The current view wins over what was saved, so a deep link into the city
+// isn't undone by changing the theme or sound.
+function current(): Prefs {
   const mode = document.documentElement.dataset.mode as Mode | undefined;
-  const next = { ...load(), ...(mode ? { mode } : {}), ...patch };
+  return { ...load(), ...(mode ? { mode } : {}) };
+}
+
+export function update(patch: Partial<Prefs>) {
+  const next = { ...current(), ...patch };
   save(next);
   apply(next);
   return next;
@@ -65,8 +66,7 @@ export function watchSystem() {
   if (typeof matchMedia !== 'function') return;
   for (const q of ['(prefers-color-scheme: dark)', '(prefers-reduced-motion: reduce)']) {
     matchMedia(q).addEventListener('change', () => {
-      const mode = document.documentElement.dataset.mode as Mode | undefined;
-      apply({ ...load(), ...(mode ? { mode } : {}) });
+      apply(current());
     });
   }
 }
