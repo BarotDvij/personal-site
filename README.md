@@ -55,7 +55,7 @@ To move or add a building, edit `STRUCTURES` in [`src/scripts/city/world.ts`](sr
 
 ### Performance rules
 
-- The Wiki ships about 2 KB of JavaScript. The City (about 15 KB gzipped) loads only when someone opens the tour.
+- The Wiki ships about 3.5 KB of JavaScript gzipped. The City engine (about 35 KB gzipped, 90 KB raw) loads only when someone opens the tour.
 - The city renders at a tiny base resolution and scales up by whole numbers, so pixels stay crisp and the GPU does almost nothing.
 - Static scenery is drawn once into an offscreen canvas. Each frame only blits it and draws clouds, packets, and beacons.
 - Quality starts from a hardware hint, then measures real frame times and drops to a lighter tier if a device can't keep up.
