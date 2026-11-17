@@ -68,7 +68,7 @@ export interface Structure {
   riser?: number; // x of the data pipe that feeds this building
   tagClear?: number; // world px of artwork (a flag, say) poking above the hit box that the name tag must clear
   tagGapScale?: number; // multiplies the gap between the hit box top and its name tag (default 1)
-  tagAt?: number; // show the name tag inside the hit box, its bottom edge at this fraction of the height
+  tagAt?: number; // show the name tag inside the hit box, its vertical centre at this fraction of the height (0.5 = middle)
 }
 
 export const STRUCTURES: Structure[] = [
@@ -86,12 +86,12 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-2', label: 'Warp pipe', kind: 'warp', x: 694, w: 22, h: 26, district: 'data', ref: { type: 'warp', to: 2 } },
 
   // Downtown
-  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 754, w: 52, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 778 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 834, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 858 },
+  { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 754, w: 52, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 778, tagAt: 0.5 },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 834, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 858, tagAt: 0.5 },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 896, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 946, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 988 },
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1058, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1098 },
-  { id: 'altaml', label: 'AltaML x Communitech for Hauser Industries', kind: 'hq', x: 1164, w: 160, h: 174, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1244 },
+  { id: 'altaml', label: 'AltaML x Communitech for Hauser Industries', kind: 'hq', x: 1164, w: 160, h: 174, district: 'ai', ref: { type: 'role', org: 'AltaML Inc.' }, text: ['ALTAML', 'COMMUNITECH'], riser: 1244, tagAt: 0.5 },
   { id: 'warp-3', label: 'Warp pipe', kind: 'warp', x: 1344, w: 22, h: 26, district: 'ai', ref: { type: 'warp', to: 3 } },
 
   // City Square
