@@ -73,7 +73,7 @@ export interface Structure {
 
 export const STRUCTURES: Structure[] = [
   // Welcome Plaza
-  { id: 'post', label: 'Post Office: about and contact', kind: 'post', x: 44, w: 72, h: 61, district: 'plaza', ref: { type: 'contact' }, text: ['POST'] },
+  { id: 'post', label: 'Post Office: about and contact', kind: 'post', x: 44, w: 72, h: 60, district: 'plaza', ref: { type: 'contact' }, text: ['POST'] },
   { id: 'warp-1', label: 'Warp pipe', kind: 'warp', x: 160, w: 22, h: 26, district: 'plaza', ref: { type: 'warp', to: 1 } },
 
   // Industrial Zone

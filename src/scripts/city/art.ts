@@ -382,15 +382,15 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
 
   switch (s.kind) {
     case 'post': {
-      const t = top + 5; // POST sign pokes 5px above the old box top, so the hit box (h: 61) now includes it
-      box(ctx, x, t + 8, w, h - 13, shade('#b5533c', p), p);
+      const t = top + 4; // POST sign pokes 4px above the old box top, so the hit box (h: 60) now includes it
+      box(ctx, x, t + 8, w, h - 12, shade('#b5533c', p), p);
       for (let yy = t + 12; yy < GROUND - 2; yy += 4) rect(ctx, x + 1, yy, w - 2, 1, shade('#9a4330', p));
       rect(ctx, x - 3, t + 4, w + 6, 5, shade('#5a3a3a', p));
       windows(ctx, p, r, x + 8, t + 16, w - 16, 14, 8, 8, 6, 4);
       door(ctx, cx, 10, 14);
       box(ctx, x + w - 14, GROUND - 14, 9, 14, shade('#2f6fd6', p), p);
       rect(ctx, x + w - 12, GROUND - 11, 5, 1, '#ffffff');
-      sign(ctx, label, cx, t - 9, '#2f6fd6', '#ffffff', p);
+      sign(ctx, label, cx, t - 4, '#2f6fd6', '#ffffff', p);
       break;
     }
     case 'shop': {
