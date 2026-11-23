@@ -101,7 +101,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'warp-4', label: 'Warp pipe', kind: 'warp', x: 1788, w: 22, h: 26, district: 'commercial', ref: { type: 'warp', to: 4 } },
 
   // Civic Centre
-  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1846, w: 72, h: 167, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1882, tagClear: 16 },
+  { id: 'occ', label: 'Ontario Chamber of Commerce', kind: 'tower', x: 1846, w: 72, h: 167, district: 'civic', ref: { type: 'role', org: 'Ontario Chamber of Commerce' }, text: ['CHAMBER OF', 'COMMERCE'], riser: 1882, tagAt: 0.5 },
   { id: 'cityhall', label: 'Kitchener City Hall', kind: 'hall', x: 1936, w: 112, h: 104, district: 'civic', ref: { type: 'civic' }, text: ['CITY HALL'] },
   { id: 'parksign', label: 'Urban Park', kind: 'parksign', x: 2062, w: 28, h: 26, district: 'civic', text: ['URBAN', 'PARK'] },
   { id: 'chess', label: 'Chess GAME', kind: 'chesstable', x: 2096, w: 28, h: 16, district: 'civic', ref: { type: 'game', id: 'chess' }, tagGapScale: 0.5 },
