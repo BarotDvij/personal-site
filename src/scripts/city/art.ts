@@ -497,15 +497,16 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'marble': {
+      const t = top - 4, H = h + 4; // crown starts 4px below the old box top, so the hit box (h: 160) now starts at the white building
       const m = shade('#ecebe6', p), vein = shade('#c9c6be', p);
-      box(ctx, x + 6, top + 14, w - 12, h - 14, m, p);
-      for (let yy = top + 20; yy < GROUND - 10; yy += 7) rect(ctx, x + 9 + ((yy * 7) % (w - 20)), yy, 6, 1, vein);
-      for (let i = 0; i < 6; i++) rect(ctx, x + 10 + i, top + 14 - i * 2, w - 20 - i * 2, 2, m);
-      rect(ctx, cx - 1, top - 6, 2, 10, p.outline);
-      windows(ctx, p, r, x + 10, top + 30, w - 20, h - 60, 3, 4, 3, 5);
+      box(ctx, x + 6, t + 14, w - 12, H - 14, m, p);
+      for (let yy = t + 20; yy < GROUND - 10; yy += 7) rect(ctx, x + 9 + ((yy * 7) % (w - 20)), yy, 6, 1, vein);
+      for (let i = 0; i < 6; i++) rect(ctx, x + 10 + i, t + 14 - i * 2, w - 20 - i * 2, 2, m);
+      rect(ctx, cx - 1, t - 6, 2, 10, p.outline);
+      windows(ctx, p, r, x + 10, t + 30, w - 20, H - 60, 3, 4, 3, 5);
       box(ctx, x, GROUND - 14, w, 14, shade('#d8d4ca', p), p);
       for (let i = 0; i < 4; i++) rect(ctx, x + 6 + i * 11, GROUND - 13, 3, 13, m);
-      sign(ctx, label, cx, top + 16, '#f2c84b', '#2a2233', p);
+      sign(ctx, label, cx, t + 16, '#f2c84b', '#2a2233', p);
       break;
     }
     case 'warehouse': {

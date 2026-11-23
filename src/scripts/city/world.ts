@@ -87,7 +87,7 @@ export const STRUCTURES: Structure[] = [
 
   // Downtown
   { id: 'knowidea', label: 'KnowIdea Research HQ', kind: 'glass', x: 754, w: 52, h: 161, district: 'ai', ref: { type: 'role', org: 'KnowIdea Inc.' }, text: ['KNOWIDEA'], riser: 778, tagAt: 0.5 },
-  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 834, w: 48, h: 164, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 858, tagAt: 0.5 },
+  { id: 'marble', label: 'Urban Marble Tower', kind: 'marble', x: 834, w: 48, h: 160, district: 'ai', ref: { type: 'project', name: 'Urban Marble' }, text: ['1ST'], riser: 858, tagAt: 0.5 },
   { id: 'patio', label: 'Pipe Muncher GAME', kind: 'patio', x: 896, w: 48, h: 28, district: 'ai', ref: { type: 'game', id: 'muncher' } },
   { id: 'ecoeats', label: 'Eco Eats Restaurant', kind: 'restaurant', x: 946, w: 84, h: 60, district: 'ai', ref: { type: 'project', name: 'Eco Eats Advisor' }, text: ['ECO EATS'], riser: 988 },
   { id: 'golime', label: 'Go Lime HQ', kind: 'mediahq', x: 1058, w: 80, h: 151, district: 'ai', ref: { type: 'role', org: 'Go Lime Inc.' }, text: ['GO LIME'], riser: 1098 },
