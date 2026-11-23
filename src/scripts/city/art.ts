@@ -601,33 +601,34 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       break;
     }
     case 'school': {
+      const t = top + 14; // tower peak sits 14px above the old box top, so the hit box (h: 94) now reaches the tip
       const brick = shade('#b5533c', p), trim = shade('#f1e3c6', p);
-      box(ctx, x, top + 20, w, h - 20, brick, p);
-      for (let yy = top + 24; yy < GROUND - 2; yy += 4) rect(ctx, x + 1, yy, w - 2, 1, shade('#9a4330', p));
+      box(ctx, x, t + 20, w, h - 34, brick, p);
+      for (let yy = t + 24; yy < GROUND - 2; yy += 4) rect(ctx, x + 1, yy, w - 2, 1, shade('#9a4330', p));
       // Roof and bell tower with a clock
-      for (let i = 0; i < 8; i++) rect(ctx, x - 2 + i * 2, top + 20 - i * 2, w + 4 - i * 4, 2, shade('#5a3a3a', p));
-      box(ctx, cx - 9, top - 4, 18, 24, trim, p);
-      for (let i = 0; i < 5; i++) rect(ctx, cx - 9 + i * 2, top - 4 - i * 2, 18 - i * 4, 2, shade('#5a3a3a', p));
-      rect(ctx, cx - 5, top + 2, 10, 10, '#ffffff');
-      rect(ctx, cx - 5, top + 2, 10, 1, p.outline);
-      rect(ctx, cx, top + 4, 1, 4, p.outline);
-      rect(ctx, cx, top + 7, 3, 1, p.outline);
-      rect(ctx, cx - 3, top + 14, 6, 5, shade('#e8c547', p));
+      for (let i = 0; i < 8; i++) rect(ctx, x - 2 + i * 2, t + 20 - i * 2, w + 4 - i * 4, 2, shade('#5a3a3a', p));
+      box(ctx, cx - 9, t - 4, 18, 24, trim, p);
+      for (let i = 0; i < 5; i++) rect(ctx, cx - 9 + i * 2, t - 4 - i * 2, 18 - i * 4, 2, shade('#5a3a3a', p));
+      rect(ctx, cx - 5, t + 2, 10, 10, '#ffffff');
+      rect(ctx, cx - 5, t + 2, 10, 1, p.outline);
+      rect(ctx, cx, t + 4, 1, 4, p.outline);
+      rect(ctx, cx, t + 7, 3, 1, p.outline);
+      rect(ctx, cx - 3, t + 14, 6, 5, shade('#e8c547', p));
       // Rows of classroom windows with white trim
       for (let row = 0; row < 2; row++)
         for (let i = 0; i < 5; i++) {
           if (row === 1 && i === 2) continue;
-          const wx = x + 8 + i * ((w - 24) / 4), wy = top + 36 + row * 16;
+          const wx = x + 8 + i * ((w - 24) / 4), wy = t + 36 + row * 16;
           rect(ctx, wx - 1, wy - 1, 10, 10, trim);
           rect(ctx, wx, wy, 8, 8, p.night ? (i % 2 ? p.lit : p.unlit) : p.glass[0]);
           rect(ctx, wx + 4, wy, 1, 8, trim);
         }
       rect(ctx, cx - 9, GROUND - 4, 18, 4, shade('#b9ae96', p));
       door(ctx, cx, 12, 16, shade('#5a4030', p));
-      sign(ctx, label, cx, top + 22, '#f2a33a', '#2a2233', p);
+      sign(ctx, label, cx, t + 22, '#f2a33a', '#2a2233', p);
       // Flagpole
-      rect(ctx, x + w - 6, top + 4, 1, 16, p.lamp);
-      rect(ctx, x + w - 5, top + 4, 6, 4, shade('#e0302f', p));
+      rect(ctx, x + w - 6, t + 4, 1, 16, p.lamp);
+      rect(ctx, x + w - 5, t + 4, 6, 4, shade('#e0302f', p));
       break;
     }
     case 'lawn': {

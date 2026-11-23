@@ -108,7 +108,7 @@ export const STRUCTURES: Structure[] = [
   { id: 'cityscapes', label: 'CityScapes Park', kind: 'park', x: 2130, w: 76, h: 44, district: 'civic', ref: { type: 'project', name: 'CityScapes' }, text: ['CITYSCAPES'] },
   { id: 'pond', label: 'Duck Flight GAME', kind: 'pond', x: 2206, w: 65, h: 27, district: 'civic', ref: { type: 'game', id: 'duck' }, text: ['DUCK POND'] },
   { id: 'library', label: 'Learning Technique Library', kind: 'library', x: 2301, w: 96, h: 74, district: 'civic', ref: { type: 'project', name: 'Learning Technique Recommendation Engine' }, text: ['LIBRARY'], riser: 2349 },
-  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2413, w: 96, h: 80, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
+  { id: 'sevenafter', label: 'SevenAfter School', kind: 'school', x: 2413, w: 96, h: 94, district: 'civic', ref: { type: 'role', org: 'SevenAfter Technologies' }, text: ['SEVENAFTER'] },
   { id: 'warp-5', label: 'Warp pipe', kind: 'warp', x: 2531, w: 22, h: 26, district: 'civic', ref: { type: 'warp', to: 5 } },
 
   // Expansion
