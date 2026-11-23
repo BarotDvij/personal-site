@@ -462,19 +462,14 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x + 8, top, w - 16, h, shade('#3c4f73', p), p);
       rect(ctx, cx, top - 16, 1, 16, p.lamp);
       // One sign per text line, in the district's colour (two lines for long names),
-      // centred vertically on the hit box. Windows fill the space above and below the
-      // signs, each band ending one window's width clear of the signs / the stone base.
+      // high up under the roof. Windows start a little below the last sign and run down
+      // to one window's width above the stone base.
       const lines = s.text ?? [label];
       const lens = DISTRICTS.find((d) => d.id === s.district)!.lens;
-      const blockH = 9 + (lines.length - 1) * 10;
-      const signTop = Math.round(top + h / 2 - blockH / 2);
-      lines.forEach((line, i) => sign(ctx, line, cx, signTop + i * 10, LENS_COLOR[lens], '#ffffff', p));
-      const band = (first: number, last: number) => {
-        const rows = Math.floor((last - first + 3) / 7);
-        if (rows > 0) windows(ctx, p, r, x + 13, last - (rows * 7 - 3), w - 26, rows * 7 - 3, 3, 4, 2, 3);
-      };
-      band(top + 8, signTop - 5);
-      band(signTop + blockH + 5, GROUND - 16 - 3);
+      lines.forEach((line, i) => sign(ctx, line, cx, top + 3 + i * 10, LENS_COLOR[lens], '#ffffff', p));
+      const winFirst = top + 12 + (lines.length - 1) * 10 + 5, winLast = GROUND - 16 - 3;
+      const winRows = Math.floor((winLast - winFirst + 3) / 7);
+      windows(ctx, p, r, x + 13, winLast - (winRows * 7 - 3), w - 26, winRows * 7 - 3, 3, 4, 2, 3);
       box(ctx, x, GROUND - 16, w, 16, shade('#2c3a56', p), p);
       door(ctx, cx, 12, 12, shade('#1a2236', p));
       if (s.id === 'occ') {
