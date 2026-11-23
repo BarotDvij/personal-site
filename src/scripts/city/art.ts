@@ -414,7 +414,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       for (let i = 0; i < 14; i++) rect(ctx, x + 2 + i * 4, top + 34 - i * 1.5, w - 4 - i * 8, 2, i === 0 ? dark : body);
       rect(ctx, x + 2, top + 32, w - 4, 3, p.outline);
-      rect(ctx, cx, top - 4, 1, 16, p.lamp);
+      rect(ctx, cx, top - 4, 1, 20, p.lamp);
       rect(ctx, cx + 1, top - 4, 9, 5, shade('#f2a33a', p));
       sign(ctx, label, cx, top + 44, '#f2a33a', '#2a2233', p);
       break;
