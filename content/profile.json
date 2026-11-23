@@ -472,7 +472,8 @@
         "Open Food Facts"
       ],
       "links": {
-        "code": "https://github.com/BarotDvij/eco-eats-advisor"
+        "code": "https://github.com/BarotDvij/eco-eats-advisor",
+        "live": "https://eco-eats-advisor.lovable.app"
       },
       "lenses": [
         "ai",
