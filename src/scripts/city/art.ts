@@ -417,7 +417,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 2, t + 32, w - 4, 3, p.outline);
       rect(ctx, cx, t - 4, 1, 19, p.lamp);
       rect(ctx, cx + 1, t - 4, 9, 5, shade('#f2a33a', p));
-      sign(ctx, label, cx, t + 44, '#f2a33a', '#2a2233', p);
+      sign(ctx, label, cx, t + 40, '#f2a33a', '#2a2233', p);
       break;
     }
     case 'studio': {
