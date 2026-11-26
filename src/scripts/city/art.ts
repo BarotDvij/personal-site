@@ -921,7 +921,7 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       }
       if (p.night) {
         // After dark the park announces itself: a glowing sign face and a small warm pool of light.
-        ctx.fillStyle = 'rgba(255, 214, 120, 0.12)';
+        ctx.fillStyle = 'rgba(255, 214, 120, 0.096)';
         ctx.fillRect(x - 3, GROUND - 33, w + 6, 33);
         ctx.fillRect(x - 1, GROUND - 31, w + 2, 31);
         rect(ctx, x + 1, GROUND - 23, w - 2, 15, '#3f9a48');
