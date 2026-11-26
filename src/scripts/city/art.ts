@@ -913,20 +913,22 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x, GROUND - 24, w, 17, shade('#2e7d32', p), p);
       rect(ctx, x + 1, GROUND - 23, w - 2, 1, shade('#4caf50', p));
       (s.text ?? []).forEach((t, i) => centeredText(ctx, t, cx, GROUND - 21 + i * 7, '#ffffff'));
+      // Lanterns on both posts: dark when off by day, lit after dark.
+      for (const lx of [x + 3, x + w - 7]) {
+        rect(ctx, lx, GROUND - 30, 4, 3, p.night ? '#ffe28a' : shade('#7a6a42', p));
+        rect(ctx, lx + 1, GROUND - 31, 2, 1, p.outline);
+        rect(ctx, lx, GROUND - 27, 4, 1, p.outline);
+      }
       if (p.night) {
-        // After dark the park announces itself: lit lanterns on both posts, a glowing sign face and a warm pool of light on the lawn.
+        // After dark the park announces itself: a glowing sign face and a small warm pool of light.
         ctx.fillStyle = 'rgba(255, 214, 120, 0.12)';
-        ctx.fillRect(x - 6, GROUND - 34, w + 12, 34);
-        ctx.fillStyle = 'rgba(255, 214, 120, 0.12)';
-        ctx.fillRect(x - 2, GROUND - 30, w + 4, 30);
+        ctx.fillRect(x - 3, GROUND - 33, w + 6, 33);
+        ctx.fillRect(x - 1, GROUND - 31, w + 2, 31);
         rect(ctx, x + 1, GROUND - 23, w - 2, 15, '#3f9a48');
         rect(ctx, x + 1, GROUND - 23, w - 2, 1, '#8be28f');
         (s.text ?? []).forEach((t, i) => centeredText(ctx, t, cx, GROUND - 21 + i * 7, '#fff6d6'));
-        for (const lx of [x + 3, x + w - 7]) {
-          rect(ctx, lx, GROUND - 30, 4, 3, '#ffe28a');
-          rect(ctx, lx + 1, GROUND - 31, 2, 1, p.outline);
-          rect(ctx, lx, GROUND - 27, 4, 1, p.outline);
-        }
+        // Redraw the lit lanterns over the glow.
+        for (const lx of [x + 3, x + w - 7]) rect(ctx, lx, GROUND - 30, 4, 3, '#ffe28a');
       }
       // Flower bed at the foot of the sign
       rect(ctx, x + 1, GROUND - 2, w - 2, 2, shade('#4fa84f', p));
