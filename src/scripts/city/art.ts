@@ -766,13 +766,12 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       rect(ctx, x + 6, GROUND - 4, w - 12, 4, water);
       rect(ctx, x + 2, GROUND - 3, w - 4, 3, water);
       rect(ctx, x + 10, GROUND - 3, 14, 1, light);
-      rect(ctx, x + 40, GROUND - 2, 18, 1, light);
+      rect(ctx, x + 28, GROUND - 2, 12, 1, light);
       // The ducks swim in drawProps, so they are not baked in here.
       for (const rx of [x + 2, x + w - 6]) {
         rect(ctx, rx, GROUND - 14, 1, 14, shade('#3f9a48', p));
         rect(ctx, rx + 2, GROUND - 11, 1, 11, shade('#3f9a48', p));
       }
-      sign(ctx, label, cx, GROUND - h, '#22b8cf', '#ffffff', p);
       break;
     }
     case 'loadtruck': {
@@ -1180,7 +1179,7 @@ function drawStreet(ctx: Ctx, p: Palette) {
     for (let xx = from; xx < to; xx += 3) rect(ctx, xx, GROUND - 3, 1, 1, shade('#7fd17a', p));
   }
   const pond = STRUCTURES.find((x) => x.id === 'pond')!.x;
-  for (const [dx, size] of [[31, 1], [45, 2], [70, 1]] as const) tree(ctx, pond + dx, p, size);
+  for (const [dx, size] of [[14, 1], [26, 2], [44, 1]] as const) tree(ctx, pond + dx, p, size);
 }
 
 export function buildCityLayer(p: Palette) {
