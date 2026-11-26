@@ -913,6 +913,21 @@ function drawStructure(ctx: Ctx, s: Structure, p: Palette) {
       box(ctx, x, GROUND - 24, w, 17, shade('#2e7d32', p), p);
       rect(ctx, x + 1, GROUND - 23, w - 2, 1, shade('#4caf50', p));
       (s.text ?? []).forEach((t, i) => centeredText(ctx, t, cx, GROUND - 21 + i * 7, '#ffffff'));
+      if (p.night) {
+        // After dark the park announces itself: lit lanterns on both posts, a glowing sign face and a warm pool of light on the lawn.
+        ctx.fillStyle = 'rgba(255, 214, 120, 0.12)';
+        ctx.fillRect(x - 6, GROUND - 34, w + 12, 34);
+        ctx.fillStyle = 'rgba(255, 214, 120, 0.12)';
+        ctx.fillRect(x - 2, GROUND - 30, w + 4, 30);
+        rect(ctx, x + 1, GROUND - 23, w - 2, 15, '#3f9a48');
+        rect(ctx, x + 1, GROUND - 23, w - 2, 1, '#8be28f');
+        (s.text ?? []).forEach((t, i) => centeredText(ctx, t, cx, GROUND - 21 + i * 7, '#fff6d6'));
+        for (const lx of [x + 3, x + w - 7]) {
+          rect(ctx, lx, GROUND - 30, 4, 3, '#ffe28a');
+          rect(ctx, lx + 1, GROUND - 31, 2, 1, p.outline);
+          rect(ctx, lx, GROUND - 27, 4, 1, p.outline);
+        }
+      }
       // Flower bed at the foot of the sign
       rect(ctx, x + 1, GROUND - 2, w - 2, 2, shade('#4fa84f', p));
       for (let i = 2; i < w - 2; i += 4) rect(ctx, x + i, GROUND - 4, 2, 2, shade(['#e0457b', '#e8c547', '#ffffff'][(i / 4) % 3 | 0], p));
@@ -1164,8 +1179,8 @@ function drawStreet(ctx: Ctx, p: Palette) {
     const gap = gapEnd - gapStart;
     if (gap < 14) return;
     const mid = Math.round(gapStart + gap / 2);
-    // Overrides: no tree between GenLedge and Super.com, nothing between Swap Robotics and the warp pipe, nothing between AltaML and its warp pipe or between the Hall of Fame and its warp pipe, a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
-    if (s.id === 'genledge' || s.id === 'swap' || s.id === 'altaml' || s.id === 'halloffame') return;
+    // Overrides: no tree between GenLedge and Super.com, nothing between Swap Robotics and the warp pipe, nothing between AltaML and its warp pipe, the Hall of Fame and its warp pipe, or City Hall and the park sign (the sign lights up at night instead), a lamp (not a tree) between the arcade and museum and between the warp pipe and KnowIdea.
+    if (s.id === 'genledge' || s.id === 'swap' || s.id === 'altaml' || s.id === 'halloffame' || s.id === 'cityhall') return;
     if (i % 2 || s.id === 'arcade' || s.id === 'warp-2') lamp(ctx, mid, p);
     else tree(ctx, mid - 5, p, 1);
   });
